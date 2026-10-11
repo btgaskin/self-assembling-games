@@ -241,6 +241,11 @@ def finite_game(profile: AdaptiveProfile) -> FiniteGame:
         if profile.fixed_decisions:
             game.fixed_decisions.update(copy.deepcopy(profile.fixed_decisions))
             game.__post_init__()
+    validate_finite_game(profile, game)
+    return game
+
+
+def validate_finite_game(profile, game):
     if profile.kind == "paper_game" and game.fidelity.get("game", {}).get("questions"):
         raise ValueError(
             "Paper-game profile needs source resolution: "

@@ -16,7 +16,9 @@ import numpy as np
 
 from .core import Outcome, Runtime
 from .metrics import Metrics
-from .registry import Profile, catalogue, load_profile
+from .registry import Profile, load_profile
+from .specification import ModelSpecification
+from .model import ModelInstance
 
 SCHEMA = 1
 
@@ -76,36 +78,37 @@ def read_snapshot(path: str | Path) -> dict[str, Any]:
 
 
 class Simulation:
-    def __init__(self, profile: Profile, seed: int = 0):
-        from .games import initialize
-
-        self.profile = load_profile(profile)
+    def __init__(
+        self, profile: Profile | ModelSpecification, seed: int = 0, *, protocol=None
+    ):
+        specification = (
+            profile
+            if isinstance(profile, ModelSpecification)
+            else ModelSpecification.from_profile(profile)
+        )
+        if specification.realisation_id != "barrett.conditional":
+            raise ValueError("Simulation needs a Barrett conditional realisation")
+        self.profile = specification.to_profile(protocol)
+        profile = self.profile
         self.seed = seed
-        self.runtime = Runtime(seed)
-        specification = next(m for m in catalogue() if m["id"] == profile.model)
-        for module, descriptor in specification.get("modules", {}).items():
-            if (
-                profile.model == "COMP-NAND"
-                and module == "Q"
-                and profile.parameters["selectors"] == 1
-                or profile.model == "ASK"
-                and module == "reply2"
-                or profile.model == "ATT-R"
-                and module == "sender_attention"
-            ):
-                continue
-            self.runtime.owners[module] = profile.parameters.get("owners", {}).get(
-                module, descriptor["owner"]
-            )
-            self.runtime.module_roles[module] = descriptor["role"]
-        self.world: dict[str, Any] = {}
-        self.interaction: dict[str, Any] = {}
-        self.lineage: dict[str, Any] = {}
+        initial = specification.to_dict()["realisation"]["initial_conditions"]
+        self.runtime = Runtime(
+            seed,
+            initial_weight=initial["table_weight"],
+            initial_reference=initial["reference"],
+        )
+        self.model_instance = ModelInstance(
+            specification,
+            specification.game_definition,
+            self.runtime.organisation,
+            self.runtime,
+        )
         self.history: list[dict[str, Any]] = []
-        self.metrics = Metrics(profile.parameters.get("window", 1000))
+        self.protocol = specification.execution_parameters(protocol)
+        self.metrics = Metrics(self.protocol["window"])
         self.metadata = provenance()
         self.status = "ready"
-        initialize(self)
+        self.model_instance.initialize()
         self.configuration_hash = digest(self.profile.to_dict())
         if profile.learner["rule"] == "R3":
             self.history.append(
@@ -116,15 +119,8 @@ class Simulation:
             )
 
     def step(self) -> Outcome:
-        from .games import play
-
         self.runtime.begin()
-        if self.profile.learner["rule"] == "R3":
-            phase = self.runtime.clocks["play"] // self.profile.learner["phase_length"]
-            if phase != self.runtime.clocks["phase"]:
-                self.runtime.clocks["phase"] = phase
-                self.runtime.emit("phase", phase=phase)
-        outcome = play(self)
+        outcome = self.model_instance.encounter()
         self.metrics.add(outcome)
         self.runtime.emit(
             "outcome",
@@ -149,7 +145,7 @@ class Simulation:
         checkpoint_every: int = 0,
         trace: str | Path | None = None,
     ) -> dict[str, Any]:
-        count = self.profile.plays if plays is None else plays
+        count = self.protocol["plays"] if plays is None else plays
         if not isinstance(count, int) or count < 0:
             raise ValueError("plays must be nonnegative")
         if checkpoint_every < 0:
@@ -196,6 +192,11 @@ class Simulation:
                 "history": self.history,
                 "metadata": self.metadata,
                 "status": self.status,
+                "model_specification": self.model_instance.specification.to_dict(),
+                "model_specification_hash": digest(
+                    self.model_instance.specification.to_dict()
+                ),
+                "model_protocol": self.protocol,
             }
         )
 
@@ -233,10 +234,68 @@ class Simulation:
         ]:
             setattr(simulation, name, copy.deepcopy(snapshot[name]))
         simulation.metrics = Metrics.restore(snapshot["metrics"])
+        declaration = snapshot.get("model_specification")
+        if declaration is not None and digest(declaration) != snapshot.get(
+            "model_specification_hash"
+        ):
+            raise ValueError("Checkpoint model specification hash mismatch")
+        specification = ModelSpecification.from_profile(
+            simulation.profile
+        ).restore_declaration(declaration)
+        simulation.model_instance = ModelInstance(
+            specification,
+            specification.game_definition,
+            simulation.runtime.organisation,
+            simulation.runtime,
+        )
+        simulation.protocol = specification.execution_parameters()
+        if (
+            "model_protocol" in snapshot
+            and simulation.protocol != snapshot["model_protocol"]
+        ):
+            raise ValueError("Checkpoint model protocol differs")
         return simulation
+
+    @property
+    def runtime(self):
+        return self._runtime
+
+    @runtime.setter
+    def runtime(self, value):
+        self._runtime = value
+        if hasattr(self, "model_instance"):
+            previous = self.model_instance
+            self.model_instance = ModelInstance(
+                previous.specification, previous.game, value.organisation, value
+            )
+
+    @property
+    def world(self):
+        return self.runtime.world
+
+    @world.setter
+    def world(self, value):
+        self.runtime.world = value
+
+    @property
+    def interaction(self):
+        return self.runtime.interaction
+
+    @interaction.setter
+    def interaction(self, value):
+        self.runtime.interaction = value
+
+    @property
+    def lineage(self):
+        return self.runtime.lineage
+
+    @lineage.setter
+    def lineage(self, value):
+        self.runtime.lineage = value
 
     def inspect(self) -> dict[str, Any]:
         return {
+            "model_instance": self.model_instance.inspect(),
             "profile": self.profile.to_dict(),
             "clocks": dict(self.runtime.clocks),
             "world": copy.deepcopy(self.world),
@@ -277,12 +336,22 @@ class Simulation:
         )
 
 
-def build(profile: str | Profile | dict[str, Any], seed: int = 0) -> Simulation:
-    from .adaptive_runtime import build_adaptive, is_adaptive_profile
+def build(
+    profile: str | Profile | dict[str, Any] | ModelSpecification,
+    seed: int = 0,
+    *,
+    protocol=None,
+):
+    from .adaptive_runtime import build_adaptive
 
-    if is_adaptive_profile(profile):
-        return build_adaptive(profile, seed)
-    return Simulation(load_profile(profile), seed)
+    specification = (
+        profile
+        if isinstance(profile, ModelSpecification)
+        else ModelSpecification.from_profile(profile)
+    )
+    if specification.realisation_id != "barrett.conditional":
+        return build_adaptive(specification, seed, protocol=protocol)
+    return Simulation(specification, seed, protocol=protocol)
 
 
 def resume(path: str | Path) -> Simulation:

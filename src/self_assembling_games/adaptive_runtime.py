@@ -10,21 +10,34 @@ from typing import Any
 import numpy as np
 
 from .adaptive import adaptive_method
-from .finite_profiles import AdaptiveProfile, load_adaptive_profile
+from .finite_profiles import AdaptiveProfile
 
 
 def build_adaptive(
-    profile: str | dict[str, Any] | AdaptiveProfile, seed: int = 0, *, game=None
+    profile: str | dict[str, Any] | AdaptiveProfile,
+    seed: int = 0,
+    *,
+    game=None,
+    protocol=None,
 ):
-    resolved = load_adaptive_profile(profile)
+    from .specification import ModelSpecification
+
+    specification = (
+        profile
+        if isinstance(profile, ModelSpecification)
+        else ModelSpecification.from_profile(profile, game=game)
+    )
+    if isinstance(profile, ModelSpecification) and game is not None:
+        specification = specification.with_game(game)
+    resolved = specification.to_profile(protocol)
     method = adaptive_method(resolved.method)
     if method.method_class == "population_evolution":
         from .evolution import EvolutionSimulation
 
-        return EvolutionSimulation(resolved, seed, game=game)
+        return EvolutionSimulation(specification, seed, protocol=protocol)
     from .finite_learning import ReinforcementSimulation
 
-    return ReinforcementSimulation(resolved, seed, game=game)
+    return ReinforcementSimulation(specification, seed, protocol=protocol)
 
 
 def checkpoint(snapshot: dict[str, Any], path: str | Path) -> Path:
@@ -57,7 +70,40 @@ def restore_adaptive(snapshot: dict[str, Any], *, game=None):
             raise ValueError(
                 "Checkpoint scipy differs; use the pinned numerical implementation"
             )
+    if game is None and snapshot.get("construction_state", {}).get("barrett_source"):
+        from .finite_adapters import barrett_game
+        from .finite_profiles import load_adaptive_profile, validate_finite_game
+
+        profile = load_adaptive_profile(snapshot["profile"])
+        budgets = {
+            k: v
+            for k, v in profile.resources.items()
+            if k
+            not in {
+                "max_population_strategies",
+                "max_measurements",
+                "max_field_evaluations",
+            }
+        }
+        source_profile = snapshot["game"]["parameters"].get("barrett_profile")
+        if source_profile is None:
+            raise ValueError("Embedded Barrett source has no game binding")
+        game = barrett_game(
+            source_profile,
+            source_snapshot=snapshot["construction_state"]["barrett_source"],
+            **budgets,
+        )
+        if profile.fixed_decisions:
+            game.fixed_decisions.update(copy.deepcopy(profile.fixed_decisions))
+            game.__post_init__()
+        validate_finite_game(profile, game)
     simulation = build_adaptive(snapshot["profile"], snapshot["seed"], game=game)
+    declaration = snapshot.get("model_specification")
+    if declaration is not None and digest(declaration) != snapshot.get(
+        "model_specification_hash"
+    ):
+        raise ValueError("Checkpoint model specification hash mismatch")
+    simulation.model_instance.specification.restore_declaration(declaration)
     if (
         simulation.game_hash != snapshot["game_hash"]
         or digest(snapshot["game"]) != snapshot["game_hash"]

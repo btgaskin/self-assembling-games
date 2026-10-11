@@ -98,13 +98,49 @@ class Table:
         raise KeyError(f"Unknown option {option!r}")
 
     def probabilities(self, *, response: bool = True) -> np.ndarray:
-        if response and self.current is not None:
+        """Compatibility spelling for the current conditional disposition."""
+        return (
+            self.conditional_disposition()
+            if response
+            else self.propensity_distribution()
+        )
+
+    def propensity_distribution(self) -> np.ndarray:
+        """Normalised mass; R6 uses this distribution to select an assignment."""
+        return self.weights / self.total
+
+    def conditional_disposition(self) -> np.ndarray:
+        """Probability of each act at this context under the current state."""
+        if self.current is not None:
             p = np.zeros(len(self.options))
             p[self.index(self.current)] = 1
         else:
-            p = self.weights / self.total
-        error = self.learner.get("error", 0.0) if response else 0.0
+            p = self.propensity_distribution()
+        from .learners import resolved_parameters
+
+        error = resolved_parameters(self.learner)["error"]
         return (1 - error) * p + error / len(self.options) if error else p
+
+    def adapt(self, runtime: Runtime, feedback: Feedback) -> None:
+        """Apply the configured adaptive operation to this realised state."""
+        from .learners import update
+
+        update(runtime, self, feedback)
+        self.validate()
+
+    def inspect_dispositions(self) -> dict[str, Any]:
+        from .learners import resolved_parameters
+
+        return {
+            **self.to_dict(),
+            "conditional_disposition": self.conditional_disposition().tolist(),
+            "propensity_distribution": self.propensity_distribution().tolist(),
+            "adaptive_operation": self.learner.get("rule"),
+            "adaptive_parameters": resolved_parameters(self.learner),
+            "adaptive_scope": "complete_unfrozen_assignment"
+            if self.learner.get("rule") == "STRATEGY_WSLR"
+            else "addressed_table",
+        }
 
     def to_dict(self) -> dict[str, Any]:
         return copy.deepcopy(
@@ -131,13 +167,31 @@ class BranchPoint(Exception):
 
 
 class Runtime:
-    """Mutable adaptive state. Games alone specify observations and credit."""
+    """Barrett conditional realisation, including adaptive and execution state.
 
-    def __init__(self, seed: int = 0):
+    Games supply observations and feedback addresses. Tables sustain conditional
+    dispositions through propensities, current assignments and reference points.
+    """
+
+    id = "barrett.conditional"
+
+    def __init__(
+        self,
+        seed: int = 0,
+        *,
+        initial_weight: float = 1.0,
+        initial_reference: float = 0.0,
+    ):
+        self.initial_weight = initial_weight
+        self.initial_reference = initial_reference
         self.rng = np.random.Generator(np.random.PCG64(seed))
         self.tables: dict[str, Table] = {}
-        self.owners: dict[str, str] = {}
-        self.module_roles: dict[str, str] = {}
+        from .organisation import Organisation
+
+        self.organisation = Organisation()
+        self.world: dict[str, Any] = {}
+        self.interaction: dict[str, Any] = {}
+        self.lineage: dict[str, Any] = {}
         self.frozen_modules: set[str] = set()
         self.clocks = {"play": 0, "turn": 0, "round": 0, "problem": 0, "phase": 0}
         self.next_identity = 0
@@ -150,6 +204,62 @@ class Runtime:
         self.force_position = 0
         self.invocations: dict[str, Any] = {}
         self.replay_chances: list[dict[str, Any]] | None = None
+
+    @property
+    def owners(self):
+        return self.organisation.owners
+
+    @owners.setter
+    def owners(self, value):
+        self.organisation.owners = value
+
+    @property
+    def module_roles(self):
+        return self.organisation.module_roles
+
+    @module_roles.setter
+    def module_roles(self, value):
+        self.organisation.module_roles = value
+
+    def before_encounter(self, learner):
+        if learner["rule"] == "R3":
+            phase = self.clocks["play"] // learner["phase_length"]
+            if phase != self.clocks["phase"]:
+                self.clocks["phase"] = phase
+                self.emit("phase", phase=phase)
+
+    def resample_complete_assignment(self):
+        """Whole-strategy WSLR changes every unfrozen assignment in order."""
+        if self.training:
+            for identity, table in self.tables.items():
+                if not table.frozen:
+                    table.current = table.options[
+                        self.uniform("new_plan:" + identity, len(table.options))
+                    ]
+                    self.emit("assignment", table=identity, option=table.current)
+
+    def retain_all_tables(self, retention, floor):
+        """FFSR applies retention after each visit, in table insertion order."""
+        if self.training:
+            for table in self.tables.values():
+                if not table.frozen:
+                    table.weights[:] = np.maximum(floor, table.weights * retention)
+                    table.validate()
+            self.emit("forget", scope="all_tables_after_visit", retention=retention)
+
+    def reset_beliefs(self, count):
+        self.world["beliefs"] = [False] * count
+
+    def inspect_dispositions(self):
+        return {
+            "implementation": self.id,
+            "tables": {k: t.inspect_dispositions() for k, t in self.tables.items()},
+            "world": copy.deepcopy(self.world),
+            "interaction": copy.deepcopy(self.interaction),
+            "clocks": dict(self.clocks),
+            "frozen_modules": sorted(self.frozen_modules),
+            "training": self.training,
+        }
 
     def emit(self, event: str, **payload: Any) -> None:
         if not self.record and self.sink is None:
@@ -175,7 +285,7 @@ class Runtime:
         context: Any,
         options: list[Any],
         learner: dict[str, Any],
-        initial: float = 1.0,
+        initial: float | None = None,
         *,
         owner: str | None = None,
         frozen: bool = False,
@@ -191,9 +301,10 @@ class Runtime:
             module,
             context,
             list(options),
-            np.full(len(options), initial),
+            np.full(len(options), self.initial_weight if initial is None else initial),
             copy.deepcopy(learner),
             frozen=frozen,
+            reference=self.initial_reference,
         )
         if learner["rule"] in {"R6", "WSLS", "WSLR", "STRATEGY_WSLR"}:
             table.current = options[
@@ -310,15 +421,12 @@ class Runtime:
             )
 
     def feedback(self, feedback: Feedback) -> None:
-        from .learners import update
-
         if not math.isfinite(feedback.payoff):
             raise ValueError("Feedback payoff must be finite")
         table = self.tables[feedback.address.table]
         table.index(feedback.address.option)
         if self.training and not table.frozen:
-            update(self, table, feedback)
-            table.validate()
+            table.adapt(self, feedback)
         self.emit(
             "feedback",
             table=feedback.address.table,

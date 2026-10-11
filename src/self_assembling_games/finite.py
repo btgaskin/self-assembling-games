@@ -23,10 +23,20 @@ from .core import key
 
 @dataclass(frozen=True)
 class FiniteDecision:
+    """A module's conditional decision bound to an encounter participant slot.
+
+    ``role`` is the established constructor spelling for that slot. Functional
+    role and organism identity can be described separately by the source game.
+    """
+
     role: str
     context: str
     options: tuple[Any, ...]
     module: str
+
+    @property
+    def slot(self):
+        return self.role
 
 
 @dataclass(frozen=True)

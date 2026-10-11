@@ -2,6 +2,16 @@
 
 from .artifacts import export_template, replay_trace
 from .core import Address, Decision, Feedback, Outcome, Runtime, Table
+from .definitions import GameDefinition, game_definition
+from .specification import (
+    ModelSpecification,
+    RealisationDefinition,
+    SourceDeclaration,
+    realisation_definition,
+)
+from .model import ModelInstance
+from .organisation import Organisation
+from .realisations import FiniteReinforcementRealisation, PopulationRealisation
 from .metrics import (
     conventional_kinds,
     evaluate,
@@ -37,6 +47,16 @@ from .simulation import (
 
 __version__ = "0.1.0"
 __all__ = [
+    "GameDefinition",
+    "game_definition",
+    "ModelSpecification",
+    "RealisationDefinition",
+    "SourceDeclaration",
+    "realisation_definition",
+    "ModelInstance",
+    "Organisation",
+    "FiniteReinforcementRealisation",
+    "PopulationRealisation",
     "AdaptiveMethod",
     "AdaptiveProfile",
     "EvolutionSimulation",

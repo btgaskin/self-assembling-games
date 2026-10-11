@@ -3,109 +3,72 @@
 from __future__ import annotations
 
 import copy
-import math
 from collections import deque
 from typing import Any
 
 import numpy as np
 
 from .adaptive import adaptive_method
-from .finite import DecisionProvider, FiniteGame, distribution
-from .finite_profiles import AdaptiveProfile, finite_game, load_adaptive_profile
-
-
-class _Sampling(DecisionProvider):
-    def __init__(self, simulation: ReinforcementSimulation, rng: np.random.Generator):
-        super().__init__(simulation.game)
-        self.simulation = simulation
-        self.rng = rng
-        if simulation.method.representation == "complete_role_plans":
-            self.plan_indices = {
-                r: self.chance(simulation.weights[r] / simulation.weights[r].sum())
-                for r in self.game.roles
-            }
-
-    def chance(self, probabilities: Any) -> int:
-        raw = np.asarray(probabilities, dtype=float)
-        if raw.ndim != 1:
-            raise ValueError("Chance probabilities must be a vector")
-        p = distribution(raw, len(raw))
-        nonzero = np.flatnonzero(p)
-        if len(nonzero) == 1:
-            return int(nonzero[0])
-        return min(
-            int(np.searchsorted(np.cumsum(p), self.rng.random(), side="right")),
-            len(p) - 1,
-        )
-
-    def choose(self, role: str, context: str) -> int:
-        if self.plan_indices is not None:
-            return int(
-                self.game.plans[role][
-                    self.plan_indices[role], self.game.row_indices[role, context]
-                ]
-            )
-        weights = self.simulation.weights[role + "/" + context]
-        return self.chance(weights / weights.sum())
+from .finite import FiniteGame, distribution
+from .finite_profiles import AdaptiveProfile
+from .specification import ModelSpecification
+from .model import ModelInstance
+from .organisation import Organisation
+from .realisations import FiniteReinforcementRealisation, _Sampling, state_alias
 
 
 class ReinforcementSimulation:
+    weights = state_alias("weights")
+    initial_weights = state_alias("initial_weights")
+    rng = state_alias("rng")
+    frozen = state_alias("frozen")
+    method = state_alias("method")
+
+    @property
+    def game(self):
+        return (
+            self.model_instance.game if hasattr(self, "model_instance") else self._game
+        )
+
+    @game.setter
+    def game(self, value):
+        if hasattr(self, "model_instance"):
+            raise ValueError(
+                "Construct a game override through game= to resolve its specification"
+            )
+        self._game = value
+
     def __init__(
         self,
         profile: AdaptiveProfile | str | dict[str, Any],
         seed: int = 0,
         *,
         game: FiniteGame | None = None,
+        protocol=None,
     ):
         from .simulation import digest, provenance
 
-        self.profile = load_adaptive_profile(profile)
-        self.method = adaptive_method(self.profile.method)
-        if self.method.method_class != "reinforcement":
-            raise ValueError("ReinforcementSimulation needs a reinforcement method")
-        self.game = game if game is not None else finite_game(self.profile)
-        self.seed = seed
-        self.protocol = {
-            "plays": 10_000,
-            "initial_weight": 1.0,
-            "window": 1000,
-            **copy.deepcopy(self.profile.protocol),
-        }
-        if self.method.representation == "conditional_decisions" and (
-            self.game.payoff_matrices is not None
-            or any(np.any(c) for c in self.game.strategy_costs.values())
-        ):
-            raise ValueError(
-                "Conditional R1 with strategy-level listening/table costs needs a defined mechanism; SKQ3"
-            )
-        self.game.compile()
-        if self.game.payoff_matrices is not None:
-            minimum = min(float(m.min()) for m in self.game.payoff_matrices)
-        else:
-            minimum = min(
-                float(self.game.returns[:, i].min() - c.max())
-                for i, c in enumerate(self.game.strategy_costs.values())
-            )
-        if minimum < 0:
-            raise ValueError(
-                "R1 requires nonnegative numerical returns; no implicit payoff shift"
-            )
-        initial = self.protocol["initial_weight"]
-        self.weights = (
-            {
-                r: np.full(len(plans), initial, dtype=float)
-                for r, plans in self.game.plans.items()
-            }
-            if self.method.representation == "complete_role_plans"
-            else {
-                r + "/" + d.context: np.full(len(d.options), initial, dtype=float)
-                for r, rows in self.game.rows.items()
-                for d in rows
-            }
+        specification = (
+            profile
+            if isinstance(profile, ModelSpecification)
+            else ModelSpecification.from_profile(profile, game=game)
         )
-        self.initial_weights = {k: v.copy() for k, v in self.weights.items()}
-        self.rng = np.random.Generator(np.random.PCG64(seed))
-        self.frozen: set[str] = set()
+        if isinstance(profile, ModelSpecification) and game is not None:
+            specification = specification.with_game(game)
+        self.profile = specification.to_profile(protocol)
+        method = adaptive_method(specification.realisation_parameters["method"])
+        if method.method_class != "reinforcement":
+            raise ValueError("ReinforcementSimulation needs a reinforcement method")
+        self.game = specification.construct_finite_game()
+        self.seed = seed
+        self.protocol = specification.execution_parameters(protocol)
+        organisation = Organisation.for_finite(self.game)
+        self._realisation = FiniteReinforcementRealisation(
+            self.game, organisation, method, self.protocol, seed
+        )
+        self.model_instance = ModelInstance(
+            specification, self.game, organisation, self._realisation
+        )
         self.plays = 0
         self.successes = 0
         self.return_totals = {r: 0.0 for r in self.game.roles}
@@ -113,7 +76,11 @@ class ReinforcementSimulation:
         self.exchanges = 0
         self.recent: deque[bool] = deque(maxlen=self.protocol["window"])
         self.history: list[dict[str, Any]] = [
-            {"phase": "initialization", "play": 0, "initial_weight": initial}
+            {
+                "phase": "initialization",
+                "play": 0,
+                "initial_weight": self.protocol["initial_weight"],
+            }
         ]
         self.status = "ready"
         self.metadata = provenance()
@@ -138,41 +105,7 @@ class ReinforcementSimulation:
         }
 
     def step(self):
-        provider = _Sampling(self, self.rng)
-        outcome = self.game.encounter(provider)
-        if provider.plan_indices is not None:
-            credits = [
-                (r, provider.plan_indices[r], value)
-                for r, value in zip(self.game.roles, outcome.returns)
-                if self.game.rows[r]
-            ]
-        else:
-            credits = (
-                [
-                    (r + "/" + c, option, value)
-                    for r, c, option, value in provider.credits
-                ]
-                if provider.credits is not None
-                else [
-                    (r + "/" + c, option, outcome.returns[self.game.roles.index(r)])
-                    for r, c, option in provider.draws
-                ]
-            )
-        # Validate the entire update before applying any credit.
-        if any(not math.isfinite(value) or value < 0 for _, _, value in credits):
-            raise ValueError("R1 requires finite nonnegative reinforcement credit")
-        updated = {}
-        for address, option, value in credits:
-            if address not in self.frozen:
-                if address not in updated:
-                    updated[address] = self.weights[address].copy()
-                updated[address][option] += value
-        if any(
-            not np.isfinite(w).all() or not math.isfinite(float(w.sum()))
-            for w in updated.values()
-        ):
-            raise OverflowError("Reinforcement weights overflowed")
-        self.weights.update(updated)
+        outcome = self.model_instance.encounter()
         self.plays += 1
         self.successes += int(outcome.success)
         self.recent.append(outcome.success)
@@ -211,7 +144,8 @@ class ReinforcementSimulation:
                 raise ValueError("samples must be a positive integer")
             rng = np.random.Generator(np.random.PCG64(seed))
             results = [
-                self.game.encounter(_Sampling(self, rng)) for _ in range(samples)
+                self.game.encounter(_Sampling(self._realisation, rng))
+                for _ in range(samples)
             ]
             return {
                 "protocol": "sampled_frozen",
@@ -296,9 +230,19 @@ class ReinforcementSimulation:
         )
 
     def snapshot(self) -> dict[str, Any]:
+        from .simulation import digest
+
         return copy.deepcopy(
             {
                 "schema_version": 1,
+                "model_specification": self.model_instance.specification.to_dict(),
+                "model_specification_hash": digest(
+                    self.model_instance.specification.to_dict()
+                ),
+                "construction_state": getattr(self.game, "construction_state", {}),
+                "model_protocol": {
+                    k: v for k, v in self.protocol.items() if k != "initial_weight"
+                },
                 "engine": "adaptive",
                 "method_class": "reinforcement",
                 "profile": self.profile.to_dict(),
@@ -332,4 +276,8 @@ class ReinforcementSimulation:
         return checkpoint(self.snapshot(), path)
 
     def inspect(self) -> dict[str, Any]:
-        return {**self.snapshot(), "assessment": self.summary()}
+        return {
+            **self.snapshot(),
+            "model_instance": self.model_instance.inspect(),
+            "assessment": self.summary(),
+        }

@@ -2,6 +2,12 @@
 
 The package provides a serial reinforcement engine, a Python API, and the `sg` command. It keeps the whole book catalogue discoverable and distinguishes executable demonstrations from source-reproduction profiles.
 
+Each simulation executes through `model_instance.game`, `organisation`,
+`realisation`, and `specification`. The [domain-model guide](model.md) explains
+conditional dispositions, adaptive state, native construction and live aliases.
+`sg describe sig.n2.demo --resolved --seed 0` exposes the resolved choices and
+initial realised state without advancing a play.
+
 ## Install and run
 
 ```sh

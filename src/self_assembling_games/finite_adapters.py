@@ -31,7 +31,7 @@ _LEGACY_FINITE = {
 }
 
 
-def barrett_game(profile: Any, **budgets: int) -> FiniteGame:
+def barrett_game(profile: Any, *, source_snapshot=None, **budgets: int) -> FiniteGame:
     """Read-only compatibility adapter for stationary finite Barrett profiles.
 
     The serial runtime supplies interaction order, chance, fixed templates and
@@ -45,7 +45,13 @@ def barrett_game(profile: Any, **budgets: int) -> FiniteGame:
     source_profile = load_profile(profile)
     if source_profile.model not in _LEGACY_FINITE:
         raise ValueError(f"{source_profile.model} has no stationary finite adapter")
-    base = Simulation(source_profile, 0)
+    base = (
+        Simulation(source_profile, 0)
+        if source_snapshot is None
+        else Simulation.restore(source_snapshot)
+    )
+    if base.profile.to_dict() != source_profile.to_dict():
+        raise ValueError("Embedded Barrett source configuration differs")
     if source_profile.learner["rule"] in {
         "R3",
         "R4",
@@ -121,10 +127,18 @@ def barrett_game(profile: Any, **budgets: int) -> FiniteGame:
                     )
 
     def interaction(provider):
+        from .model import ModelInstance
+
         sim = copy.copy(base)
         sim.runtime = AdapterRuntime(provider)
         sim.world = copy.deepcopy(base.world)
         sim.interaction = copy.deepcopy(base.interaction)
+        sim.model_instance = ModelInstance(
+            base.model_instance.specification,
+            base.model_instance.game,
+            sim.runtime.organisation,
+            sim.runtime,
+        )
         result = play(sim)
         if result.status != "complete":
             raise ValueError(
@@ -137,7 +151,7 @@ def barrett_game(profile: Any, **budgets: int) -> FiniteGame:
             result.exchanges,
         )
 
-    return FiniteGame(
+    game = FiniteGame(
         source_profile.model,
         roles,
         tuple(addresses.values()),
@@ -152,3 +166,5 @@ def barrett_game(profile: Any, **budgets: int) -> FiniteGame:
         },
         **budgets,
     )
+    game.construction_state = {"barrett_source": base.snapshot()}
+    return game

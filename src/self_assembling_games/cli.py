@@ -29,6 +29,12 @@ def main(argv: list[str] | None = None) -> int:
     )
     describe = sub.add_parser("describe")
     describe.add_argument("identifier")
+    describe.add_argument(
+        "--resolved",
+        action="store_true",
+        help="Construct and inspect resolved choices and initial realised state",
+    )
+    describe.add_argument("--seed", type=int, default=0)
     running = sub.add_parser("run")
     running.add_argument("profile")
     running.add_argument("--seed", type=int, default=0)
@@ -99,6 +105,15 @@ def main(argv: list[str] | None = None) -> int:
 
             result = adaptive_methods()
         elif args.command == "describe":
+            if args.resolved:
+                print(
+                    json.dumps(
+                        build(args.identifier, args.seed).model_instance.inspect(),
+                        indent=2,
+                        allow_nan=False,
+                    )
+                )
+                return 0
             entries = [x for x in catalogue() if x["id"] == args.identifier]
             from .finite_profiles import (
                 adaptive_profiles,

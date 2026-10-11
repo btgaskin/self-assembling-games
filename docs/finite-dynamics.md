@@ -12,7 +12,7 @@ The default mathematical method is `replicator.continuous`. For population frequ
 dx_i/dt = x_i (f_i - mean_fitness)
 ```
 
-This is the one-population or multi-population replicator equation in Skyrms §3. Each population has its own mean. Population definitions assign game roles to inherited types; a type can contain several role plans. Independent individuals are drawn for separate roles, including roles assigned to the same population. Focal fitness averages those roles with explicit weights. Full genotype frequencies preserve correlations across inherited role plans. Evolutionary rates and frozen populations are explicit configuration fields.
+This is the one-population or multi-population replicator equation in Skyrms §3. Each population has its own mean. Population definitions assign encounter slots to inherited types; a type can contain several slot plans. Independent individuals are drawn for separate slots, including slots assigned to the same population. Focal fitness averages those slots with explicit weights. Joint inherited-plan frequencies preserve correlations across inherited plans. Evolutionary rates and frozen populations are explicit configuration fields. The [domain-model guide](model.md) distinguishes this matching rule from the association of several functional modules within one participant.
 
 `replicator_mutator.birth_uniform` implements Skyrms' mutation at reproduction:
 

@@ -10,98 +10,14 @@ import numpy as np
 
 from .adaptive import adaptive_method
 from .finite import FiniteGame, distribution
-from .finite_profiles import AdaptiveProfile, finite_game, load_adaptive_profile
+from .finite_profiles import AdaptiveProfile
+from .specification import ModelSpecification
+from .model import ModelInstance
+from .organisation import Organisation
+from .realisations import PopulationRealisation, state_alias
 
 
-class PopulationSpec:
-    """A distinct individual occupies every slot, including shared populations."""
-
-    def __init__(
-        self,
-        game: FiniteGame,
-        *,
-        groups: dict[str, list[str]] | None = None,
-        role_weights: dict[str, float] | None = None,
-        rates: dict[str, float] | None = None,
-        frozen: list[str] | None = None,
-        matching: str = "independent_individuals",
-        max_population_strategies: int = 100_000,
-    ):
-        self.groups = copy.deepcopy(
-            groups if groups is not None else {r: [r] for r in game.roles}
-        )
-        if not self.groups or any(
-            not name or not roles for name, roles in self.groups.items()
-        ):
-            raise ValueError("Populations need nonempty names and inherited role sets")
-        roles = [r for rs in self.groups.values() for r in rs]
-        if sorted(roles) != sorted(game.roles):
-            raise ValueError("Every role must belong to exactly one population")
-        if matching != "independent_individuals":
-            raise ValueError(
-                "Supported matching samples a distinct independent individual per role slot"
-            )
-        self.names = tuple(sorted(self.groups))
-        self.matching = matching
-        self.role_population = {r: name for name, rs in self.groups.items() for r in rs}
-        default_weights = {r: 1 / len(rs) for rs in self.groups.values() for r in rs}
-        self.role_weights = dict(
-            default_weights if role_weights is None else role_weights
-        )
-        if set(self.role_weights) != set(game.roles):
-            raise ValueError("role_weights must cover all role slots")
-        for rs in self.groups.values():
-            distribution([self.role_weights[r] for r in rs], len(rs))
-        self.rates = {name: 1.0 for name in self.names}
-        if rates is not None:
-            if set(rates) - set(self.names):
-                raise ValueError("Unknown encounter-rate population")
-            self.rates.update(rates)
-        if any(not math.isfinite(v) or v <= 0 for v in self.rates.values()):
-            raise ValueError("Encounter rates must be positive and finite")
-        self.frozen = set(frozen or [])
-        if not self.frozen <= set(self.names):
-            raise ValueError("Unknown frozen population")
-        self.components = {}
-        self.counts = {}
-        for name in self.names:
-            rs = self.groups[name]
-            sizes = [len(game.plans[r]) for r in rs]
-            count = math.prod(sizes)
-            if count > max_population_strategies:
-                raise ValueError(
-                    f"{name} needs {count} inherited types; max_population_strategies="
-                    f"{max_population_strategies}"
-                )
-            index = np.arange(count)
-            self.counts[name] = count
-            self.components[name] = {
-                r: (index // math.prod(sizes[k + 1 :])) % sizes[k]
-                for k, r in enumerate(rs)
-            }
-
-    def to_dict(self) -> dict[str, Any]:
-        return {
-            "groups": copy.deepcopy(self.groups),
-            "role_weights": dict(self.role_weights),
-            "rates": dict(self.rates),
-            "frozen": sorted(self.frozen),
-            "matching": self.matching,
-            "strategy_counts": dict(self.counts),
-            "inheritance": "joint plans for declared roles; lexicographic role-plan indices",
-        }
-
-    def role_marginals(
-        self, game: FiniteGame, frequencies: dict[str, np.ndarray]
-    ) -> dict[str, np.ndarray]:
-        return {
-            r: np.bincount(
-                self.components[self.role_population[r]][r],
-                weights=frequencies[self.role_population[r]],
-                minlength=len(game.plans[r]),
-            )
-            for r in game.roles
-        }
+from .organisation import PopulationSpec
 
 
 class IntegrationDomainError(ValueError):
@@ -113,88 +29,84 @@ class EvolutionResourceError(ValueError):
 
 
 class EvolutionSimulation:
+    frequencies = state_alias("frequencies")
+    initial_frequencies = state_alias("initial_frequencies")
+    method = state_alias("method")
+
+    @property
+    def game(self):
+        return (
+            self.model_instance.game if hasattr(self, "model_instance") else self._game
+        )
+
+    @game.setter
+    def game(self, value):
+        if hasattr(self, "model_instance"):
+            raise ValueError(
+                "Construct a game override through game= to resolve its specification"
+            )
+        self._game = value
+
+    @property
+    def population(self):
+        return self._realisation.organisation.population
+
+    @population.setter
+    def population(self, value):
+        self._realisation.organisation.population = value
+
     def __init__(
         self,
         profile: AdaptiveProfile | str | dict[str, Any],
         seed: int = 0,
         *,
         game: FiniteGame | None = None,
+        protocol=None,
     ):
         from .simulation import digest, provenance
 
-        self.profile = load_adaptive_profile(profile)
-        self.method = adaptive_method(self.profile.method)
-        if self.method.method_class != "population_evolution":
-            raise ValueError("EvolutionSimulation needs a population evolution method")
-        self.game = game if game is not None else finite_game(self.profile)
-        self.population = PopulationSpec(
-            self.game,
-            **self.profile.population,
-            max_population_strategies=self.profile.resources.get(
-                "max_population_strategies", 100_000
-            ),
+        specification = (
+            profile
+            if isinstance(profile, ModelSpecification)
+            else ModelSpecification.from_profile(profile, game=game)
         )
+        if isinstance(profile, ModelSpecification) and game is not None:
+            specification = specification.with_game(game)
+        self.profile = specification.to_profile(protocol)
+        method = adaptive_method(specification.realisation_parameters["method"])
+        if method.method_class != "population_evolution":
+            raise ValueError("EvolutionSimulation needs a population evolution method")
+        self.game = specification.construct_finite_game()
+        organisation = Organisation.for_finite(self.game)
+        organisation.population = PopulationSpec(
+            self.game,
+            **specification.organisation_parameters,
+            max_population_strategies=specification.realisation_parameters[
+                "resources"
+            ].get("max_population_strategies", 100_000),
+        )
+        self.resources = specification.realisation_parameters["resources"]
         self.seed = seed
-        self.protocol = {
-            "duration": 50.0,
-            "initialization": {"kind": "dirichlet", "concentration": 1.0},
-            "solver": "DOP853",
-            "rtol": 1e-9,
-            "atol": 1e-12,
-            "max_step": 1.0,
-            "sample_interval": 1.0,
-            "mutation_rate": 0.0,
-            **copy.deepcopy(self.profile.protocol),
-        }
-        if self.protocol["solver"] not in {
-            "DOP853",
-            "RK45",
-            "RK23",
-        }:
+        self.protocol = specification.execution_parameters(protocol)
+        if self.protocol["solver"] not in {"DOP853", "RK45", "RK23"}:
             raise ValueError(
                 "Supported simplex solvers are DOP853, RK45, and RK23; implicit solvers require a tangent-coordinate or analytic-Jacobian implementation"
             )
-        init = self.protocol["initialization"]
-        if not isinstance(init, dict) or init.get("kind") not in {
-            "dirichlet",
-            "uniform",
-            "explicit",
-        }:
-            raise ValueError("Initialization is dirichlet, uniform, or explicit")
-        rng = np.random.Generator(np.random.PCG64(seed))
-        self.frequencies = {}
-        if init["kind"] == "explicit" and set(init.get("frequencies", {})) != set(
-            self.population.names
-        ):
-            raise ValueError("Explicit initialization must supply every population")
-        for name in self.population.names:
-            count = self.population.counts[name]
-            if init["kind"] == "explicit":
-                values = distribution(init["frequencies"][name], count)
-            elif init["kind"] == "uniform":
-                values = np.full(count, 1 / count)
-            else:
-                concentration = init.get("concentration", 1.0)
-                if (
-                    not isinstance(concentration, (int, float))
-                    or not math.isfinite(concentration)
-                    or concentration <= 0
-                ):
-                    raise ValueError(
-                        "Dirichlet concentration must be positive and finite"
-                    )
-                values = rng.dirichlet(np.full(count, concentration))
-                if np.any(values <= 0):
-                    raise ValueError(
-                        "Dirichlet initialization underflowed; increase concentration"
-                    )
-            self.frequencies[name] = values
-        self.initial_frequencies = {n: x.copy() for n, x in self.frequencies.items()}
+        self._realisation = PopulationRealisation(
+            self.game, organisation, method, self.protocol, seed
+        )
+        self.model_instance = ModelInstance(
+            specification, self.game, organisation, self._realisation
+        )
         self.time = 0.0
         # Integrated expected success, returns by role, terms, exchanges.
         self.integrals = np.zeros(len(self.game.roles) + 3)
         self.history: list[dict[str, Any]] = [
-            {"phase": "initialization", "time": 0.0, "protocol": copy.deepcopy(init)}
+            {
+                "phase": "initialization",
+                "time": 0.0,
+                "protocol": copy.deepcopy(self.protocol["initialization"]),
+            }
         ]
         self.measurements: list[dict[str, Any]] = []
         self.status = "ready"
@@ -223,52 +135,14 @@ class EvolutionSimulation:
         self._validate_birth_domain()
         self.measurements.append(self.evaluate())
 
-    def _validate_birth_domain(self) -> None:
-        if self.method.id != "replicator_mutator.birth_uniform":
-            return
-        if self.game.payoff_matrices is not None:
-            minimum = min(float(m.min()) for m in self.game.payoff_matrices)
-        else:
-            minimum = min(
-                float(self.game.returns[:, i].min() - cost.max())
-                for i, cost in enumerate(self.game.strategy_costs.values())
-            )
-        if minimum < 0:
-            raise ValueError(
-                "Birth mutation needs nonnegative reproduction returns; preserve/declare background fitness"
-            )
+    def _validate_birth_domain(self):
+        return self._realisation._validate_birth_domain()
 
-    def _expectations(self, frequencies: dict[str, np.ndarray]) -> dict[str, Any]:
-        role_frequencies = self.population.role_marginals(self.game, frequencies)
-        result = self.game.expectations(role_frequencies)
-        result["population_fitness"] = {
-            name: sum(
-                self.population.role_weights[r]
-                * result["fitness"][r][self.population.components[name][r]]
-                for r in self.population.groups[name]
-            )
-            for name in self.population.names
-        }
-        return result
+    def _expectations(self, frequencies):
+        return self._realisation._expectations(frequencies)
 
-    def vector_field(
-        self, frequencies: dict[str, np.ndarray] | None = None
-    ) -> dict[str, np.ndarray]:
-        values = self.frequencies if frequencies is None else frequencies
-        for name in self.population.names:
-            distribution(values[name], self.population.counts[name])
-        result = self._expectations(values)
-        return {
-            name: np.zeros_like(values[name])
-            if name in self.population.frozen
-            else self.population.rates[name]
-            * self.method.field(
-                values[name],
-                result["population_fitness"][name],
-                self.protocol["mutation_rate"],
-            )
-            for name in self.population.names
-        }
+    def vector_field(self, frequencies=None):
+        return self._realisation.vector_field(frequencies)
 
     def evaluate(self, *, tolerance: float = 1e-8) -> dict[str, Any]:
         if not math.isfinite(tolerance) or tolerance < 0:
@@ -347,7 +221,7 @@ class EvolutionSimulation:
         def field(t, state):
             nonlocal calls
             calls += 1
-            if calls > self.profile.resources.get("max_field_evaluations", 200_000):
+            if calls > self.resources.get("max_field_evaluations", 200_000):
                 raise EvolutionResourceError("Evolution exceeded max_field_evaluations")
             values = {n: state[ends[i] : ends[i + 1]] for i, n in enumerate(names)}
             for n, x in values.items():
@@ -360,17 +234,7 @@ class EvolutionSimulation:
                         f"Solver left the {n} simplex; reduce max_step or tighten tolerances"
                     )
             result = self._expectations(values)
-            changes = [
-                np.zeros_like(values[n])
-                if n in self.population.frozen
-                else self.population.rates[n]
-                * self.method.field(
-                    values[n],
-                    result["population_fitness"][n],
-                    self.protocol["mutation_rate"],
-                )
-                for n in names
-            ]
+            changes = list(self._realisation.field_changes(values, result).values())
             accumulators = [
                 result["success_probability"],
                 *(result["expected_returns"][r] for r in self.game.roles),
@@ -382,7 +246,7 @@ class EvolutionSimulation:
         start = self.time
         if len(self.measurements) + math.ceil(
             duration / self.protocol["sample_interval"]
-        ) > self.profile.resources.get("max_measurements", 10_000):
+        ) > self.resources.get("max_measurements", 10_000):
             raise ValueError("Evolution report samples exceed max_measurements")
         try:
             while self.time < target:
@@ -488,9 +352,21 @@ class EvolutionSimulation:
         )
 
     def snapshot(self) -> dict[str, Any]:
+        from .simulation import digest
+
         return copy.deepcopy(
             {
                 "schema_version": 1,
+                "model_specification": self.model_instance.specification.to_dict(),
+                "model_specification_hash": digest(
+                    self.model_instance.specification.to_dict()
+                ),
+                "construction_state": getattr(self.game, "construction_state", {}),
+                "model_protocol": {
+                    k: v
+                    for k, v in self.protocol.items()
+                    if k not in {"initialization", "mutation_rate"}
+                },
                 "engine": "adaptive",
                 "method_class": "population_evolution",
                 "profile": self.profile.to_dict(),
@@ -520,4 +396,8 @@ class EvolutionSimulation:
         return checkpoint(self.snapshot(), path)
 
     def inspect(self) -> dict[str, Any]:
-        return {**self.snapshot(), "assessment": self.summary()}
+        return {
+            **self.snapshot(),
+            "model_instance": self.model_instance.inspect(),
+            "assessment": self.summary(),
+        }
