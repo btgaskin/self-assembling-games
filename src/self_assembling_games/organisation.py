@@ -73,6 +73,11 @@ class Organisation:
             return {slot: [slot] for slot in self.slots}
         if realisation.id == "population.complete_plan":
             return {name: [name] for name in self.population.names}
+        if realisation.id == "population.multilocus":
+            return {
+                "population": ["frequencies"]
+                + (["counts"] if realisation.finite else [])
+            }
         return {
             slot: [
                 self.policy_address(slot, row.context)
@@ -202,4 +207,62 @@ class PopulationSpec:
                 minlength=len(game.plans[r]),
             )
             for r in game.roles
+        }
+
+
+class MultilocusPopulationSpec:
+    """Encounter positions of one haploid population, sampled with replacement.
+
+    Each group shares a genotype across all its slots. Separate groups draw
+    independently. Return weights specify their contributions to reproduction.
+    """
+
+    def __init__(
+        self,
+        game,
+        *,
+        individuals=None,
+        return_weights=None,
+        sampling="with_replacement",
+    ):
+        self.individuals = copy.deepcopy(
+            individuals if individuals is not None else {s: [s] for s in game.roles}
+        )
+        if (
+            not isinstance(self.individuals, dict)
+            or not self.individuals
+            or any(
+                not isinstance(n, str)
+                or not n
+                or not isinstance(slots, list)
+                or not slots
+                for n, slots in self.individuals.items()
+            )
+        ):
+            raise ValueError("Individuals need named, nonempty encounter-slot bindings")
+        slots = [s for group in self.individuals.values() for s in group]
+        if len(slots) != len(game.roles) or set(slots) != set(game.roles):
+            raise ValueError(
+                "Individual bindings must partition encounter slots exactly once"
+            )
+        if sampling != "with_replacement":
+            raise ValueError("Multilocus encounter sampling is with_replacement")
+        self.sampling = sampling
+        self.return_weights = copy.deepcopy(
+            return_weights
+            if return_weights is not None
+            else {s: 1 / len(game.roles) for s in game.roles}
+        )
+        if self.return_weights.keys() != game.plans.keys():
+            raise ValueError("return_weights must cover every encounter slot")
+        distribution([self.return_weights[s] for s in game.roles], len(game.roles))
+        self.slot_individual = {
+            s: name for name, group in self.individuals.items() for s in group
+        }
+
+    def to_dict(self):
+        return {
+            "individuals": copy.deepcopy(self.individuals),
+            "return_weights": copy.deepcopy(self.return_weights),
+            "sampling": self.sampling,
         }

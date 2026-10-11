@@ -31,6 +31,10 @@ def build_adaptive(
         specification = specification.with_game(game)
     resolved = specification.to_profile(protocol)
     method = adaptive_method(resolved.method)
+    if method.method_class == "population_generations":
+        from .multilocus import MultilocusSimulation
+
+        return MultilocusSimulation(specification, seed, protocol=protocol)
     if method.method_class == "population_evolution":
         from .evolution import EvolutionSimulation
 
@@ -83,6 +87,12 @@ def restore_adaptive(snapshot: dict[str, Any], *, game=None):
                 "max_population_strategies",
                 "max_measurements",
                 "max_field_evaluations",
+                "max_haplotypes",
+                "max_recombination_patterns",
+                "max_transmission_work",
+                "max_genotype_mask_entries",
+                "max_history_entries",
+                "max_generation_work",
             }
         }
         source_profile = snapshot["game"]["parameters"].get("barrett_profile")
@@ -115,6 +125,9 @@ def restore_adaptive(snapshot: dict[str, Any], *, game=None):
         raise ValueError("Checkpoint protocol differs")
     for field in ["metadata", "fidelity", "history", "status"]:
         setattr(simulation, field, copy.deepcopy(snapshot[field]))
+    if simulation.method.method_class == "population_generations":
+        simulation.restore_state(snapshot)
+        return simulation
     if simulation.method.method_class == "population_evolution":
         from .finite import distribution
 

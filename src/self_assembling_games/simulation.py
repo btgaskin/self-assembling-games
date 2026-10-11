@@ -373,6 +373,7 @@ def run_ensemble(
     workers: int = 1,
     duration: float | None = None,
     metric: str | None = None,
+    generations: int | None = None,
 ) -> dict[str, Any]:
     from .adaptive_runtime import is_adaptive_profile
 
@@ -388,8 +389,13 @@ def run_ensemble(
             duration=duration,
             metric=metric,
             workers=workers,
+            generations=generations,
         )
-    if duration is not None or metric not in {None, "cumulative_accuracy"}:
+    if (
+        duration is not None
+        or generations is not None
+        or metric not in {None, "cumulative_accuracy"}
+    ):
         raise ValueError(
             "Barrett encounter ensembles use plays and cumulative_accuracy"
         )
@@ -493,10 +499,27 @@ def benchmark(
     seed: int = 0,
     *,
     duration: float | None = None,
+    generations: int | None = None,
 ) -> dict[str, Any]:
     sim = build(profile, seed)
     from .evolution import EvolutionSimulation
     from .finite_learning import ReinforcementSimulation
+    from .multilocus import MultilocusSimulation
+
+    if isinstance(sim, MultilocusSimulation):
+        if plays is not None or duration is not None:
+            raise ValueError("Multilocus benchmarks use generations")
+        start = time.perf_counter()
+        sim.run(generations=generations)
+        return {
+            "profile": profile,
+            "clock": "generations",
+            "generations": sim.generation,
+            "elapsed_seconds": time.perf_counter() - start,
+            "metadata": sim.metadata,
+        }
+    if generations is not None:
+        raise ValueError("generations belongs to multilocus generation methods")
 
     if isinstance(sim, EvolutionSimulation):
         if plays is not None:

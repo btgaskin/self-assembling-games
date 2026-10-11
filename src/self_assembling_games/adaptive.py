@@ -35,7 +35,7 @@ class AdaptiveMethod:
         if not np.isfinite(mutation_rate) or not 0 <= mutation_rate <= 1:
             raise ValueError("mutation_rate must be in [0,1]")
         if self.method_class != "population_evolution":
-            raise ValueError("Reinforcement methods use encounter updates")
+            raise ValueError("Only continuous population methods supply a vector field")
         mean = float(frequencies @ fitness)
         if self.id == "replicator.continuous":
             if mutation_rate != 0:
@@ -57,6 +57,22 @@ class AdaptiveMethod:
 _METHODS = {
     m.id: m
     for m in (
+        AdaptiveMethod(
+            "haplotype.deterministic",
+            "population_generations",
+            "haplotypes",
+            "Discrete haploid selection, declared recombination, and locus mutation",
+            False,
+            "https://doi.org/10.1093/genetics/161.4.1727",
+        ),
+        AdaptiveMethod(
+            "wright_fisher.haploid",
+            "population_generations",
+            "haplotypes",
+            "Multilocus haploid Wright–Fisher census after selection and transmission",
+            False,
+            "https://doi.org/10.1534/genetics.104.032821#appendix-a",
+        ),
         AdaptiveMethod(
             "replicator.continuous",
             "population_evolution",
@@ -98,6 +114,7 @@ def adaptive_methods(method_class: str | None = None) -> list[dict[str, Any]]:
     if method_class is not None and method_class not in {
         "population_evolution",
         "reinforcement",
+        "population_generations",
     }:
         raise ValueError("Unknown adaptive method class")
     return [

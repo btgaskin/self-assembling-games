@@ -47,6 +47,9 @@ _REALISATIONS = {
             "population_evolution",
             "complete_inherited_plans",
         ),
+        RealisationDefinition(
+            "population.multilocus", "population_generations", "haplotypes"
+        ),
     )
 }
 
@@ -130,6 +133,10 @@ class ModelSpecification:
                 "initial_weight",
                 "mutation_rate",
             }
+            if definition.id == "population.multilocus":
+                from .multilocus import GENETIC_FIELDS
+
+                allowed |= GENETIC_FIELDS
             if rp.keys() - allowed:
                 raise ValueError(
                     "Outer run controls belong in build(..., protocol=...)"
@@ -138,10 +145,14 @@ class ModelSpecification:
                 "finite.conditional": "reinforcement.conditional.R1",
                 "finite.complete_plan": "reinforcement.strategy.R1",
                 "population.complete_plan": "replicator.continuous",
+                "population.multilocus": "haplotype.deterministic",
             }[definition.id]
             method = rp.pop("method", expected)
             fixed = rp.pop("fixed_decisions", {})
             resources = rp.pop("resources", {})
+            genetics = {}
+            if definition.id == "population.multilocus":
+                genetics = {k: rp.pop(k) for k in list(rp) if k in GENETIC_FIELDS}
             profile = AdaptiveProfile(
                 game.id + ".native",
                 game.id,
@@ -153,6 +164,7 @@ class ModelSpecification:
                 resources=resources,
                 kind=source.kind,
                 assumptions=list(source.assumptions),
+                genetics=genetics,
             )
         result = cls.from_profile(profile)
         if result.realisation_id != definition.id:
@@ -190,7 +202,9 @@ class ModelSpecification:
             profile = load_adaptive_profile(value)
             method = adaptive_method(profile.method)
             rid = (
-                "population.complete_plan"
+                "population.multilocus"
+                if method.method_class == "population_generations"
+                else "population.complete_plan"
                 if method.method_class == "population_evolution"
                 else "finite.complete_plan"
                 if method.representation == "complete_role_plans"
@@ -245,11 +259,31 @@ class ModelSpecification:
                     for k, v in population.to_dict().items()
                     if k not in {"strategy_counts", "inheritance"}
                 }
+            elif method.method_class == "population_generations":
+                from .multilocus import resolve_genetics
+
+                genetics, org, initialization = resolve_genetics(
+                    obj._finite_game,
+                    method,
+                    profile.genetics,
+                    org,
+                    profile.protocol.get("initialization"),
+                    profile.resources,
+                )
+                rp = {
+                    "method": method.id,
+                    **genetics,
+                    "initialization": initialization,
+                    "fixed_decisions": copy.deepcopy(profile.fixed_decisions),
+                    "resources": copy.deepcopy(profile.resources),
+                }
             questions = obj._finite_game.fidelity.get("game", {}).get("questions", [])
             identifiers = [method.source]
             defaults = {
                 **(
-                    {
+                    {"generations": 100, "sample_interval": 1}
+                    if method.method_class == "population_generations"
+                    else {
                         "duration": 50.0,
                         "solver": "DOP853",
                         "rtol": 1e-9,

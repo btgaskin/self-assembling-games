@@ -119,3 +119,39 @@ The finite Skyrms family is registered from [Skyrms (2009), §§2–5](https://d
 - B11's ARP equations contain inconsistent payoff indices and an APR spelling. Its unchosen-option update is transcribed literally in the rule sheet pending original-source clarification.
 - B3's repeated .975 phrase in the hierarchical footnote is treated as one reported proportion, not two experiments.
 - Figures were consulted alongside extracted text where conditional structure matters, including the hierarchical composition figure. Future corrections should name the precise source page or figure and the resulting model change.
+
+## Multilocus population methods and constructed assays
+
+The multilocus extension follows standard haploid selection/transmission
+recursions and multinomial Wright–Fisher sampling. Its [method specification](multilocus.md)
+records the precise equations, census convention, expression map, participation
+bindings and life-cycle order.
+
+- **Kirkpatrick, M., Johnson, T., & Barton, N. H. (2002).** General models of
+  multilocus evolution. *Genetics*, 161(4), 1727–1750.
+  [doi:10.1093/genetics/161.4.1727](https://doi.org/10.1093/genetics/161.4.1727).
+  The institutional/publisher abstract was checked for the scope of the general
+  multilocus framework. The elementary operators implemented here are specified
+  independently in the method guide.
+- **Barton, N. H., & Otto, S. P. (2005).** Evolution of Recombination Due to Random
+  Drift. *Genetics*, 169(4), 2353–2370.
+  [doi:10.1534/genetics.104.032821](https://doi.org/10.1534/genetics.104.032821);
+  [author PDF](https://www.zoology.ubc.ca/~otto/Reprints/BartonOtto2005.pdf).
+  The model description and Appendix A were examined for haploid selection,
+  random mating/meiosis and multinomial juvenile sampling. Their `2N` haploid
+  sample corresponds to this library's `population_size=N` haploid genomes.
+- **Supplied working study (11 October 2026):** *Material realisations of
+  self-assembling games: Organisation, inheritance, and the constitution of
+  adaptive capacities*. The user-supplied text defines the toy coordination,
+  fixed-NAND adapter and parity-composition examples and the single-boundary
+  exchange operator. The library's three `ML-*` kernels and expression tables
+  implement those constructed assays. Their source status is
+  `explicit_constructed_assay`; the supplied template and preformed module
+  assumptions are retained in game fidelity records. No published biological
+  findings are attributed to this working study.
+
+Independent interval switches, per-locus mutation matrices, explicit affine
+reproductive weights and encounter sampling with replacement are declared model
+choices. Barrett/Skyrms source-model observations and adaptive laws retain their
+existing definitions and source gates. The multilocus toy demonstrations are
+listed separately through `sg list --family constructed`.

@@ -24,12 +24,18 @@ class AdaptiveProfile:
     kind: str = "demonstration"
     assumptions: list[str] = field(default_factory=list)
     lineage: dict[str, Any] = field(default_factory=dict)
+    genetics: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        return copy.deepcopy(vars(self))
+        result = copy.deepcopy(vars(self))
+        if not result["genetics"]:
+            result.pop("genetics")
+        return result
 
     def validate(self) -> None:
         method = adaptive_method(self.method)
+        if method.method_class != "population_generations" and self.genetics:
+            raise ValueError("Genetics belongs to multilocus generation methods")
         if self.kind == "historical_reproduction":
             raise ValueError(
                 "Historical adaptive reproduction protocols remain gated; SKQ1"
@@ -52,6 +58,7 @@ class AdaptiveProfile:
             "sample_interval",
             "mutation_rate",
             "window",
+            "generations",
         }
         if self.protocol.keys() - allowed:
             raise ValueError(
@@ -59,7 +66,9 @@ class AdaptiveProfile:
                 + ", ".join(sorted(self.protocol.keys() - allowed))
             )
         class_allowed = (
-            {
+            {"generations", "initialization", "sample_interval"}
+            if method.method_class == "population_generations"
+            else {
                 "duration",
                 "initialization",
                 "solver",
@@ -74,6 +83,23 @@ class AdaptiveProfile:
         )
         if self.protocol.keys() - class_allowed:
             raise ValueError(f"Protocol fields do not belong to {method.method_class}")
+        if method.method_class == "population_generations":
+            generations = self.protocol.get("generations", 100)
+            interval = self.protocol.get("sample_interval", 1)
+            if (
+                not isinstance(generations, int)
+                or isinstance(generations, bool)
+                or generations < 0
+            ):
+                raise ValueError("generations must be a nonnegative integer")
+            if (
+                not isinstance(interval, int)
+                or isinstance(interval, bool)
+                or interval <= 0
+            ):
+                raise ValueError(
+                    "Generation sample_interval must be a positive integer"
+                )
         for name in {
             "duration",
             "initial_weight",
@@ -112,6 +138,19 @@ class AdaptiveProfile:
             "max_measurements",
             "max_field_evaluations",
         }
+        if method.method_class == "population_generations":
+            allowed_budgets = {
+                "max_role_strategies",
+                "max_leaves",
+                "max_mask_entries",
+                "max_measurements",
+                "max_haplotypes",
+                "max_recombination_patterns",
+                "max_transmission_work",
+                "max_genotype_mask_entries",
+                "max_history_entries",
+                "max_generation_work",
+            }
         if self.resources.keys() - allowed_budgets:
             raise ValueError("Unknown resource budgets")
         if any(
@@ -140,7 +179,7 @@ def register_finite_game(
     from .registry import catalogue
 
     if (
-        identifier.startswith("SK-")
+        identifier.startswith(("SK-", "ML-"))
         or identifier in {g["id"] for g in catalogue()}
         or identifier in _CUSTOM_FACTORIES
     ):
@@ -196,6 +235,9 @@ def finite_catalogue(family: str | None = None) -> list[dict[str, Any]]:
         if g["id"] in _LEGACY_FINITE
     ]
     entries += [copy.deepcopy(value[1]) for value in _CUSTOM_FACTORIES.values()]
+    from .multilocus_games import multilocus_catalogue
+
+    entries += multilocus_catalogue()
     return [e for e in entries if family is None or e["family"] == family]
 
 
@@ -209,9 +251,24 @@ def finite_game(profile: AdaptiveProfile) -> FiniteGame:
             "max_population_strategies",
             "max_measurements",
             "max_field_evaluations",
+            "max_haplotypes",
+            "max_recombination_patterns",
+            "max_transmission_work",
+            "max_genotype_mask_entries",
+            "max_history_entries",
+            "max_generation_work",
         }
     }
-    if profile.model.startswith("SK-"):
+    if profile.model.startswith("ML-"):
+        from .multilocus_games import multilocus_game
+
+        game = multilocus_game(
+            profile.model,
+            profile.parameters,
+            fixed_decisions=profile.fixed_decisions,
+            **budgets,
+        )
+    elif profile.model.startswith("SK-"):
         from .skyrms import skyrms_game
 
         game = skyrms_game(
@@ -267,6 +324,9 @@ def validate_finite_game(profile, game):
 
 def adaptive_profiles(family: str | None = None) -> list[dict[str, Any]]:
     profiles = []
+    from .multilocus_games import multilocus_profiles
+
+    profiles += multilocus_profiles()
     for game in finite_catalogue("skyrms"):
         identifier = game["id"]
         slug = identifier.lower()

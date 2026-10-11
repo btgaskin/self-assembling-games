@@ -11,6 +11,9 @@ from .specification import (
 )
 from .model import ModelInstance
 from .organisation import Organisation
+from .organisation import MultilocusPopulationSpec
+from .genetics import Locus, GenomeSpec, ExpressionMap, TransmissionSpec
+from .multilocus import MultilocusRealisation, MultilocusSimulation
 from .realisations import FiniteReinforcementRealisation, PopulationRealisation
 from .metrics import (
     conventional_kinds,
@@ -47,6 +50,13 @@ from .simulation import (
 
 __version__ = "0.1.0"
 __all__ = [
+    "Locus",
+    "GenomeSpec",
+    "ExpressionMap",
+    "TransmissionSpec",
+    "MultilocusPopulationSpec",
+    "MultilocusRealisation",
+    "MultilocusSimulation",
     "GameDefinition",
     "game_definition",
     "ModelSpecification",

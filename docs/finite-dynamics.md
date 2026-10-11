@@ -2,9 +2,9 @@
 
 `FiniteGame` describes permitted decision contexts, option sets, chance events, participant returns, and interaction timing. It compiles the interaction into chance-weighted leaves and complete deterministic role plans. A plan assigns an option to every adaptive context, including contexts an encounter may leave unvisited. Frozen conditional components remain explicit chance distributions. Exact expectations sum over these leaves; role-plan compatibility masks avoid constructing a dense multi-player payoff tensor.
 
-`AdaptiveProfile` combines a game with a method, population structure, protocol, resource budgets, and optional pretrained lineage. `register_finite_game` supplies additional source-labelled factories through the same interface. `build`, `load_profile`, `resume`, and `evaluate` dispatch between the existing Barrett encounter runtime and the finite runtime. `finite_catalogue` lists games with finite adapters; the original `catalogue` retains the Barrett chapter catalogue.
+`AdaptiveProfile` combines a game with a method, population structure, protocol, resource budgets, optional pretrained lineage, and optional multilocus genetics. `register_finite_game` supplies additional source-labelled factories through the same interface. `build`, `load_profile`, `resume`, and `evaluate` dispatch between Barrett encounters, finite reinforcement, continuous population dynamics, and discrete multilocus generations. `finite_catalogue` lists games with finite adapters and constructed assays; the original `catalogue` retains the Barrett chapter catalogue.
 
-## Evolution
+## Continuous evolution
 
 The default mathematical method is `replicator.continuous`. For population frequencies `x_i`, random-matching expected fitness `f_i`, and mean fitness `sum_i x_i*f_i`,
 
@@ -71,3 +71,22 @@ The dyadic signalling game supplies the simplest shared comparison: four complet
 The frozen translator in §5 gives an analytically tractable one-role control. With the source's sender and receiver held fixed, the four translator plans have returns `[0.5, 0, 1, 0.5]` in the library's lexicographic order. Pure replicator frequencies have the closed form `x_i(t) = x_i(0)*exp(f_i*t) / sum_j(x_j(0)*exp(f_j*t))`. The unique optimal translator has return one. Both learning representations can be evaluated exactly against these endpoints.
 
 Complementary information, voting, teamwork, and chains also permit exact final-policy evaluation under matched game parameters. A controlled comparison records representation, initial policies, seeds, frozen components, and budgets, and reports final-policy success and participant returns. Training curves retain their native clocks. Numerical evolution and sampled reinforcement produce the policies; exhaustive expectation makes their evaluation exact up to floating-point arithmetic.
+
+## Discrete multilocus generations
+
+`haplotype.deterministic` and `wright_fisher.haploid` use the same declared
+selection, recombination and locus-mutation operators. Their census states are
+haplotype frequencies and integer haploid counts, respectively. Their clock is
+`generations`, with no continuous numerical solver. The new realisation connects
+an explicit genotype-to-plan expression map to the existing finite game.
+
+`MultilocusPopulationSpec` binds encounter slots to sampled individuals. Several
+slots can share one genotype, preserving associations when components act within
+one individual. Separate groups draw independently with replacement. Conditional
+reproductive weights evaluate one focal individual group at a time and integrate
+the others. The current multilocus implementation uses one reproducing population.
+
+The [multilocus guide](multilocus.md) gives equations (1)–(7), initializer and
+recombination conventions, native construction, resource limits, validation and
+primary references. `ML-COORD`, `ML-TRANSFER` and `ML-COMPOSE` are constructed
+assays, with deterministic and Wright–Fisher demonstration profiles.

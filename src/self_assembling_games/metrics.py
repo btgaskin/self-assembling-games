@@ -89,14 +89,17 @@ def evaluate(
     base = snapshot.snapshot() if isinstance(snapshot, Simulation) else snapshot
     from .evolution import EvolutionSimulation
     from .finite_learning import ReinforcementSimulation
+    from .multilocus import MultilocusSimulation
 
-    if isinstance(snapshot, (EvolutionSimulation, ReinforcementSimulation)):
+    if isinstance(
+        snapshot, (EvolutionSimulation, ReinforcementSimulation, MultilocusSimulation)
+    ):
         base = snapshot.snapshot()
     if isinstance(base, dict) and base.get("engine") == "adaptive":
         from .adaptive_runtime import restore_adaptive
 
         sim = restore_adaptive(base)
-        if isinstance(sim, EvolutionSimulation):
+        if isinstance(sim, (EvolutionSimulation, MultilocusSimulation)):
             if protocol != "exact":
                 raise ValueError(
                     "Evolutionary population evaluation uses exact finite expectations"

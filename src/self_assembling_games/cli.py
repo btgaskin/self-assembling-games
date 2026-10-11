@@ -22,7 +22,7 @@ def main(argv: list[str] | None = None) -> int:
     listing.add_argument("--all", action="store_true")
     listing.add_argument("--experiments", action="store_true")
     listing.add_argument(
-        "--family", choices=["barrett", "skyrms", "all"], default="all"
+        "--family", choices=["barrett", "skyrms", "constructed", "all"], default="all"
     )
     sub.add_parser(
         "methods", help="List adaptive method classes and their named methods"
@@ -40,6 +40,7 @@ def main(argv: list[str] | None = None) -> int:
     running.add_argument("--seed", type=int, default=0)
     running.add_argument("--plays", type=int)
     running.add_argument("--time", type=float, help="Additional evolutionary time")
+    running.add_argument("--generations", type=int)
     running.add_argument("--output", type=Path, required=True)
     running.add_argument("--trace", type=Path)
     running.add_argument("--checkpoint-every", type=int, default=0)
@@ -57,12 +58,14 @@ def main(argv: list[str] | None = None) -> int:
     continuing.add_argument("checkpoint")
     continuing.add_argument("--plays", type=int)
     continuing.add_argument("--time", type=float)
+    continuing.add_argument("--generations", type=int)
     continuing.add_argument("--output", type=Path)
     ensemble = sub.add_parser("ensemble")
     ensemble.add_argument("profile")
     ensemble.add_argument("--seeds", type=int, nargs="+", required=True)
     ensemble.add_argument("--plays", type=int)
     ensemble.add_argument("--time", type=float)
+    ensemble.add_argument("--generations", type=int)
     ensemble.add_argument("--metric")
     ensemble.add_argument("--threshold", type=float)
     ensemble.add_argument("--output", type=Path, required=True)
@@ -71,6 +74,7 @@ def main(argv: list[str] | None = None) -> int:
     timing.add_argument("profile")
     timing.add_argument("--plays", type=int)
     timing.add_argument("--time", type=float)
+    timing.add_argument("--generations", type=int)
     replay = sub.add_parser("replay")
     replay.add_argument("trace")
     args = parser.parse_args(argv)
@@ -86,15 +90,17 @@ def main(argv: list[str] | None = None) -> int:
                         "Historical adaptive experiments remain source-gated; SKQ1"
                     )
                 result = reproduction_protocols()
-            elif args.family == "skyrms":
+            elif args.family in {"skyrms", "constructed"}:
                 result = (
-                    finite_catalogue("skyrms")
+                    finite_catalogue(args.family)
                     if args.all
-                    else adaptive_profiles("skyrms")
+                    else adaptive_profiles(args.family)
                 )
             elif args.family == "all":
                 result = (
-                    catalogue() + finite_catalogue("skyrms")
+                    catalogue()
+                    + finite_catalogue("skyrms")
+                    + finite_catalogue("constructed")
                     if args.all
                     else profiles() + adaptive_profiles()
                 )
@@ -148,6 +154,7 @@ def main(argv: list[str] | None = None) -> int:
                 sim,
                 plays=args.plays,
                 duration=args.time,
+                generations=args.generations,
                 output=args.output,
                 checkpoint_every=args.checkpoint_every,
                 trace=args.trace,
@@ -169,12 +176,13 @@ def main(argv: list[str] | None = None) -> int:
             )
         elif args.command == "resume":
             sim = resume(args.checkpoint)
-            if args.plays is None and args.time is None:
-                raise ValueError("Resume requires --plays or --time")
+            if args.plays is None and args.time is None and args.generations is None:
+                raise ValueError("Resume requires --plays, --time, or --generations")
             result = _run(
                 sim,
                 plays=args.plays,
                 duration=args.time,
+                generations=args.generations,
                 output=args.output or args.checkpoint,
             )
         elif args.command == "ensemble":
@@ -186,6 +194,7 @@ def main(argv: list[str] | None = None) -> int:
                 threshold=args.threshold,
                 workers=args.workers,
                 duration=args.time,
+                generations=args.generations,
                 metric=args.metric,
             )
         elif args.command == "replay":
@@ -193,7 +202,12 @@ def main(argv: list[str] | None = None) -> int:
 
             result = replay_trace(args.trace).metrics.summary()
         else:
-            result = benchmark(args.profile, args.plays, duration=args.time)
+            result = benchmark(
+                args.profile,
+                args.plays,
+                duration=args.time,
+                generations=args.generations,
+            )
     except (ValueError, KeyError, OSError, TypeError) as error:
         print(f"sg: {error}", file=sys.stderr)
         return 2
@@ -202,10 +216,27 @@ def main(argv: list[str] | None = None) -> int:
 
 
 def _run(
-    sim, *, plays=None, duration=None, output=None, checkpoint_every=0, trace=None
+    sim,
+    *,
+    plays=None,
+    duration=None,
+    generations=None,
+    output=None,
+    checkpoint_every=0,
+    trace=None,
 ):
     from .evolution import EvolutionSimulation
     from .finite_learning import ReinforcementSimulation
+    from .multilocus import MultilocusSimulation
+
+    if isinstance(sim, MultilocusSimulation):
+        if plays is not None or duration is not None or checkpoint_every or trace:
+            raise ValueError(
+                "Multilocus populations use --generations and census checkpoints"
+            )
+        return sim.run(generations=generations, output=output)
+    if generations is not None:
+        raise ValueError("--generations belongs to multilocus generation methods")
 
     if isinstance(sim, EvolutionSimulation):
         if plays is not None or checkpoint_every or trace:

@@ -2,11 +2,11 @@
 
 A research library for **self-assembling games**: organized interactions that acquire signaling conventions, computation, coordination, and inquiry through adaptive decisions. Game definitions describe what participants observe, choose, and receive. Adaptive methods describe how their decisions or inherited strategies change.
 
-Every executable simulation exposes a **game**, its **organisation**, its **realisation**, and a resolved **specification** through `simulation.model_instance`. A conditional decision expresses a component's current disposition to act under a permitted observation. Its adaptive disposition depends on the realised state and the mechanism that changes it. Reinforcement modifies propensities and assignments; population evolution changes complete inherited-plan frequencies. Connecting these decisions produces signaling, translation, attention, questions, partner selection, and learning-rule selection. See the [domain model and native construction API](docs/model.md).
+Every executable simulation exposes a **game**, its **organisation**, its **realisation**, and a resolved **specification** through `simulation.model_instance`. A conditional decision expresses a component's current disposition to act under a permitted observation. Its adaptive disposition depends on the realised state and the mechanism that changes it. Reinforcement modifies propensities and assignments; population methods change inherited-plan or multilocus genotype distributions. Connecting these dispositions produces signaling, translation, attention, questions, partner selection, and learning-rule selection. See the [domain model and native construction API](docs/model.md).
 
-The source families currently include Jeffrey A. Barrett's *Self-Assembling Games: Language, Learning, and Inquiry* (2025), with **39 catalogue entries, 32 executable model families, and 45 encounter profiles**, and Brian Skyrms' *Evolution of signalling systems with multiple senders and receivers* (2009), with **six finite game families**. There are also **40 adaptive profiles** spanning the Skyrms games and selected Barrett adapters. Each profile records its game, method, assumptions, and protocol.
+The source families currently include Jeffrey A. Barrett's *Self-Assembling Games: Language, Learning, and Inquiry* (2025), with **39 catalogue entries, 32 executable model families, and 45 encounter profiles**, and Brian Skyrms' *Evolution of signalling systems with multiple senders and receivers* (2009), with **six finite game families**. Three constructed multilocus assays examine intracellular coordination, fixed-template transfer, and composition. There are **46 adaptive profiles** spanning the Skyrms games, selected Barrett adapters, and these constructed assays. Each profile records its game, method, assumptions, and protocol.
 
-Source-specific definitions preserve observations, option sets, feedback, and timing. The finite core supports continuous-time replicator dynamics, birth-mutation replicator dynamics, conditional reinforcement, and complete-plan reinforcement. The Barrett encounter runtime additionally supports punishment, persistence, invention, and nested learning. Source questions and deliberate variants travel with configurations and checkpoints. See the [shared adaptive architecture](docs/finite-dynamics.md) and [source register](docs/sources.md).
+Source-specific definitions preserve observations, option sets, feedback, and timing. The finite core supports continuous-time replicator dynamics, birth-mutation replicator dynamics, conditional reinforcement, and complete-plan reinforcement. Multilocus realisations add deterministic haplotype recursions and haploid Wright–Fisher sampling with explicit expression, recombination, and locus mutation. The Barrett encounter runtime additionally supports punishment, persistence, invention, and nested learning. Source questions and deliberate variants travel with configurations and checkpoints. See the [shared adaptive architecture](docs/finite-dynamics.md), [multilocus methods and equations](docs/multilocus.md), and [source register](docs/sources.md).
 
 ## Games, methods, and history
 
@@ -18,8 +18,12 @@ The library takes self-assembling games as its organizing concept and traces eac
 | Population evolution | `replicator_mutator.birth_uniform` | Plan frequencies with uniform mutation at reproduction |
 | Reinforcement | `reinforcement.conditional.R1` | Propensities at permitted decision contexts |
 | Reinforcement | `reinforcement.strategy.R1` | Propensities over complete role plans |
+| Discrete population generations | `haplotype.deterministic` | Frequencies of complete haploid genotypes |
+| Discrete population generations | `wright_fisher.haploid` | Integer haploid census counts; frequencies derived from counts |
 
 Solvers are separate from mathematical methods. The default replicator equation is Skyrms' continuous-time equation; DOP853 is the library's default numerical solver. Population grouping, role weights, fixed components, initialization, and mutation are explicit choices. Full inherited distributions retain correlations between roles. Additional finite games can be registered through `register_finite_game`.
+
+Multilocus methods advance discrete generations through selection, declared recombination, independent locus mutation, and a deterministic or sampled census. A genotype-to-plan expression map connects inherited loci to functional components. Individual bindings specify which encounter slots act from the same genotype; separate groups sample independently with replacement. This makes joint participation explicit alongside inheritance. The methods follow established population-genetic recursions; the constructed games supply the functional assays and reproductive-fitness mapping. Their [documentation](docs/multilocus.md#sources-and-scope) cites Kirkpatrick, Johnson and Barton (2002), Barton and Otto (2005), and the supplied working study, with the respective conventions and assumptions.
 
 Install evolutionary support and list the families:
 
@@ -32,6 +36,9 @@ sg run sk-sig.evolution.demo --seed 1 --time 20 --output runs/signal-evolution
 sg run sk-sig.strategy-r1.demo --seed 1 --plays 10000 --output runs/signal-learning
 sg evaluate runs/signal-evolution
 sg evaluate runs/signal-learning
+sg list --family constructed
+sg run ml-transfer.wf.demo --seed 1 --generations 100 --output runs/genetic-transfer
+sg evaluate runs/genetic-transfer
 ```
 
 These two signalling profiles use the same finite game and complete role-plan sets. Their final policies can be evaluated exactly by summing over all states and strategy combinations. Evolutionary time and learning encounters are reported separately. The frozen-endpoint translator offers a particularly simple comparison with one adaptive role and known plan payoffs; the voting game supplies an exact majority-rule success benchmark of `0.972`. See [comparison conditions and source questions](docs/finite-dynamics.md).
@@ -261,9 +268,11 @@ Reports include accuracy, net payoff, terms, exchanges, outcome status, and comp
 .venv/bin/python -m pytest -q
 ```
 
+Multilocus reports distinguish final-census success from the average expected success before reproduction across all advanced generations. Inspection exposes full genotype state, expressed plans, allele frequencies, linkage disequilibrium, and the last staged generation. Checkpoints retain the genome order, expression map, transmission specification, counts or frequencies, RNG state, and generation history. The [worked examples](examples/multilocus_assays.py) compare association, transmission stages, and target-dependent template accessibility.
+
 Ensembles fix seed sets and protocols, resume interrupted runs, and report distributions with bootstrap and Wilson confidence intervals. Independent workers preserve each seed's serial trajectory. Book-horizon profiles include `sig.n4.book` and `sig.n8.punishment.book`. Their registered long statistical reproductions await execution; source-reported percentages are documented reference results.
 
-Tests cover learning rules, source strategy spaces, exact game fixtures, role-grouped fitness, numerical integration, checkpoint continuation, and policy comparisons. Run `python -m pytest -q` to check the installed development environment.
+Tests cover learning rules, source strategy spaces, exact game fixtures, role-grouped fitness, numerical integration, multilocus operator oracles, shared-individual expression, Wright–Fisher moments, checkpoint continuation, and policy comparisons. The earlier 85-profile state, RNG, event, and trajectory baselines remain checked. Run `python -m pytest -q` to check the installed development environment.
 
 ## Source fidelity and further work
 
@@ -271,4 +280,4 @@ A demonstration supplies an executable configuration and labels its choices. A s
 
 The common abstraction and composition operations are engineering designs derived from the games. “Category” here means the organized family of models and operations. A formal mathematical category would require separately specified objects, morphisms, and laws.
 
-For further reading, use the [catalogue](docs/catalogue.md), [learning rules](docs/learning-rules.md), [finite dynamics](docs/finite-dynamics.md), [source register](docs/sources.md). The five game specification sheets expand the mechanisms and chapter citations presented here.
+For further reading, use the [domain model](docs/model.md), [catalogue](docs/catalogue.md), [learning rules](docs/learning-rules.md), [finite dynamics](docs/finite-dynamics.md), [multilocus methods](docs/multilocus.md), and [source register](docs/sources.md). The five game specification sheets expand the mechanisms and chapter citations presented here.

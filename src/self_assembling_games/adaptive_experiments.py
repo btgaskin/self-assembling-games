@@ -22,6 +22,7 @@ def adaptive_ensemble(
     metric: str | None = None,
     threshold: float | None = None,
     workers: int = 1,
+    generations: int | None = None,
 ) -> dict[str, Any]:
     import json
     import math
@@ -29,7 +30,9 @@ def adaptive_ensemble(
     from .metrics import wilson
 
     p = load_adaptive_profile(profile)
-    evolution = adaptive_method(p.method).method_class == "population_evolution"
+    method_class = adaptive_method(p.method).method_class
+    evolution = method_class == "population_evolution"
+    discrete = method_class == "population_generations"
     if not seeds or len(set(seeds)) != len(seeds):
         raise ValueError("Seeds must be unique and nonempty")
     if not isinstance(workers, int) or workers <= 0:
@@ -38,10 +41,19 @@ def adaptive_ensemble(
         not math.isfinite(threshold) or not 0 <= threshold <= 1
     ):
         raise ValueError("Accuracy threshold must be in [0,1]")
-    if (evolution and plays is not None) or (not evolution and duration is not None):
+    if (
+        (evolution and (plays is not None or generations is not None))
+        or (discrete and (plays is not None or duration is not None))
+        or (
+            method_class == "reinforcement"
+            and (duration is not None or generations is not None)
+        )
+    ):
         raise ValueError("Ensemble duration must use the adaptive method's clock")
     horizon = (
-        (p.protocol.get("duration", 50.0) if duration is None else duration)
+        (p.protocol.get("generations", 100) if generations is None else generations)
+        if discrete
+        else (p.protocol.get("duration", 50.0) if duration is None else duration)
         if evolution
         else (p.protocol.get("plays", 10_000) if plays is None else plays)
     )
@@ -52,13 +64,19 @@ def adaptive_ensemble(
     ):
         raise ValueError("Ensemble horizon must be finite and positive")
     if not evolution and (not isinstance(horizon, int) or isinstance(horizon, bool)):
-        raise ValueError("Reinforcement ensemble plays must be an integer")
+        raise ValueError("Ensemble plays/generations must be an integer")
     metric = metric or (
-        "final_policy_success_probability" if evolution else "cumulative_accuracy"
+        "final_policy_success_probability"
+        if evolution or discrete
+        else "cumulative_accuracy"
     )
     allowed = {
         "final_policy_success_probability",
-        "time_average_expected_success" if evolution else "cumulative_accuracy",
+        "generation_average_expected_success"
+        if discrete
+        else "time_average_expected_success"
+        if evolution
+        else "cumulative_accuracy",
     }
     if metric not in allowed:
         raise ValueError("Metric does not belong to this adaptive method")
@@ -68,7 +86,11 @@ def adaptive_ensemble(
         "configuration_hash": digest(p.to_dict()),
         "seeds": list(seeds),
         "horizon": horizon,
-        "clock": "evolutionary_time" if evolution else "plays",
+        "clock": "generations"
+        if discrete
+        else "evolutionary_time"
+        if evolution
+        else "plays",
         "metric": metric,
         "threshold": threshold,
         "threshold_comparison": "strictly_greater",
@@ -84,7 +106,7 @@ def adaptive_ensemble(
     if workers == 1:
         results = [_adaptive_run(t) for t in tasks]
     else:
-        if not p.model.startswith("SK-") and "profile" not in p.parameters:
+        if not p.model.startswith(("SK-", "ML-")) and "profile" not in p.parameters:
             raise ValueError(
                 "Custom game factories need serial ensembles or worker-side registration"
             )
@@ -140,12 +162,15 @@ def _adaptive_run(task):
     if sim.seed != seed or sim.configuration_hash != digest(profile):
         raise ValueError("Ensemble checkpoint does not match the protocol")
     evolution = isinstance(sim, EvolutionSimulation)
-    reached = sim.time if evolution else sim.plays
+    discrete = sim.method.method_class == "population_generations"
+    reached = sim.generation if discrete else sim.time if evolution else sim.plays
     remaining = horizon - reached
     if remaining < 0:
         raise ValueError("Checkpoint exceeds ensemble horizon")
     if remaining > 0 and sim.status not in {"resource_limit", "integration_failed"}:
-        if evolution:
+        if discrete:
+            sim.run(generations=remaining, output=destination)
+        elif evolution:
             try:
                 sim.run(duration=remaining, output=destination)
             except (EvolutionResourceError, IntegrationDomainError):
@@ -159,7 +184,10 @@ def _adaptive_run(task):
         measurement = summary[metric]
     return {
         "seed": seed,
-        "complete": (sim.time if evolution else sim.plays) == horizon,
+        "complete": (
+            sim.generation if discrete else sim.time if evolution else sim.plays
+        )
+        == horizon,
         "measurement": measurement,
         "summary": summary,
         "fidelity": copy.deepcopy(sim.fidelity),

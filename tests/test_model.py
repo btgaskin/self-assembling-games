@@ -54,7 +54,18 @@ def test_native_and_profile_execute_the_same_model(profile):
         assert left.model_instance.inspect() == right.model_instance.inspect()
 
 
-@pytest.mark.parametrize("profile", PROFILES, ids=lambda p: p["id"])
+@pytest.mark.parametrize(
+    "profile",
+    [
+        p
+        for p in PROFILES
+        if p["id"]
+        in json.loads(
+            (Path(__file__).parent / "data/domain_refactor_baseline.json").read_text()
+        )["cases"]
+    ],
+    ids=lambda p: p["id"],
+)
 def test_pre_refactor_state_rng_events_and_trajectory(profile):
     fixture = json.loads(
         (Path(__file__).parent / "data/domain_refactor_baseline.json").read_text()

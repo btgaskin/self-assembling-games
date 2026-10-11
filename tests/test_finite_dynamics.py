@@ -651,6 +651,8 @@ def test_every_adaptive_profile_has_exact_mass_and_restores(profile):
     assert s.evaluate()["completed_mass"] == pytest.approx(1)
     if s.method.method_class == "reinforcement":
         s.run(plays=2)
+    elif s.method.method_class == "population_generations":
+        s.run(generations=2)
     else:
         s.run(duration=0.01)
     assert restore_adaptive(s.snapshot()).snapshot() == s.snapshot()
@@ -662,9 +664,10 @@ def test_adaptive_cli_and_family_listings(tmp_path, capsys):
     assert {m["method_class"] for m in adaptive_methods()} == {
         "population_evolution",
         "reinforcement",
+        "population_generations",
     }
     assert main(["methods"]) == 0
-    assert len(json.loads(capsys.readouterr().out)) == 4
+    assert len(json.loads(capsys.readouterr().out)) == 6
     assert main(["list", "--all", "--family", "skyrms"]) == 0
     assert len(json.loads(capsys.readouterr().out)) == 6
     output = tmp_path / "evolution"

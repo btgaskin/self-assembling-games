@@ -82,7 +82,7 @@ WSLR changes all unfrozen assignments in order. Current assignments and the
 adaptive operation make these distinctions inspectable. The compatibility
 spelling `probabilities(response=False)` returns the propensity distribution.
 
-Four registered realisations cover the current executable cases:
+Five registered realisations cover the current executable cases:
 
 | Identifier | State and change |
 |---|---|
@@ -90,6 +90,7 @@ Four registered realisations cover the current executable cases:
 | `finite.conditional` | Context-bound act propensities; validate an encounter's entire credit batch, then apply R1 |
 | `finite.complete_plan` | Mass over complete plans; sample one plan per participant and reinforce it once |
 | `population.complete_plan` | Joint inherited-plan frequencies; selection and the declared birth-mutation law under explicit matching |
+| `population.multilocus` | Haplotype frequencies or counts; genotype-to-plan expression, individual participation, selection and explicit transmission |
 
 Barrett feedback updates addressed tables sequentially. Finite reinforcement
 validates and applies a whole credit transaction. Each implementation retains its
@@ -112,6 +113,12 @@ Several slots assigned to one population still draw distinct independent
 individuals. Multiple modules inside one slot can share a complete plan, retaining
 their internal association. Joint inheritance and joint participation are thus
 separately specified.
+
+For multilocus models, `MultilocusPopulationSpec` instead binds several encounter
+slots to one sampled individual. All those slots express that individual's
+genotype. Separate groups sample with replacement from the single haploid
+population. [Multilocus methods](multilocus.md) specifies the expression,
+conditional fitness and transmission equations, with their source references.
 
 `organisation.inventory(realisation)` discovers current addresses directly from
 live state. Invention, rollback and removal immediately alter that inventory.
@@ -147,15 +154,16 @@ present dispositions with different R1 adaptation, then compares correlated and
 anticorrelated complete plans. The same architecture supports a fixed-template
 transfer with explicit adaptive adapters and retained module state.
 
-These are computational realisations of the specified games. A molecular
-genotype-to-organisation map or a recombination operator requires its own concrete
-mechanism and validation. The current population methods use continuous
-selection and uniform birth mutation over complete inherited plans. A biological
-interpretation should specify the reproducing entities and the mechanisms that
-make and modify their dispositions.
+These are computational realisations of the specified games. Complete-plan
+population methods use continuous selection and uniform birth mutation.
+Multilocus methods add an explicit inherited encoding, deterministic expression,
+recombination and locus mutation under discrete generations. A molecular
+genotype-to-organisation map requires its own concrete mechanisms. A biological
+interpretation specifies the reproducing entities and how they make and modify
+their dispositions.
 
 The refactor is checked against pre-change state, RNG, events and trajectories for
-all 85 executable profiles. Additional tests compare native and profile
+the 85 executable profiles present before that refactor. Additional tests compare native and profile
 construction, live aliases, source gates, failed credit transactions, template
 restore, inspection and evaluation. Continuous solver arithmetic and tolerances
 retain their established contract. Baseline hashes and their capture conditions
