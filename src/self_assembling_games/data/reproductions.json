@@ -1,0 +1,36 @@
+[
+  {
+    "id": "B2-n4-R1",
+    "profile": "sig.n4.book",
+    "plays": 1000000,
+    "metric": "cumulative_accuracy",
+    "comparison": ">",
+    "cutoff": 0.95,
+    "reported_fraction": 0.76,
+    "source": "B2 pp.32\u201333",
+    "required": "Explicit seed set; original seeds/count unavailable",
+    "executed": false
+  },
+  {
+    "id": "B2-n8-R2",
+    "profile": "sig.n8.punishment.book",
+    "plays": 10000000,
+    "metric": "cumulative_accuracy",
+    "comparison": ">",
+    "cutoff": 0.95,
+    "reported_fraction": 0.83,
+    "source": "B2 pp.35\u201336",
+    "required": "Explicit seed set",
+    "executed": false
+  },
+  {
+    "id": "B3-HIER",
+    "profile": null,
+    "plays": 100000000,
+    "metric": "near_perfect_efficient_signaling",
+    "reported_fraction": 0.975,
+    "source": "B3 p.50",
+    "required": "Operational efficiency cutoff; seed set",
+    "executed": false
+  }
+]

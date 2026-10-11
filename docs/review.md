@@ -1,6 +1,6 @@
-# Review before implementation
+# Source questions and mechanism checks
 
-## Proposed decisions
+## Adopted decisions
 
 - Keep this as a standalone local research repository.
 - Use Barrett's book models as the canonical family, with source-specific observations, timing, updates, and parameters.
@@ -25,6 +25,9 @@
 | Q8 — Attention extension | B12 §12.6; Herrmann and VanDrunen (2025) | Distractor sampling/correlation and sender conditional-table sharing | Defines what information is available and which policies can evolve |
 | Q9 — Nested task environments | B12 §§12.2–12.3 | Bandit distributions; trial parameters; positive failure return; oracle processes | Enables reproducible meta-learning comparisons |
 | Q10 — Qualitative assembly/network extensions | B4, B6 §6.1, B9 §§9.3,9.5–9.6, B12 §§12.4–12.7 | Primitive dynamics, imitation rate, subscription learner, generalization kernel | These are framework entries until a concrete source protocol is recovered |
+| Q11 — Partial ordering sampler | B5 §5.6 | Exact adjacent training-pair selection and held-out protocol | Demonstrations sample adjacent pairs in both directions explicitly |
+| Q12 — Frozen template lifecycle | B5, B7 | Pretraining budget/checkpoint selection; frozen mutator behavior; unseen receiver pairs | Export transforms and their lineage are explicit variants |
+| Q13 — Monty Hall host | B11 §11.4 | Exact host protocol | Demonstration opens a uniformly selected eligible goat door |
 
 These questions concern specific profiles, so they need not delay the fully specified finite signaling core. Recover the cited papers when a corresponding profile enters implementation. Record source-supported resolutions in the register; preserve a literal book profile if a correction is needed.
 
@@ -33,7 +36,7 @@ These questions concern specific profiles, so they need not delay the fully spec
 | Mechanism | Concrete check |
 |---|---|
 | Proportional response | Every urn normalizes; equal weights give equal probabilities |
-| Feedback selection | Only visited, active decisions update; frozen modules remain byte-for-byte stable |
+| Feedback selection | Update footprints equal the declared credit rule, including unsampled recipients; frozen adaptive state remains byte-for-byte stable |
 | Punishment | Floor holds after negative reward; other types retain their previous weights |
 | Perfect finite policy | Exact success equals one under a matching convention |
 | NAND baseline | Always-T policy evaluates to .75 under independent fair inputs |
@@ -47,8 +50,8 @@ These questions concern specific profiles, so they need not delay the fully spec
 | Evaluation | Held-out/frozen evaluation produces no updates; cumulative and current-policy metrics remain separate |
 | Reproducibility | Checkpoint restores learner state, clocks, provisional IDs, and random generator state |
 
-These are planned acceptance checks, not reported test results. Statistical convergence comparisons should follow deterministic rule checks. Include seed counts, run lengths, cutoff definitions, distribution of outcomes, and baseline policies with any future report.
+These checks guide the executable test suite; actual results are recorded in the qualification report. Statistical convergence comparisons should follow deterministic rule checks. Include seed counts, run lengths, cutoff definitions, distribution of outcomes, and baseline policies with any future report.
 
 ## Review boundary
 
-The documentation is ready for structural review: game coverage, source fidelity, common contracts, composition operations, and implementation order. The current repository contains no simulator. Runtime creation, simulations, replicator derivations, and remote publication follow a subsequent agreed step.
+The documentation is ready for structural review: game coverage, source fidelity, common contracts, composition operations, and implementation order. The approved plan has been implemented as a reinforcement runtime with explicit source gates. See [runtime.md](runtime.md), [Astra review](astra-review.md), and [repository plan](repository-plan.md). Population/replicator dynamics and remote publication remain subsequent work.

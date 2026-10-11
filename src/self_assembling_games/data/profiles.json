@@ -1,0 +1,1048 @@
+[
+  {
+    "id": "sig.demo",
+    "model": "SIG",
+    "parameters": {
+      "states": 2,
+      "signals": 2,
+      "actions": 2
+    },
+    "learner": {
+      "rule": "R1"
+    },
+    "kind": "demonstration",
+    "plays": 10000,
+    "source": [
+      "B2",
+      "https://doi.org/10.1093/9780197793572.003.0002"
+    ],
+    "assumptions": [
+      "Short demonstration duration; source reproduction status is separate."
+    ]
+  },
+  {
+    "id": "sig.n4.demo",
+    "model": "SIG",
+    "parameters": {
+      "states": 4,
+      "signals": 4,
+      "actions": 4
+    },
+    "learner": {
+      "rule": "R1"
+    },
+    "kind": "demonstration",
+    "plays": 10000,
+    "source": [
+      "B2",
+      "https://doi.org/10.1093/9780197793572.003.0002"
+    ],
+    "assumptions": [
+      "Short demonstration duration; source reproduction status is separate."
+    ]
+  },
+  {
+    "id": "sig.n8.punishment.demo",
+    "model": "SIG",
+    "parameters": {
+      "states": 8,
+      "signals": 8,
+      "actions": 8
+    },
+    "learner": {
+      "rule": "R2",
+      "reward": 1,
+      "punishment": 1
+    },
+    "kind": "demonstration",
+    "plays": 10000,
+    "source": [
+      "B2",
+      "https://doi.org/10.1093/9780197793572.003.0002"
+    ],
+    "assumptions": [
+      "Short demonstration duration; source reproduction status is separate."
+    ]
+  },
+  {
+    "id": "sig.iterative.demo",
+    "model": "SIG",
+    "parameters": {
+      "states": 2,
+      "signals": 2,
+      "actions": 2
+    },
+    "learner": {
+      "rule": "R3",
+      "phase_length": 2500,
+      "reward": 2,
+      "punishment": 4
+    },
+    "kind": "demonstration",
+    "plays": 10000,
+    "source": [
+      "B2",
+      "https://doi.org/10.1093/9780197793572.003.0002"
+    ],
+    "assumptions": [
+      "Short demonstration duration; source reproduction status is separate."
+    ]
+  },
+  {
+    "id": "sig.strategy.demo",
+    "model": "SIG",
+    "parameters": {
+      "states": 2,
+      "signals": 2,
+      "actions": 2
+    },
+    "learner": {
+      "rule": "STRATEGY_WSLR"
+    },
+    "kind": "demonstration",
+    "plays": 10000,
+    "source": [
+      "B2",
+      "https://doi.org/10.1093/9780197793572.003.0002"
+    ],
+    "assumptions": [
+      "Short demonstration duration; source reproduction status is separate."
+    ]
+  },
+  {
+    "id": "cue.demo",
+    "model": "CUE",
+    "parameters": {
+      "states": 2,
+      "signals": 2,
+      "actions": 2,
+      "fixed_map": [
+        0,
+        1
+      ]
+    },
+    "learner": {
+      "rule": "R1"
+    },
+    "kind": "demonstration",
+    "plays": 10000,
+    "source": [
+      "B4",
+      "https://doi.org/10.1093/9780197793572.003.0004"
+    ],
+    "assumptions": [
+      "Short demonstration duration; source reproduction status is separate."
+    ]
+  },
+  {
+    "id": "man.demo",
+    "model": "MAN",
+    "parameters": {
+      "states": 2,
+      "signals": 2,
+      "actions": 2,
+      "fixed_map": [
+        0,
+        1
+      ]
+    },
+    "learner": {
+      "rule": "R1"
+    },
+    "kind": "demonstration",
+    "plays": 10000,
+    "source": [
+      "B4",
+      "https://doi.org/10.1093/9780197793572.003.0004"
+    ],
+    "assumptions": [
+      "Short demonstration duration; source reproduction status is separate."
+    ]
+  },
+  {
+    "id": "hyb.demo",
+    "model": "HYB",
+    "parameters": {
+      "states": 2,
+      "signals": 2,
+      "actions": 2
+    },
+    "learner": {
+      "rule": "R6"
+    },
+    "kind": "demonstration",
+    "plays": 10000,
+    "source": [
+      "B11",
+      "https://doi.org/10.1093/9780197793572.003.0011"
+    ],
+    "assumptions": [
+      "Short demonstration duration; source reproduction status is separate."
+    ]
+  },
+  {
+    "id": "cod.demo",
+    "model": "COD",
+    "parameters": {},
+    "learner": {
+      "rule": "R1"
+    },
+    "kind": "demonstration",
+    "plays": 10000,
+    "source": [
+      "B3",
+      "https://doi.org/10.1093/9780197793572.003.0003"
+    ],
+    "assumptions": [
+      "Short demonstration duration; source reproduction status is separate."
+    ]
+  },
+  {
+    "id": "nand.demo",
+    "model": "NAND",
+    "parameters": {},
+    "learner": {
+      "rule": "R1"
+    },
+    "kind": "demonstration",
+    "plays": 10000,
+    "source": [
+      "B3",
+      "https://doi.org/10.1093/9780197793572.003.0003"
+    ],
+    "assumptions": [
+      "Short demonstration duration; source reproduction status is separate."
+    ]
+  },
+  {
+    "id": "scod.demo",
+    "model": "SCOD",
+    "parameters": {},
+    "learner": {
+      "rule": "R1"
+    },
+    "kind": "demonstration",
+    "plays": 10000,
+    "source": [
+      "B6",
+      "https://doi.org/10.1093/9780197793572.003.0006"
+    ],
+    "assumptions": [
+      "Short demonstration duration; source reproduction status is separate."
+    ]
+  },
+  {
+    "id": "hier.demo",
+    "model": "HIER",
+    "parameters": {
+      "simple_reward": 1.5,
+      "complex_reward": 2.0,
+      "term_cost": 0.5
+    },
+    "learner": {
+      "rule": "SIGNED",
+      "floor": 1
+    },
+    "kind": "demonstration",
+    "plays": 10000,
+    "source": [
+      "B3",
+      "https://doi.org/10.1093/9780197793572.003.0003"
+    ],
+    "assumptions": [
+      "Short demonstration duration; source reproduction status is separate."
+    ]
+  },
+  {
+    "id": "inv.demo",
+    "model": "INV",
+    "parameters": {
+      "n": 3,
+      "max_tables": 10000
+    },
+    "learner": {
+      "rule": "R1"
+    },
+    "kind": "demonstration",
+    "plays": 10000,
+    "source": [
+      "B11",
+      "https://doi.org/10.1093/9780197793572.003.0011"
+    ],
+    "assumptions": [
+      "Short demonstration duration; source reproduction status is separate."
+    ]
+  },
+  {
+    "id": "ord.demo",
+    "model": "ORD",
+    "parameters": {
+      "n": 7,
+      "max_tables": 10000,
+      "failed_row": "discard"
+    },
+    "learner": {
+      "rule": "R1"
+    },
+    "kind": "demonstration",
+    "plays": 10000,
+    "source": [
+      "B5",
+      "https://doi.org/10.1093/9780197793572.003.0005"
+    ],
+    "assumptions": [
+      "Pair first-failure rows are discarded in this explicit variant."
+    ]
+  },
+  {
+    "id": "add.demo",
+    "model": "ADD",
+    "parameters": {
+      "n": 6,
+      "max_tables": 10000,
+      "failed_row": "discard"
+    },
+    "learner": {
+      "rule": "R1"
+    },
+    "kind": "demonstration",
+    "plays": 10000,
+    "source": [
+      "B7",
+      "https://doi.org/10.1093/9780197793572.003.0007"
+    ],
+    "assumptions": [
+      "Pair first-failure rows are discarded in this explicit variant."
+    ]
+  },
+  {
+    "id": "tr-ord.demo",
+    "model": "TR-ORD",
+    "parameters": {
+      "n": 7,
+      "template_mode": "constructed"
+    },
+    "learner": {
+      "rule": "R2"
+    },
+    "kind": "demonstration",
+    "plays": 10000,
+    "source": [
+      "B5",
+      "https://doi.org/10.1093/9780197793572.003.0005"
+    ],
+    "assumptions": [
+      "Constructed perfect ordering fixture; no claim of learned pretraining."
+    ]
+  },
+  {
+    "id": "tr-part.demo",
+    "model": "TR-PART",
+    "parameters": {
+      "n": 7,
+      "template_mode": "constructed",
+      "pair_sampler": "uniform_adjacent_both_directions"
+    },
+    "learner": {
+      "rule": "R2"
+    },
+    "kind": "demonstration",
+    "plays": 10000,
+    "source": [
+      "B5",
+      "https://doi.org/10.1093/9780197793572.003.0005"
+    ],
+    "assumptions": [
+      "Constructed perfect ordering fixture; no claim of learned pretraining."
+    ]
+  },
+  {
+    "id": "tr-log.demo",
+    "model": "TR-LOG",
+    "parameters": {
+      "template_mode": "constructed",
+      "truth_table": [
+        0,
+        1,
+        1,
+        1
+      ]
+    },
+    "learner": {
+      "rule": "R1"
+    },
+    "kind": "demonstration",
+    "plays": 10000,
+    "source": [
+      "B5",
+      "https://doi.org/10.1093/9780197793572.003.0005"
+    ],
+    "assumptions": [
+      "Constructed perfect NAND fixture; target OR."
+    ]
+  },
+  {
+    "id": "comp-nand.1.demo",
+    "model": "COMP-NAND",
+    "parameters": {
+      "template_mode": "constructed",
+      "selectors": 1
+    },
+    "learner": {
+      "rule": "R1"
+    },
+    "kind": "demonstration",
+    "plays": 10000,
+    "source": [
+      "B7",
+      "https://doi.org/10.1093/9780197793572.003.0007"
+    ],
+    "assumptions": [
+      "Constructed perfect NAND modules; shared upstream output."
+    ]
+  },
+  {
+    "id": "comp-nand.2.demo",
+    "model": "COMP-NAND",
+    "parameters": {
+      "template_mode": "constructed",
+      "selectors": 2
+    },
+    "learner": {
+      "rule": "R1"
+    },
+    "kind": "demonstration",
+    "plays": 10000,
+    "source": [
+      "B7",
+      "https://doi.org/10.1093/9780197793572.003.0007"
+    ],
+    "assumptions": [
+      "Constructed perfect NAND modules; shared upstream output."
+    ]
+  },
+  {
+    "id": "add-comp.demo",
+    "model": "ADD-COMP",
+    "parameters": {
+      "template_mode": "constructed",
+      "ties": "left"
+    },
+    "learner": {
+      "rule": "R2"
+    },
+    "kind": "demonstration",
+    "plays": 10000,
+    "source": [
+      "B7",
+      "https://doi.org/10.1093/9780197793572.003.0007"
+    ],
+    "assumptions": [
+      "Constructed arithmetic/ordering fixtures; ties choose left."
+    ]
+  },
+  {
+    "id": "dial.demo",
+    "model": "DIAL",
+    "parameters": {
+      "answers": 4,
+      "base_reward": 1.0,
+      "max_exchanges": 2
+    },
+    "learner": {
+      "rule": "R1"
+    },
+    "kind": "demonstration",
+    "plays": 10000,
+    "source": [
+      "B8",
+      "https://doi.org/10.1093/9780197793572.003.0008"
+    ],
+    "assumptions": [
+      "Short demonstration duration; source reproduction status is separate."
+    ]
+  },
+  {
+    "id": "dial-restricted.demo",
+    "model": "DIAL-restricted",
+    "parameters": {
+      "answers": 2,
+      "base_reward": 1.0,
+      "max_exchanges": 2
+    },
+    "learner": {
+      "rule": "R1"
+    },
+    "kind": "demonstration",
+    "plays": 10000,
+    "source": [
+      "B8",
+      "https://doi.org/10.1093/9780197793572.003.0008"
+    ],
+    "assumptions": [
+      "Short demonstration duration; source reproduction status is separate."
+    ]
+  },
+  {
+    "id": "ask.demo",
+    "model": "ASK",
+    "parameters": {
+      "answers": 2,
+      "base_reward": 2.0,
+      "exchange_cost": 0.5,
+      "failure_cost": false,
+      "negative_returns": "floor_one",
+      "max_exchanges": 20
+    },
+    "learner": {
+      "rule": "SIGNED"
+    },
+    "kind": "demonstration",
+    "plays": 10000,
+    "source": [
+      "B8",
+      "https://doi.org/10.1093/9780197793572.003.0008"
+    ],
+    "assumptions": [
+      "Repeated exchanges subtract .5 each; failure has zero payoff; negative success returns floor at one; conversations censored at 20 exchanges."
+    ]
+  },
+  {
+    "id": "dial-costly.demo",
+    "model": "DIAL-costly",
+    "parameters": {
+      "answers": 4,
+      "base_reward": 3.0,
+      "exchange_cost": 1.0,
+      "failure_cost": true,
+      "negative_returns": "floor_one",
+      "max_exchanges": 20,
+      "history_binding": "last_two_answers"
+    },
+    "learner": {
+      "rule": "SIGNED"
+    },
+    "kind": "demonstration",
+    "plays": 10000,
+    "source": [
+      "B8",
+      "https://doi.org/10.1093/9780197793572.003.0008"
+    ],
+    "assumptions": [
+      "Last-two-answer state extension; failures pay costs; signed floor; conversations censored at 20 exchanges."
+    ]
+  },
+  {
+    "id": "vis.demo",
+    "model": "VIS",
+    "parameters": {
+      "agents": 5,
+      "schedule": "random_permutation",
+      "payoff": 1.0,
+      "reciprocal": true
+    },
+    "learner": {
+      "rule": "R1"
+    },
+    "kind": "demonstration",
+    "plays": 10000,
+    "source": [
+      "B9",
+      "https://doi.org/10.1093/9780197793572.003.0009"
+    ],
+    "assumptions": [
+      "Short demonstration duration; source reproduction status is separate."
+    ]
+  },
+  {
+    "id": "stag.demo",
+    "model": "STAG",
+    "parameters": {
+      "agents": 5,
+      "schedule": "random_permutation",
+      "types": [
+        "stag",
+        "stag",
+        "stag",
+        "hare",
+        "hare"
+      ],
+      "reciprocal": true
+    },
+    "learner": {
+      "rule": "R1"
+    },
+    "kind": "demonstration",
+    "plays": 10000,
+    "source": [
+      "B9",
+      "https://doi.org/10.1093/9780197793572.003.0009"
+    ],
+    "assumptions": [
+      "Short demonstration duration; source reproduction status is separate."
+    ]
+  },
+  {
+    "id": "ffsr.demo",
+    "model": "FFSR",
+    "parameters": {
+      "agents": 5,
+      "schedule": "random_permutation",
+      "retention": 0.999,
+      "error": 0.01,
+      "floor": 0.001
+    },
+    "learner": {
+      "rule": "R1",
+      "error": 0.01
+    },
+    "kind": "demonstration",
+    "plays": 10000,
+    "source": [
+      "B9",
+      "https://doi.org/10.1093/9780197793572.003.0009"
+    ],
+    "assumptions": [
+      "Explicit variant: all tables discounted after every visit; error mixes .01 uniform choice."
+    ]
+  },
+  {
+    "id": "inq.demo",
+    "model": "INQ",
+    "parameters": {
+      "agents": 5,
+      "rounds_per_problem": 100,
+      "perfect_communication": true
+    },
+    "learner": {
+      "rule": "R1"
+    },
+    "kind": "demonstration",
+    "plays": 10000,
+    "source": [
+      "B10",
+      "https://doi.org/10.1093/9780197793572.003.0010"
+    ],
+    "assumptions": [
+      "Short demonstration duration; source reproduction status is separate."
+    ]
+  },
+  {
+    "id": "box.demo",
+    "model": "BOX",
+    "parameters": {
+      "placement": "fixed"
+    },
+    "learner": {
+      "rule": "WSLS"
+    },
+    "kind": "demonstration",
+    "plays": 10,
+    "source": [
+      "B11",
+      "https://doi.org/10.1093/9780197793572.003.0011"
+    ],
+    "assumptions": [
+      "Short demonstration duration; source reproduction status is separate."
+    ]
+  },
+  {
+    "id": "box.random.demo",
+    "model": "BOX",
+    "parameters": {
+      "placement": "random"
+    },
+    "learner": {
+      "rule": "R1"
+    },
+    "kind": "demonstration",
+    "plays": 1000,
+    "source": [
+      "B11",
+      "https://doi.org/10.1093/9780197793572.003.0011"
+    ],
+    "assumptions": [
+      "Short demonstration duration; source reproduction status is separate."
+    ]
+  },
+  {
+    "id": "change.demo",
+    "model": "CHANGE",
+    "parameters": {
+      "change_at": 5000,
+      "new_mapping": [
+        0,
+        2,
+        1,
+        3
+      ]
+    },
+    "learner": {
+      "rule": "BOUNDED",
+      "maximum": 30
+    },
+    "kind": "demonstration",
+    "plays": 10000,
+    "source": [
+      "B11",
+      "https://doi.org/10.1093/9780197793572.003.0011"
+    ],
+    "assumptions": [
+      "Per-option ceiling 30 is an explicit bounded-learning variant."
+    ]
+  },
+  {
+    "id": "band.demo",
+    "model": "BAND",
+    "parameters": {
+      "arms": [
+        {
+          "rewards": [
+            2
+          ],
+          "probabilities": [
+            1.0
+          ]
+        },
+        {
+          "rewards": [
+            4
+          ],
+          "probabilities": [
+            1.0
+          ]
+        },
+        {
+          "rewards": [
+            8
+          ],
+          "probabilities": [
+            1.0
+          ]
+        }
+      ]
+    },
+    "learner": {
+      "rule": "R1"
+    },
+    "kind": "demonstration",
+    "plays": 10000,
+    "source": [
+      "B12",
+      "https://doi.org/10.1093/9780197793572.003.0012"
+    ],
+    "assumptions": [
+      "Deterministic demonstration machine rewards 2,4,8."
+    ]
+  },
+  {
+    "id": "band.arp.demo",
+    "model": "BAND",
+    "parameters": {
+      "arms": [
+        {
+          "rewards": [
+            2
+          ],
+          "probabilities": [
+            1.0
+          ]
+        },
+        {
+          "rewards": [
+            4
+          ],
+          "probabilities": [
+            1.0
+          ]
+        },
+        {
+          "rewards": [
+            8
+          ],
+          "probabilities": [
+            1.0
+          ]
+        }
+      ]
+    },
+    "learner": {
+      "rule": "R4",
+      "epsilon": 0.2,
+      "floor": 0.0001,
+      "forgetting": 0.001,
+      "w_plus": 0.01,
+      "w_minus": 0.02
+    },
+    "kind": "demonstration",
+    "plays": 10000,
+    "source": [
+      "B12",
+      "https://doi.org/10.1093/9780197793572.003.0012"
+    ],
+    "assumptions": [
+      "Literal per-unchosen ARP increments; one reference point; initial propensities one."
+    ]
+  },
+  {
+    "id": "meta-rule.demo",
+    "model": "META-RULE",
+    "parameters": {
+      "rules": [
+        {
+          "rule": "R1"
+        },
+        {
+          "rule": "WSLS"
+        }
+      ],
+      "inner_model": "BOX",
+      "inner_parameters": {
+        "placement": "fixed"
+      },
+      "inner_plays": 10,
+      "threshold": 0.8,
+      "return": "accuracy",
+      "failure_return": 0.05
+    },
+    "learner": {
+      "rule": "R1"
+    },
+    "kind": "demonstration",
+    "plays": 1000,
+    "source": [
+      "B12",
+      "https://doi.org/10.1093/9780197793572.003.0012"
+    ],
+    "assumptions": [
+      "Short demonstration duration; source reproduction status is separate."
+    ]
+  },
+  {
+    "id": "meta-oracle.demo",
+    "model": "META-ORACLE",
+    "parameters": {
+      "reliabilities": [
+        0.2,
+        0.3,
+        0.4,
+        0.5,
+        0.6,
+        0.7,
+        0.9
+      ],
+      "failure_return": 0.05,
+      "answer_process": "independent_bernoulli"
+    },
+    "learner": {
+      "rule": "R1"
+    },
+    "kind": "demonstration",
+    "plays": 10000,
+    "source": [
+      "B12",
+      "https://doi.org/10.1093/9780197793572.003.0012"
+    ],
+    "assumptions": [
+      "Independent Bernoulli advisers; positive failure return .05."
+    ]
+  },
+  {
+    "id": "mh.demo",
+    "model": "MH",
+    "parameters": {
+      "host": "uniform_eligible_goat"
+    },
+    "learner": {
+      "rule": "R1"
+    },
+    "kind": "demonstration",
+    "plays": 10000,
+    "source": [
+      "B11",
+      "https://doi.org/10.1093/9780197793572.003.0011"
+    ],
+    "assumptions": [
+      "Short demonstration duration; source reproduction status is separate."
+    ]
+  },
+  {
+    "id": "att-r.demo",
+    "model": "ATT-R",
+    "parameters": {
+      "receiver_features": 3,
+      "distractor_law": "independent_fair"
+    },
+    "learner": {
+      "rule": "R1"
+    },
+    "kind": "demonstration",
+    "plays": 10000,
+    "source": [
+      "B12",
+      "https://doi.org/10.1093/9780197793572.003.0012"
+    ],
+    "assumptions": [
+      "Independent fair binary distractors."
+    ]
+  },
+  {
+    "id": "att-b.source_value.demo",
+    "model": "ATT-B",
+    "parameters": {
+      "receiver_features": 3,
+      "sender_features": 3,
+      "binding": "source_value",
+      "distractor_law": "independent_fair"
+    },
+    "learner": {
+      "rule": "R1"
+    },
+    "kind": "demonstration",
+    "plays": 10000,
+    "source": [
+      "B12",
+      "https://doi.org/10.1093/9780197793572.003.0012"
+    ],
+    "assumptions": [
+      "Explicit source_value sender policy binding and independent fair distractors."
+    ]
+  },
+  {
+    "id": "att-b.value.demo",
+    "model": "ATT-B",
+    "parameters": {
+      "receiver_features": 3,
+      "sender_features": 3,
+      "binding": "value",
+      "distractor_law": "independent_fair"
+    },
+    "learner": {
+      "rule": "R1"
+    },
+    "kind": "demonstration",
+    "plays": 10000,
+    "source": [
+      "B12",
+      "https://doi.org/10.1093/9780197793572.003.0012"
+    ],
+    "assumptions": [
+      "Explicit value sender policy binding and independent fair distractors."
+    ]
+  },
+  {
+    "id": "sig.n4.book",
+    "model": "SIG",
+    "parameters": {
+      "states": 4,
+      "signals": 4,
+      "actions": 4
+    },
+    "learner": {
+      "rule": "R1"
+    },
+    "kind": "book_literal",
+    "plays": 1000000,
+    "source": [
+      "B2",
+      "https://doi.org/10.1093/9780197793572.003.0002"
+    ],
+    "assumptions": []
+  },
+  {
+    "id": "sig.n8.punishment.book",
+    "model": "SIG",
+    "parameters": {
+      "states": 8,
+      "signals": 8,
+      "actions": 8
+    },
+    "learner": {
+      "rule": "R2",
+      "reward": 1,
+      "punishment": 1
+    },
+    "kind": "book_literal",
+    "plays": 10000000,
+    "source": [
+      "B2",
+      "https://doi.org/10.1093/9780197793572.003.0002"
+    ],
+    "assumptions": []
+  },
+  {
+    "id": "inv.forget-type.demo",
+    "model": "INV",
+    "parameters": {
+      "n": 3,
+      "max_tables": 10000,
+      "forgetting": {
+        "every": 5,
+        "mode": "type",
+        "protect_mutator": true,
+        "cleanup": "remove_orphan_receiver",
+        "protect_empty_urn": true
+      }
+    },
+    "learner": {
+      "rule": "R1"
+    },
+    "kind": "deliberate_variant",
+    "plays": 10000,
+    "source": [
+      "B11",
+      "https://doi.org/10.1093/9780197793572.003.0011"
+    ],
+    "assumptions": [
+      "Explicit forgetting every five plays; mutator protected; empty urn protected; orphan receiver rows removed."
+    ]
+  },
+  {
+    "id": "inv.forget-ball.demo",
+    "model": "INV",
+    "parameters": {
+      "n": 3,
+      "max_tables": 10000,
+      "forgetting": {
+        "every": 5,
+        "mode": "ball",
+        "protect_mutator": true,
+        "cleanup": "remove_orphan_receiver",
+        "protect_empty_urn": true
+      }
+    },
+    "learner": {
+      "rule": "R1"
+    },
+    "kind": "deliberate_variant",
+    "plays": 10000,
+    "source": [
+      "B11",
+      "https://doi.org/10.1093/9780197793572.003.0011"
+    ],
+    "assumptions": [
+      "Explicit forgetting every five plays; mutator protected; empty urn protected; orphan receiver rows removed."
+    ]
+  },
+  {
+    "id": "sig.n2.demo",
+    "model": "SIG",
+    "parameters": {
+      "states": 2,
+      "signals": 2,
+      "actions": 2
+    },
+    "learner": {
+      "rule": "R1"
+    },
+    "kind": "demonstration",
+    "plays": 10000,
+    "source": [
+      "B2",
+      "https://doi.org/10.1093/9780197793572.003.0002"
+    ],
+    "assumptions": [
+      "Short demonstration duration; source reproduction status is separate."
+    ]
+  }
+]

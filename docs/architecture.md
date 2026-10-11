@@ -10,7 +10,7 @@ The common unit is a **conditional decision**: a module observes a particular ci
 | Module | Stable identity, owner, role, observation space, urns, learner state | Basic sender, executive receiver, translator |
 | Decision | Observation key, available options, response rule | State→signal; context→active senders; source→consultation |
 | Interaction | Execution order, information delivery, termination, resets | Sender then receiver; repeated questions; asynchronous inquiry rounds |
-| Feedback | Recipient decisions, reward calculation, timing, update multiplicity | Shared match reward; visitor-only link reward; translator-only punishment |
+| Feedback | Explicit state targets, outcome/payoff, timing, update multiplicity | Shared match reward; visitor-only link reward; translator-only punishment |
 | Experiment | Phases, seeds, evaluation protocol, measures, source profile | Train/freeze/transfer; repeated fresh bandit tasks; source reproduction |
 
 A source game is defined by all six. Sharing urn storage alone does not make two experiments the same game.
@@ -29,9 +29,11 @@ Every play records each decision occurrence:
 
 `(time, module_id, urn_id, observation, chosen_option, phase, provisional_creation)`.
 
-A feedback event names which occurrences it rewards, with the reward and learning rule. Dialogue can visit the same urn and choose the same option several times. Keep an ordered sequence rather than collapsing occurrences into a set. A frozen module can still draw and produce output while receiving no updates. An inactive sender contributes no draw or learning event.
+A feedback event names its adaptive-state targets, outcome success, numeric payoff, and originating occurrences where applicable. Credit can reach an unsampled host option, a newly invented option, or an entire propensity vector. Dialogue can visit the same urn and choose the same option several times. Keep an ordered sequence rather than collapsing occurrences into a set. A frozen module can still draw and produce output while its adaptive state remains unchanged. An inactive sender contributes no draw or learning event.
 
-Future checkpoints should contain all urns, current assignments, learner state, environment state, clocks, ID allocation state, and random generator state. A seed alone is useful within a pinned implementation; event records support diagnosis across implementation changes.
+Chance events also record nature, scheduling, noise, randomized completion, and task construction. Structural events record creation, commit, rollback, and deletion. A module invocation evaluates once; all consumers of that invocation reuse its output.
+
+Checkpoints contain all urns, current assignments, learner state, environment state, clocks, ID allocation state, and random generator state. A seed alone is useful within a pinned implementation; event records support diagnosis across implementation changes.
 
 ## Roles and ownership
 
@@ -95,7 +97,7 @@ The reported book percentages are reference observations from its simulations. T
 
 ## Proposed implementation shape after review
 
-A small Python package can use NumPy for numeric urn tables and random sampling. Begin with finite environments, explicit interaction functions, and common learner/trace interfaces. Add dynamic dictionaries for invention and dialogue only when their families arrive. Preserve semantic IDs even when a faster array representation is introduced.
+The Python package uses NumPy for numeric urn tables and random sampling. It begins with finite environments, explicit interaction functions, and common learner/trace interfaces. Add dynamic dictionaries for invention and dialogue only when their families arrive. Preserve semantic IDs even when a faster array representation is introduced.
 
 Suggested modules: `core` (IDs, urns, traces, clocks), `learners`, `games`, `composition`, `experiments`, and `metrics`. Game definitions should remain readable enough to compare with the book. An arbitrary graph interpreter or generic theorem framework is unnecessary for the first executable milestone.
 

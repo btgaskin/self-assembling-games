@@ -80,7 +80,7 @@ There are `3+2N` urns and `4+5N` weights, derived from the specification. For `N
 
 **Source:** [B12 §12.6, p.263](https://doi.org/10.1093/9780197793572.003.0012).
 
-Add a sender salience urn choosing between the true task-relevant source and binary spurious sources. The sender's conditional signal urns must be keyed by the selected source/value so it can learn different source-conditioned policies. The receiver retains ATT-R's feature selection. Reward all participating salience and action decisions on a match to the true task state.
+Add a sender salience urn choosing between the true task-relevant source and binary spurious sources. The sender observes the selected source/value. The binding from that observation to conditional signal urns is a source-profile decision: source/value-specific tables and shared value-only tables are explicit alternatives. The receiver retains ATT-R's feature selection. Reward all participating salience and action decisions on a match to the true task state.
 
 The chapter reports reliable signaling above .75 in about .68 of runs with one true and one spurious source on each side, and about .14 with four spurious sources on each side. It specifies the extension's mechanism; the exact conditional-table sharing and distractor law should be checked in Herrmann and VanDrunen before a canonical reproduction. This distinction matters because sharing a signal urn across sources constrains the learner differently.
 

@@ -10,4 +10,4 @@ This repository studies Barrett's self-assembling games. Use the chapter-level s
 - Retain configuration, seeds, source model identifiers, and phase histories with future experimental outputs.
 - Write positively and concretely about purpose, mechanism, conditions, and results. Preserve material uncertainty where it affects interpretation or implementation.
 
-Current milestone: documentation for review. Runtime implementation begins in a subsequent agreed step.
+Current milestone: reinforcement runtime and mechanism validation. Source-reproduction profiles with unresolved rules stay gated; demonstration choices remain explicit.

@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "self-assembling-games"
+version = "0.1.0"
+description = "Source-based reinforcement models of signaling and self-assembling games"
+requires-python = ">=3.11"
+dependencies = ["numpy>=1.26"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "build>=1", "ruff>=0.12"]
+
+[project.scripts]
+sg = "self_assembling_games.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+self_assembling_games = ["data/*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F"]

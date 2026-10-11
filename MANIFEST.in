@@ -1,0 +1,4 @@
+recursive-include docs *.md
+recursive-include sources *.json
+include AGENTS.md
+include requirements-qualification.txt

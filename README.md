@@ -2,7 +2,29 @@
 
 A source-based specification for Jeffrey A. Barrett's reinforcement-learning models of signaling, rule transfer, modular composition, discourse, networks, inquiry, and learning how to learn.
 
-This is a separate research project from toyLIFE. Its first milestone is a reviewable rulebook. The repository currently contains specifications and source records; executable models follow after review.
+This is a separate research project from toyLIFE. It contains the rulebook and an executable reinforcement runtime with a Python API, CLI, exact/sampled evaluation, frozen composition, dynamic vocabulary, dialogue, networks, inquiry, and nested learning. Source-specific operational questions remain attached to the affected profiles.
+
+## Run a game
+
+```sh
+python3 -m venv .venv
+.venv/bin/python -m pip install -e '.[dev]'
+.venv/bin/sg list
+.venv/bin/sg run sig.n2.demo --seed 0 --plays 10000 --output runs/signaling
+.venv/bin/sg evaluate runs/signaling
+.venv/bin/python -m pytest -q
+```
+
+```python
+from self_assembling_games import build, evaluate
+
+simulation = build("hier.demo", seed=0)
+simulation.run(plays=10_000)
+state = simulation.inspect()
+assessment = evaluate(simulation.snapshot())
+```
+
+See the [qualification report](docs/qualification.md) for measured checks and timings, and the [runtime guide](docs/runtime.md) for profiles, training artifacts, CLI commands, and reproducibility. [Astra review](docs/astra-review.md) and the [repository plan](docs/repository-plan.md) explain the structural decisions.
 
 ## Read the structure
 
@@ -11,7 +33,7 @@ This is a separate research project from toyLIFE. Its first milestone is a revie
 3. [Learning rules](docs/learning-rules.md): the precise updates that the games use.
 4. Game specifications: [basic and generalized signaling](docs/games/signaling.md), [assembly and transfer](docs/games/transfer.md), [computation and discourse](docs/games/computation-discourse.md), [networks and inquiry](docs/games/networks-inquiry.md), and [adaptive learning](docs/games/adaptive-learning.md).
 5. [Source register](docs/sources.md): chapter titles, printed pages, DOI links, quotations, and cited antecedents.
-6. [Review](docs/review.md): decisions and source questions to settle before implementation.
+6. [Review](docs/review.md): implementation decisions and outstanding source questions.
 
 The primary source is Barrett, Jeffrey A. (2025), *Self-Assembling Games: Language, Learning, and Inquiry*, Oxford University Press. Chapter citations use **B1–B13**, section numbers, and the book's printed page numbers. The source register links every chapter. PDF fingerprints and Zotero identifiers are in [sources/chapters.json](sources/chapters.json).
 

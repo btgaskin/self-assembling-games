@@ -1,0 +1,1414 @@
+[
+  {
+    "id": "SIG",
+    "name": "Lewis\u2013Skyrms `n\u00d7n\u00d7n`; general `i\u00d7j\u00d7k`; biased nature",
+    "adaptive_choices": "Signals and acts",
+    "source_learning": "R1, configurable R2/R3/R6",
+    "mechanism_status": "Specified",
+    "implemented": true,
+    "required_fields": [
+      "states",
+      "signals",
+      "actions"
+    ],
+    "source_questions": [],
+    "learners": [
+      "R1",
+      "R2",
+      "SIGNED",
+      "R3",
+      "DISCOUNT",
+      "BOUNDED",
+      "R6",
+      "WSLR",
+      "STRATEGY_WSLR"
+    ],
+    "validation_status": "mechanism_tests",
+    "profile_status": "complete_demonstrations",
+    "source_reproduction_status": "protocol_specific",
+    "analysis_available": false,
+    "modules": {
+      "sender": {
+        "role": "sender",
+        "owner": "sender"
+      },
+      "receiver": {
+        "role": "receiver",
+        "owner": "receiver"
+      }
+    }
+  },
+  {
+    "id": "COD",
+    "name": "Four-state coding",
+    "adaptive_choices": "Two signals, joint act",
+    "source_learning": "R1/R2",
+    "mechanism_status": "Specified",
+    "implemented": true,
+    "required_fields": [],
+    "source_questions": [],
+    "learners": [
+      "R1",
+      "R2",
+      "SIGNED",
+      "R3",
+      "DISCOUNT",
+      "BOUNDED"
+    ],
+    "validation_status": "mechanism_tests",
+    "profile_status": "complete_demonstrations",
+    "source_reproduction_status": "protocol_specific",
+    "analysis_available": false,
+    "modules": {
+      "A": {
+        "role": "sender",
+        "owner": "A"
+      },
+      "B": {
+        "role": "sender",
+        "owner": "B"
+      },
+      "R": {
+        "role": "receiver",
+        "owner": "R"
+      }
+    }
+  },
+  {
+    "id": "NAND",
+    "name": "Binary truth-function game",
+    "adaptive_choices": "Two signals, truth act",
+    "source_learning": "R1/R2",
+    "mechanism_status": "Specified",
+    "implemented": true,
+    "required_fields": [],
+    "source_questions": [],
+    "learners": [
+      "R1",
+      "R2",
+      "SIGNED",
+      "R3",
+      "DISCOUNT",
+      "BOUNDED"
+    ],
+    "validation_status": "mechanism_tests",
+    "profile_status": "complete_demonstrations",
+    "source_reproduction_status": "protocol_specific",
+    "analysis_available": false,
+    "modules": {
+      "A": {
+        "role": "sender",
+        "owner": "A"
+      },
+      "B": {
+        "role": "sender",
+        "owner": "B"
+      },
+      "R": {
+        "role": "receiver",
+        "owner": "R"
+      }
+    }
+  },
+  {
+    "id": "HIER",
+    "name": "Hierarchical composition",
+    "adaptive_choices": "Activation, signals, interpretation, act",
+    "source_learning": "Signed reward, floor one",
+    "mechanism_status": "Specified",
+    "implemented": true,
+    "required_fields": [
+      "simple_reward",
+      "complex_reward",
+      "term_cost"
+    ],
+    "source_questions": [],
+    "learners": [
+      "SIGNED"
+    ],
+    "validation_status": "mechanism_tests",
+    "profile_status": "complete_demonstrations",
+    "source_reproduction_status": "protocol_specific",
+    "analysis_available": false,
+    "modules": {
+      "A": {
+        "role": "sender",
+        "owner": "sender"
+      },
+      "B": {
+        "role": "sender",
+        "owner": "sender"
+      },
+      "ES": {
+        "role": "executive_sender",
+        "owner": "sender"
+      },
+      "R": {
+        "role": "receiver",
+        "owner": "receiver"
+      },
+      "ER": {
+        "role": "executive_receiver",
+        "owner": "receiver"
+      }
+    }
+  },
+  {
+    "id": "CUE",
+    "name": "Cue reading",
+    "adaptive_choices": "Receiver response",
+    "source_learning": "R1; fixed sender",
+    "mechanism_status": "Specified precursor",
+    "implemented": true,
+    "required_fields": [
+      "states",
+      "signals",
+      "actions",
+      "fixed_map"
+    ],
+    "source_questions": [],
+    "learners": [
+      "R1",
+      "R2",
+      "SIGNED",
+      "R3",
+      "DISCOUNT",
+      "BOUNDED"
+    ],
+    "validation_status": "mechanism_tests",
+    "profile_status": "complete_demonstrations",
+    "source_reproduction_status": "protocol_specific",
+    "analysis_available": false,
+    "modules": {
+      "sender": {
+        "role": "sender",
+        "owner": "sender"
+      },
+      "receiver": {
+        "role": "receiver",
+        "owner": "receiver"
+      }
+    }
+  },
+  {
+    "id": "MAN",
+    "name": "Sensory manipulation",
+    "adaptive_choices": "Sender behavior",
+    "source_learning": "R1; fixed receiver",
+    "mechanism_status": "Specified precursor",
+    "implemented": true,
+    "required_fields": [
+      "states",
+      "signals",
+      "actions",
+      "fixed_map"
+    ],
+    "source_questions": [],
+    "learners": [
+      "R1",
+      "R2",
+      "SIGNED",
+      "R3",
+      "DISCOUNT",
+      "BOUNDED"
+    ],
+    "validation_status": "mechanism_tests",
+    "profile_status": "complete_demonstrations",
+    "source_reproduction_status": "protocol_specific",
+    "analysis_available": false,
+    "modules": {
+      "sender": {
+        "role": "sender",
+        "owner": "sender"
+      },
+      "receiver": {
+        "role": "receiver",
+        "owner": "receiver"
+      }
+    }
+  },
+  {
+    "id": "ORD",
+    "name": "Seven-stimulus ordering",
+    "adaptive_choices": "Invented signals and relation",
+    "source_learning": "R5",
+    "mechanism_status": "Clarify first-failure rows",
+    "implemented": true,
+    "required_fields": [
+      "n",
+      "max_tables",
+      "failed_row"
+    ],
+    "source_questions": [
+      "Q3"
+    ],
+    "learners": [
+      "R1"
+    ],
+    "validation_status": "mechanism_tests",
+    "profile_status": "complete_demonstrations",
+    "source_reproduction_status": "requires_resolution",
+    "analysis_available": false,
+    "modules": {
+      "A": {
+        "role": "sender",
+        "owner": "bird"
+      },
+      "B": {
+        "role": "sender",
+        "owner": "bird"
+      },
+      "R": {
+        "role": "receiver",
+        "owner": "bird"
+      }
+    }
+  },
+  {
+    "id": "TR-ORD",
+    "name": "New ordering via old template",
+    "adaptive_choices": "Old input selection",
+    "source_learning": "R2; frozen template",
+    "mechanism_status": "Specified",
+    "implemented": true,
+    "required_fields": [
+      "n",
+      "template_mode"
+    ],
+    "source_questions": [
+      "Q12"
+    ],
+    "learners": [
+      "R1",
+      "R2",
+      "SIGNED",
+      "R3",
+      "DISCOUNT",
+      "BOUNDED"
+    ],
+    "validation_status": "mechanism_tests",
+    "profile_status": "complete_demonstrations",
+    "source_reproduction_status": "requires_resolution",
+    "analysis_available": false,
+    "modules": {
+      "TA": {
+        "role": "translator",
+        "owner": "TA"
+      },
+      "TB": {
+        "role": "translator",
+        "owner": "TB"
+      },
+      "ordering:A": {
+        "role": "sender",
+        "owner": "ordering"
+      },
+      "ordering:B": {
+        "role": "sender",
+        "owner": "ordering"
+      },
+      "ordering:R": {
+        "role": "receiver",
+        "owner": "ordering"
+      }
+    }
+  },
+  {
+    "id": "TR-PART",
+    "name": "Adjacent-only transfer training",
+    "adaptive_choices": "Old input selection",
+    "source_learning": "R2 then fixed evaluation",
+    "mechanism_status": "Clarify exact pair sampler",
+    "implemented": true,
+    "required_fields": [
+      "n",
+      "template_mode",
+      "pair_sampler"
+    ],
+    "source_questions": [
+      "Q11"
+    ],
+    "learners": [
+      "R1",
+      "R2",
+      "SIGNED",
+      "R3",
+      "DISCOUNT",
+      "BOUNDED"
+    ],
+    "validation_status": "mechanism_tests",
+    "profile_status": "complete_demonstrations",
+    "source_reproduction_status": "requires_resolution",
+    "analysis_available": false,
+    "modules": {
+      "TA": {
+        "role": "translator",
+        "owner": "TA"
+      },
+      "TB": {
+        "role": "translator",
+        "owner": "TB"
+      },
+      "ordering:A": {
+        "role": "sender",
+        "owner": "ordering"
+      },
+      "ordering:B": {
+        "role": "sender",
+        "owner": "ordering"
+      },
+      "ordering:R": {
+        "role": "receiver",
+        "owner": "ordering"
+      }
+    }
+  },
+  {
+    "id": "TR-LOG",
+    "name": "NAND/OR template transfer",
+    "adaptive_choices": "Old truth-input selection",
+    "source_learning": "R1; frozen template",
+    "mechanism_status": "Specified; broader closure claim open",
+    "implemented": true,
+    "required_fields": [
+      "template_mode",
+      "truth_table"
+    ],
+    "source_questions": [
+      "Q12"
+    ],
+    "learners": [
+      "R1",
+      "R2",
+      "SIGNED",
+      "R3",
+      "DISCOUNT",
+      "BOUNDED"
+    ],
+    "validation_status": "mechanism_tests",
+    "profile_status": "complete_demonstrations",
+    "source_reproduction_status": "requires_resolution",
+    "analysis_available": false,
+    "modules": {
+      "TA": {
+        "role": "translator",
+        "owner": "TA"
+      },
+      "TB": {
+        "role": "translator",
+        "owner": "TB"
+      },
+      "template:A": {
+        "role": "sender",
+        "owner": "template"
+      },
+      "template:B": {
+        "role": "sender",
+        "owner": "template"
+      },
+      "template:R": {
+        "role": "receiver",
+        "owner": "template"
+      }
+    }
+  },
+  {
+    "id": "KIND",
+    "name": "Conventional concepts/kinds",
+    "adaptive_choices": "Analysis of learned partitions",
+    "source_learning": "Existing game learner",
+    "mechanism_status": "Interpretation/analysis",
+    "implemented": false,
+    "required_fields": [
+      "equivalence_criterion"
+    ],
+    "source_questions": [],
+    "learners": [],
+    "validation_status": "awaiting_protocol",
+    "profile_status": "awaiting_protocol",
+    "source_reproduction_status": "protocol_specific",
+    "analysis_available": true,
+    "modules": {}
+  },
+  {
+    "id": "POLY",
+    "name": "Polymerization of interactions",
+    "adaptive_choices": "Candidate connections",
+    "source_learning": "Task-dependent",
+    "mechanism_status": "Proposal",
+    "implemented": false,
+    "required_fields": [
+      "primitive_protocol"
+    ],
+    "source_questions": [
+      "Q10"
+    ],
+    "learners": [],
+    "validation_status": "awaiting_protocol",
+    "profile_status": "awaiting_protocol",
+    "source_reproduction_status": "requires_resolution",
+    "analysis_available": false,
+    "modules": {}
+  },
+  {
+    "id": "SCOD",
+    "name": "Self-assembling coding",
+    "adaptive_choices": "Signals, attention, act",
+    "source_learning": "R1",
+    "mechanism_status": "Specified",
+    "implemented": true,
+    "required_fields": [],
+    "source_questions": [],
+    "learners": [
+      "R1",
+      "R2",
+      "SIGNED",
+      "R3",
+      "DISCOUNT",
+      "BOUNDED"
+    ],
+    "validation_status": "mechanism_tests",
+    "profile_status": "complete_demonstrations",
+    "source_reproduction_status": "protocol_specific",
+    "analysis_available": false,
+    "modules": {
+      "A": {
+        "role": "sender",
+        "owner": "A"
+      },
+      "B": {
+        "role": "sender",
+        "owner": "B"
+      },
+      "R": {
+        "role": "receiver",
+        "owner": "receiver"
+      },
+      "salience": {
+        "role": "source_selector",
+        "owner": "receiver"
+      },
+      "RA": {
+        "role": "receiver",
+        "owner": "receiver"
+      },
+      "RB": {
+        "role": "receiver",
+        "owner": "receiver"
+      }
+    }
+  },
+  {
+    "id": "COMP-NAND",
+    "name": "One- and two-selector computational composition",
+    "adaptive_choices": "Module input source",
+    "source_learning": "R1; frozen modules",
+    "mechanism_status": "Specified",
+    "implemented": true,
+    "required_fields": [
+      "template_mode",
+      "selectors"
+    ],
+    "source_questions": [
+      "Q12"
+    ],
+    "learners": [
+      "R1",
+      "R2",
+      "SIGNED",
+      "R3",
+      "DISCOUNT",
+      "BOUNDED"
+    ],
+    "validation_status": "mechanism_tests",
+    "profile_status": "complete_demonstrations",
+    "source_reproduction_status": "requires_resolution",
+    "analysis_available": false,
+    "modules": {
+      "first:A": {
+        "role": "sender",
+        "owner": "first"
+      },
+      "first:B": {
+        "role": "sender",
+        "owner": "first"
+      },
+      "first:R": {
+        "role": "receiver",
+        "owner": "first"
+      },
+      "second:A": {
+        "role": "sender",
+        "owner": "second"
+      },
+      "second:B": {
+        "role": "sender",
+        "owner": "second"
+      },
+      "second:R": {
+        "role": "receiver",
+        "owner": "second"
+      },
+      "P": {
+        "role": "source_selector",
+        "owner": "P"
+      },
+      "Q": {
+        "role": "source_selector",
+        "owner": "Q"
+      }
+    }
+  },
+  {
+    "id": "ADD",
+    "name": "Small-cardinal addition",
+    "adaptive_choices": "Invented signals, sum act",
+    "source_learning": "R5",
+    "mechanism_status": "Clarify source profile",
+    "implemented": true,
+    "required_fields": [
+      "n",
+      "max_tables",
+      "failed_row"
+    ],
+    "source_questions": [
+      "Q3"
+    ],
+    "learners": [
+      "R1"
+    ],
+    "validation_status": "mechanism_tests",
+    "profile_status": "complete_demonstrations",
+    "source_reproduction_status": "requires_resolution",
+    "analysis_available": false,
+    "modules": {
+      "A": {
+        "role": "sender",
+        "owner": "monkey"
+      },
+      "B": {
+        "role": "sender",
+        "owner": "monkey"
+      },
+      "R": {
+        "role": "receiver",
+        "owner": "monkey"
+      }
+    }
+  },
+  {
+    "id": "ADD-COMP",
+    "name": "Addition\u2013comparison composition",
+    "adaptive_choices": "Translation into old comparison",
+    "source_learning": "R2; frozen modules",
+    "mechanism_status": "Clarify ties/pretraining",
+    "implemented": true,
+    "required_fields": [
+      "template_mode",
+      "ties"
+    ],
+    "source_questions": [
+      "Q4",
+      "Q12"
+    ],
+    "learners": [
+      "R1",
+      "R2",
+      "SIGNED",
+      "R3",
+      "DISCOUNT",
+      "BOUNDED"
+    ],
+    "validation_status": "mechanism_tests",
+    "profile_status": "complete_demonstrations",
+    "source_reproduction_status": "requires_resolution",
+    "analysis_available": false,
+    "modules": {
+      "translation": {
+        "role": "translator",
+        "owner": "translation"
+      },
+      "addition:A": {
+        "role": "sender",
+        "owner": "addition"
+      },
+      "addition:B": {
+        "role": "sender",
+        "owner": "addition"
+      },
+      "addition:R": {
+        "role": "receiver",
+        "owner": "addition"
+      },
+      "ordering:A": {
+        "role": "sender",
+        "owner": "ordering"
+      },
+      "ordering:B": {
+        "role": "sender",
+        "owner": "ordering"
+      },
+      "ordering:R": {
+        "role": "receiver",
+        "owner": "ordering"
+      }
+    }
+  },
+  {
+    "id": "ASK",
+    "name": "Slab/block question",
+    "adaptive_choices": "Start/continue/act, answer",
+    "source_learning": "R1, exchange reward",
+    "mechanism_status": "Clarify repeated-question costs",
+    "implemented": true,
+    "required_fields": [
+      "answers",
+      "base_reward",
+      "exchange_cost",
+      "failure_cost",
+      "negative_returns",
+      "max_exchanges"
+    ],
+    "source_questions": [
+      "Q1"
+    ],
+    "learners": [
+      "SIGNED"
+    ],
+    "validation_status": "mechanism_tests",
+    "profile_status": "complete_demonstrations",
+    "source_reproduction_status": "requires_resolution",
+    "analysis_available": false,
+    "modules": {
+      "assistant": {
+        "role": "assistant",
+        "owner": "assistant"
+      },
+      "reply1": {
+        "role": "assistant",
+        "owner": "assistant"
+      },
+      "reply2": {
+        "role": "assistant",
+        "owner": "assistant"
+      },
+      "builder": {
+        "role": "builder",
+        "owner": "builder"
+      }
+    }
+  },
+  {
+    "id": "DIAL",
+    "name": "Four-material dialogue",
+    "adaptive_choices": "Questions, replies, action",
+    "source_learning": "R1/R2",
+    "mechanism_status": "Specified finite variant",
+    "implemented": true,
+    "required_fields": [
+      "answers",
+      "base_reward",
+      "max_exchanges"
+    ],
+    "source_questions": [],
+    "learners": [
+      "R1",
+      "R2",
+      "SIGNED",
+      "R3",
+      "DISCOUNT",
+      "BOUNDED"
+    ],
+    "validation_status": "mechanism_tests",
+    "profile_status": "complete_demonstrations",
+    "source_reproduction_status": "protocol_specific",
+    "analysis_available": false,
+    "modules": {
+      "assistant": {
+        "role": "assistant",
+        "owner": "assistant"
+      },
+      "reply1": {
+        "role": "assistant",
+        "owner": "assistant"
+      },
+      "reply2": {
+        "role": "assistant",
+        "owner": "assistant"
+      },
+      "builder": {
+        "role": "builder",
+        "owner": "builder"
+      }
+    }
+  },
+  {
+    "id": "DIAL-restricted",
+    "name": "Two-answer dialogue",
+    "adaptive_choices": "Same, two answers",
+    "source_learning": "R1",
+    "mechanism_status": "Specified finite variant",
+    "implemented": true,
+    "required_fields": [
+      "answers",
+      "base_reward",
+      "max_exchanges"
+    ],
+    "source_questions": [],
+    "learners": [
+      "R1",
+      "R2",
+      "SIGNED",
+      "R3",
+      "DISCOUNT",
+      "BOUNDED"
+    ],
+    "validation_status": "mechanism_tests",
+    "profile_status": "complete_demonstrations",
+    "source_reproduction_status": "protocol_specific",
+    "analysis_available": false,
+    "modules": {
+      "assistant": {
+        "role": "assistant",
+        "owner": "assistant"
+      },
+      "reply1": {
+        "role": "assistant",
+        "owner": "assistant"
+      },
+      "reply2": {
+        "role": "assistant",
+        "owner": "assistant"
+      },
+      "builder": {
+        "role": "builder",
+        "owner": "builder"
+      }
+    }
+  },
+  {
+    "id": "DIAL-costly",
+    "name": "Costly unlimited dialogue",
+    "adaptive_choices": "Continue/stop",
+    "source_learning": "Cost-adjusted feedback",
+    "mechanism_status": "Clarify history and negative returns",
+    "implemented": true,
+    "required_fields": [
+      "answers",
+      "base_reward",
+      "exchange_cost",
+      "failure_cost",
+      "negative_returns",
+      "max_exchanges",
+      "history_binding"
+    ],
+    "source_questions": [
+      "Q1"
+    ],
+    "learners": [
+      "SIGNED"
+    ],
+    "validation_status": "mechanism_tests",
+    "profile_status": "complete_demonstrations",
+    "source_reproduction_status": "requires_resolution",
+    "analysis_available": false,
+    "modules": {
+      "assistant": {
+        "role": "assistant",
+        "owner": "assistant"
+      },
+      "reply1": {
+        "role": "assistant",
+        "owner": "assistant"
+      },
+      "reply2": {
+        "role": "assistant",
+        "owner": "assistant"
+      },
+      "builder": {
+        "role": "builder",
+        "owner": "builder"
+      }
+    }
+  },
+  {
+    "id": "VIS",
+    "name": "Visiting networks",
+    "adaptive_choices": "Host",
+    "source_learning": "Payoff reinforcement",
+    "mechanism_status": "Specified core; game supplies payoff",
+    "implemented": true,
+    "required_fields": [
+      "agents",
+      "schedule",
+      "payoff",
+      "reciprocal"
+    ],
+    "source_questions": [
+      "Q10"
+    ],
+    "learners": [
+      "R1",
+      "R2",
+      "SIGNED",
+      "R3",
+      "DISCOUNT",
+      "BOUNDED"
+    ],
+    "validation_status": "mechanism_tests",
+    "profile_status": "complete_demonstrations",
+    "source_reproduction_status": "requires_resolution",
+    "analysis_available": false,
+    "modules": {}
+  },
+  {
+    "id": "STAG",
+    "name": "Fixed stag/hare visiting",
+    "adaptive_choices": "Host",
+    "source_learning": "Reciprocal reinforcement",
+    "mechanism_status": "Specified; imitation extension clarify",
+    "implemented": true,
+    "required_fields": [
+      "agents",
+      "schedule",
+      "types",
+      "reciprocal"
+    ],
+    "source_questions": [
+      "Q10"
+    ],
+    "learners": [
+      "R1",
+      "R2",
+      "SIGNED",
+      "R3",
+      "DISCOUNT",
+      "BOUNDED"
+    ],
+    "validation_status": "mechanism_tests",
+    "profile_status": "complete_demonstrations",
+    "source_reproduction_status": "requires_resolution",
+    "analysis_available": false,
+    "modules": {}
+  },
+  {
+    "id": "FFSR",
+    "name": "Signaling/partner coevolution",
+    "adaptive_choices": "Host and complete strategy",
+    "source_learning": "Expected payoff + exploration",
+    "mechanism_status": "Clarify forgetting/error parameters",
+    "implemented": true,
+    "required_fields": [
+      "agents",
+      "schedule",
+      "retention",
+      "error",
+      "floor"
+    ],
+    "source_questions": [
+      "Q6"
+    ],
+    "learners": [
+      "R1"
+    ],
+    "validation_status": "mechanism_tests",
+    "profile_status": "complete_demonstrations",
+    "source_reproduction_status": "requires_resolution",
+    "analysis_available": false,
+    "modules": {}
+  },
+  {
+    "id": "SUB",
+    "name": "Information subscriptions",
+    "adaptive_choices": "Link set",
+    "source_learning": "Source-dependent",
+    "mechanism_status": "Clarify RL; best-response comparator",
+    "implemented": false,
+    "required_fields": [
+      "link_update_protocol"
+    ],
+    "source_questions": [
+      "Q10"
+    ],
+    "learners": [],
+    "validation_status": "awaiting_protocol",
+    "profile_status": "awaiting_protocol",
+    "source_reproduction_status": "requires_resolution",
+    "analysis_available": false,
+    "modules": {}
+  },
+  {
+    "id": "DISC",
+    "name": "Bargaining and discrimination",
+    "adaptive_choices": "Partners and bargaining strategy",
+    "source_learning": "Best response",
+    "mechanism_status": "Later dynamics",
+    "implemented": false,
+    "required_fields": [
+      "bargaining_protocol"
+    ],
+    "source_questions": [
+      "Q10"
+    ],
+    "learners": [],
+    "validation_status": "awaiting_protocol",
+    "profile_status": "awaiting_protocol",
+    "source_reproduction_status": "requires_resolution",
+    "analysis_available": false,
+    "modules": {}
+  },
+  {
+    "id": "INQ",
+    "name": "Epistemic-network inquiry",
+    "adaptive_choices": "Nature, self, other agent",
+    "source_learning": "R1 on true belief",
+    "mechanism_status": "Specified",
+    "implemented": true,
+    "required_fields": [
+      "agents",
+      "rounds_per_problem"
+    ],
+    "source_questions": [],
+    "learners": [
+      "R1"
+    ],
+    "validation_status": "mechanism_tests",
+    "profile_status": "complete_demonstrations",
+    "source_reproduction_status": "protocol_specific",
+    "analysis_available": false,
+    "modules": {}
+  },
+  {
+    "id": "BOX",
+    "name": "Fixed/random reward boxes",
+    "adaptive_choices": "Box",
+    "source_learning": "R1; WSLS comparator",
+    "mechanism_status": "Specified",
+    "implemented": true,
+    "required_fields": [
+      "placement"
+    ],
+    "source_questions": [],
+    "learners": [
+      "R1",
+      "R2",
+      "SIGNED",
+      "R3",
+      "DISCOUNT",
+      "BOUNDED",
+      "WSLS",
+      "WSLR",
+      "R6"
+    ],
+    "validation_status": "mechanism_tests",
+    "profile_status": "complete_demonstrations",
+    "source_reproduction_status": "protocol_specific",
+    "analysis_available": false,
+    "modules": {
+      "choice": {
+        "role": "action_selection",
+        "owner": "choice"
+      }
+    }
+  },
+  {
+    "id": "CHANGE",
+    "name": "Sequentially changing coding payoff",
+    "adaptive_choices": "Signal partitions/interpretation",
+    "source_learning": "Bounded reinforcement",
+    "mechanism_status": "Clarify bounding rule",
+    "implemented": true,
+    "required_fields": [
+      "change_at",
+      "new_mapping"
+    ],
+    "source_questions": [
+      "Q7"
+    ],
+    "learners": [
+      "R1",
+      "R2",
+      "SIGNED",
+      "R3",
+      "DISCOUNT",
+      "BOUNDED"
+    ],
+    "validation_status": "mechanism_tests",
+    "profile_status": "complete_demonstrations",
+    "source_reproduction_status": "requires_resolution",
+    "analysis_available": false,
+    "modules": {
+      "A": {
+        "role": "sender",
+        "owner": "A"
+      },
+      "B": {
+        "role": "sender",
+        "owner": "B"
+      },
+      "R": {
+        "role": "receiver",
+        "owner": "R"
+      }
+    }
+  },
+  {
+    "id": "INV",
+    "name": "Signal invention/forgetting",
+    "adaptive_choices": "Signal, new type, act",
+    "source_learning": "R5 plus forgetting",
+    "mechanism_status": "Base specified; forgetting clarify",
+    "implemented": true,
+    "required_fields": [
+      "n",
+      "max_tables"
+    ],
+    "source_questions": [],
+    "learners": [
+      "R1"
+    ],
+    "validation_status": "mechanism_tests",
+    "profile_status": "complete_demonstrations",
+    "source_reproduction_status": "protocol_specific",
+    "analysis_available": false,
+    "modules": {
+      "sender": {
+        "role": "sender",
+        "owner": "sender"
+      },
+      "R": {
+        "role": "receiver",
+        "owner": "R"
+      }
+    }
+  },
+  {
+    "id": "HYB",
+    "name": "WSLRwR signaling",
+    "adaptive_choices": "Current assignments on failure",
+    "source_learning": "R6",
+    "mechanism_status": "Specified",
+    "implemented": true,
+    "required_fields": [
+      "states",
+      "signals",
+      "actions"
+    ],
+    "source_questions": [],
+    "learners": [
+      "R1",
+      "R2",
+      "SIGNED",
+      "R3",
+      "DISCOUNT",
+      "BOUNDED",
+      "R6",
+      "WSLR",
+      "STRATEGY_WSLR"
+    ],
+    "validation_status": "mechanism_tests",
+    "profile_status": "complete_demonstrations",
+    "source_reproduction_status": "protocol_specific",
+    "analysis_available": false,
+    "modules": {
+      "sender": {
+        "role": "sender",
+        "owner": "sender"
+      },
+      "receiver": {
+        "role": "receiver",
+        "owner": "receiver"
+      }
+    }
+  },
+  {
+    "id": "BAND",
+    "name": "Reinforced bandits",
+    "adaptive_choices": "Machine",
+    "source_learning": "R1 weighted by payoff",
+    "mechanism_status": "Distribution supplied per experiment",
+    "implemented": true,
+    "required_fields": [
+      "arms"
+    ],
+    "source_questions": [
+      "Q9"
+    ],
+    "learners": [
+      "R1",
+      "R2",
+      "SIGNED",
+      "R3",
+      "DISCOUNT",
+      "BOUNDED",
+      "R4"
+    ],
+    "validation_status": "mechanism_tests",
+    "profile_status": "complete_demonstrations",
+    "source_reproduction_status": "requires_resolution",
+    "analysis_available": false,
+    "modules": {
+      "choice": {
+        "role": "action_selection",
+        "owner": "choice"
+      }
+    }
+  },
+  {
+    "id": "META-RULE",
+    "name": "Learning-rule selection",
+    "adaptive_choices": "Inner learner",
+    "source_learning": "R7",
+    "mechanism_status": "Specify trial profile/positive failure return",
+    "implemented": true,
+    "required_fields": [
+      "rules",
+      "inner_model",
+      "inner_parameters",
+      "inner_plays",
+      "threshold",
+      "return",
+      "failure_return"
+    ],
+    "source_questions": [
+      "Q9"
+    ],
+    "learners": [
+      "R1",
+      "R2",
+      "SIGNED",
+      "R3",
+      "DISCOUNT",
+      "BOUNDED"
+    ],
+    "validation_status": "mechanism_tests",
+    "profile_status": "complete_demonstrations",
+    "source_reproduction_status": "requires_resolution",
+    "analysis_available": false,
+    "modules": {
+      "choice": {
+        "role": "learner_selection",
+        "owner": "choice"
+      }
+    }
+  },
+  {
+    "id": "META-ORACLE",
+    "name": "Adviser selection",
+    "adaptive_choices": "Oracle",
+    "source_learning": "R7",
+    "mechanism_status": "Specify answer process",
+    "implemented": true,
+    "required_fields": [
+      "reliabilities",
+      "failure_return",
+      "answer_process"
+    ],
+    "source_questions": [
+      "Q9"
+    ],
+    "learners": [
+      "R1",
+      "R2",
+      "SIGNED",
+      "R3",
+      "DISCOUNT",
+      "BOUNDED",
+      "R4"
+    ],
+    "validation_status": "mechanism_tests",
+    "profile_status": "complete_demonstrations",
+    "source_reproduction_status": "requires_resolution",
+    "analysis_available": false,
+    "modules": {
+      "choice": {
+        "role": "action_selection",
+        "owner": "choice"
+      }
+    }
+  },
+  {
+    "id": "MH",
+    "name": "Monty Hall",
+    "adaptive_choices": "Stay/switch",
+    "source_learning": "R1 or Bayesian comparator",
+    "mechanism_status": "Specify host protocol",
+    "implemented": true,
+    "required_fields": [
+      "host"
+    ],
+    "source_questions": [
+      "Q13"
+    ],
+    "learners": [
+      "R1",
+      "R2",
+      "SIGNED",
+      "R3",
+      "DISCOUNT",
+      "BOUNDED"
+    ],
+    "validation_status": "mechanism_tests",
+    "profile_status": "complete_demonstrations",
+    "source_reproduction_status": "requires_resolution",
+    "analysis_available": false,
+    "modules": {
+      "choice": {
+        "role": "action_selection",
+        "owner": "choice"
+      }
+    }
+  },
+  {
+    "id": "GEN",
+    "name": "Generalization",
+    "adaptive_choices": "Similar circumstances/options",
+    "source_learning": "Spread reinforcement",
+    "mechanism_status": "Clarify similarity rule",
+    "implemented": false,
+    "required_fields": [
+      "similarity_kernel"
+    ],
+    "source_questions": [
+      "Q10"
+    ],
+    "learners": [],
+    "validation_status": "awaiting_protocol",
+    "profile_status": "awaiting_protocol",
+    "source_reproduction_status": "requires_resolution",
+    "analysis_available": false,
+    "modules": {}
+  },
+  {
+    "id": "SET",
+    "name": "Learning sets and self-tuning",
+    "adaptive_choices": "Rule strength/salience",
+    "source_learning": "Adaptive learning schedule",
+    "mechanism_status": "Proposal/cited clarification",
+    "implemented": false,
+    "required_fields": [
+      "self_tuning_schedule"
+    ],
+    "source_questions": [
+      "Q7"
+    ],
+    "learners": [],
+    "validation_status": "awaiting_protocol",
+    "profile_status": "awaiting_protocol",
+    "source_reproduction_status": "requires_resolution",
+    "analysis_available": false,
+    "modules": {}
+  },
+  {
+    "id": "ATT-R",
+    "name": "Receiver attention",
+    "adaptive_choices": "Signal, feature, act",
+    "source_learning": "R1",
+    "mechanism_status": "Specified; pin distractor law",
+    "implemented": true,
+    "required_fields": [
+      "receiver_features",
+      "distractor_law"
+    ],
+    "source_questions": [
+      "Q8"
+    ],
+    "learners": [
+      "R1",
+      "R2",
+      "SIGNED",
+      "R3",
+      "DISCOUNT",
+      "BOUNDED"
+    ],
+    "validation_status": "mechanism_tests",
+    "profile_status": "complete_demonstrations",
+    "source_reproduction_status": "requires_resolution",
+    "analysis_available": false,
+    "modules": {
+      "sender": {
+        "role": "sender",
+        "owner": "sender"
+      },
+      "receiver": {
+        "role": "receiver",
+        "owner": "receiver"
+      },
+      "sender_attention": {
+        "role": "source_selector",
+        "owner": "sender"
+      },
+      "receiver_attention": {
+        "role": "feature_selector",
+        "owner": "receiver"
+      }
+    }
+  },
+  {
+    "id": "ATT-B",
+    "name": "Both agents learn attention",
+    "adaptive_choices": "Source/feature, signal, act",
+    "source_learning": "R1",
+    "mechanism_status": "Clarify table sharing/distractor law",
+    "implemented": true,
+    "required_fields": [
+      "receiver_features",
+      "sender_features",
+      "binding",
+      "distractor_law"
+    ],
+    "source_questions": [
+      "Q8"
+    ],
+    "learners": [
+      "R1",
+      "R2",
+      "SIGNED",
+      "R3",
+      "DISCOUNT",
+      "BOUNDED"
+    ],
+    "validation_status": "mechanism_tests",
+    "profile_status": "complete_demonstrations",
+    "source_reproduction_status": "requires_resolution",
+    "analysis_available": false,
+    "modules": {
+      "sender": {
+        "role": "sender",
+        "owner": "sender"
+      },
+      "receiver": {
+        "role": "receiver",
+        "owner": "receiver"
+      },
+      "sender_attention": {
+        "role": "source_selector",
+        "owner": "sender"
+      },
+      "receiver_attention": {
+        "role": "feature_selector",
+        "owner": "receiver"
+      }
+    }
+  },
+  {
+    "id": "RIT",
+    "name": "Ritualization of learning",
+    "adaptive_choices": "Saliences and adaptive dispositions",
+    "source_learning": "Primitive dynamics unspecified",
+    "mechanism_status": "Proposal",
+    "implemented": false,
+    "required_fields": [
+      "primitive_dynamics"
+    ],
+    "source_questions": [
+      "Q10"
+    ],
+    "learners": [],
+    "validation_status": "awaiting_protocol",
+    "profile_status": "awaiting_protocol",
+    "source_reproduction_status": "requires_resolution",
+    "analysis_available": false,
+    "modules": {}
+  }
+]

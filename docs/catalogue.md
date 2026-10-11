@@ -69,10 +69,10 @@ These IDs are repository labels. Source names and attributions remain in the gam
 ## A useful ordering for executable work
 
 1. Finite full-state urns and R1/R2: SIG, COD, NAND, HIER.
-2. Explicit frozen modules and translators: TR-ORD/TR-LOG, SCOD, COMP-NAND.
-3. Provisional invention and dynamic rows: INV, ORD, ADD, ADD-COMP.
+2. Structural breadth and frozen composition: SCOD, COMP-NAND, TR-LOG, dialogue, networks, inquiry.
+3. Provisional invention and dynamic rows: INV, ORD, ADD, then learned TR-ORD/TR-PART/ADD-COMP.
 4. Turn-based histories: finite DIAL, then source-resolved ASK/costly dialogue.
 5. Partner and consultation schedulers: VIS/STAG/FFSR, INQ.
 6. Extra learner state and nested tasks: R3/R4/R6, BOX/BAND/META, ATT-R/ATT-B.
 
-This is a proposed dependency order for review. No implementation or experimental run is included in the current milestone.
+This is a proposed dependency order for review. The runtime and its current executable/source statuses are described in [runtime.md](runtime.md). The machine-readable registry separately tracks mechanism, profile, implementation, and source-reproduction status.
