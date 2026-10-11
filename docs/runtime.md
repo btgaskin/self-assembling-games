@@ -116,4 +116,4 @@ Structural history includes explicit fixture changes and the iterative phase sch
 
 The suite covers every registered profile, source gates, numeric updates, finite-state counts, exact fixtures, signed successful payoffs, unsampled reciprocity, stochastic fan-out, repeated draws, asynchronous inquiry, dynamic rollback/extinction, frozen artifacts, held-out evaluation, inner resets, event replay, resumable ensembles, independent-process parity, and CLI behavior.
 
-The [qualification report](qualification.md) records the actual test, build, and benchmark results. Long book-horizon statistical reproduction is a separate registered experiment.
+Run `python -m pytest -q` to exercise these checks. Long book-horizon statistical reproduction is a separate registered experiment.

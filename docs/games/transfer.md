@@ -16,7 +16,7 @@ Two senders each observe one of seven ranked stimuli. Independent uniform sampli
 
 Success means the receiver's ordering relation matches the rank relation of the two stimuli. Existing successful choices gain one in each used urn; failures gain zero. A successful newly invented signal is introduced at weight one into every input urn of its sender and reinforced in its origin urn. Retaining signals only after successful first use permits a learned vocabulary without preassigning names to ranks.
 
-The two sender identities remain meaningful even when token strings resemble one another. Dynamic receiver rows are keyed by their ordered, typed pair. The chapter describes receiver urn creation and successful vocabulary retention; first-failure receiver-row disposal needs checking against the underlying ordering implementation. Track it as question **Q3** in [review](../review.md).
+The two sender identities remain meaningful even when token strings resemble one another. Dynamic receiver rows are keyed by their ordered, typed pair. The chapter describes receiver urn creation and successful vocabulary retention; first-failure receiver-row disposal needs checking against the underlying ordering implementation. Track it as question **Q3** in [source register](../sources.md#source-questions-affecting-profiles).
 
 ## TR-ORD — Transfer a learned ordering
 

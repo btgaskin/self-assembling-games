@@ -62,7 +62,7 @@ The explanatory aim is to show how such capacities can arise under specified, mo
 | B12 — Learning How to Learn | Rule selection, generalization, and attention | Adapting how experience is acquired and used |
 | B13 — Self-Assembling Games and Explanation | Explanatory synthesis | Interpreting the capacities and structures that the games produce |
 
-References use **B1–B13**, section numbers, and printed pages. The [source register](docs/sources.md) supplies chapter DOI links, quotation anchors, and Barrett's cited antecedents. The [chapter manifest](sources/chapters.json) records Zotero identifiers and attachment fingerprints.
+References use **B1–B13**, section numbers, and printed pages. The [source register](docs/sources.md) supplies chapter DOI links, quotation anchors, and Barrett's cited antecedents. The [chapter manifest](sources/chapters.json) records bibliographic identifiers and printed page intervals.
 
 ## Components and capacities
 
@@ -90,7 +90,7 @@ The following vocabulary organizes the implementation. It groups mechanisms desc
 
 The **full-state representation** makes every table, option weight, assignment, reference point, clock, and current world state inspectable. Each game separately controls what its agents can observe. A receiver can therefore remain ignorant of nature even while a researcher inspects the entire simulation.
 
-A game specifies six connected parts: environment, modules, decisions, interaction order, feedback, and experiment protocol. Feedback names its state targets explicitly. This accommodates repeated choices in dialogue, reciprocal rewards to an unsampled host option, and translator-only learning through frozen components. See [architecture](docs/architecture.md) for these contracts.
+A game specifies six connected parts: environment, modules, decisions, interaction order, feedback, and experiment protocol. Feedback names its state targets explicitly. This accommodates repeated choices in dialogue, reciprocal rewards to an unsampled host option, and translator-only learning through frozen components.
 
 ## Urns, randomness, and learning
 
@@ -217,7 +217,7 @@ The library supports several distinct assembly operations:
 8. **Structural invention:** introduce options and dependent decision contexts, as in INV, ORD, and ADD.
 9. **Nested learning:** select an inner learning process while preserving the outer learner across tasks, as in META-RULE.
 
-Each operation preserves observation restrictions, update targets, execution order, and reset boundaries. A learned template import copies its policy into distinct frozen instances and records training lineage. Invented vocabularies need explicit export choices for mutator suppression and missing pair rows. See the [runtime guide](docs/runtime.md) for artifact transfer and the [architecture](docs/architecture.md) for the structural contracts.
+Each operation preserves observation restrictions, update targets, execution order, and reset boundaries. A learned template import copies its policy into distinct frozen instances and records training lineage. Invented vocabularies need explicit export choices for mutator suppression and missing pair rows. See the [runtime guide](docs/runtime.md) for artifact transfer.
 
 ## Run and inspect a game
 
@@ -263,12 +263,12 @@ Reports include accuracy, net payoff, terms, exchanges, outcome status, and comp
 
 Ensembles fix seed sets and protocols, resume interrupted runs, and report distributions with bootstrap and Wilson confidence intervals. Independent workers preserve each seed's serial trajectory. Book-horizon profiles include `sig.n4.book` and `sig.n8.punishment.book`. Their registered long statistical reproductions await execution; source-reported percentages are documented reference results.
 
-The [Barrett qualification report](docs/qualification.md) records its original **108 passing tests**, formatting/lint checks, wheel and source builds, installed CLI checks, and serial timing measurements. The finite dynamics addition extends verification to source strategy spaces, exact game fixtures, role-grouped fitness, selection and mutation equations, numerical integration, reinforcement continuation, and exact policy comparisons. Current validation is recorded in [finite dynamics](docs/finite-dynamics.md).
+Tests cover learning rules, source strategy spaces, exact game fixtures, role-grouped fitness, numerical integration, checkpoint continuation, and policy comparisons. Run `python -m pytest -q` to check the installed development environment.
 
 ## Source fidelity and further work
 
-A demonstration supplies an executable configuration and labels its choices. A source reproduction additionally requires source parameters, an explicit measurement protocol, and resolved operational questions. The runtime gates canonical profiles affected by unresolved source details; [review](docs/review.md) tracks Q1–Q13 and the relevant follow-up sources. The catalogue retains qualitative mechanisms and separate dynamics so their place in the book remains visible.
+A demonstration supplies an executable configuration and labels its choices. A source reproduction additionally requires source parameters, an explicit measurement protocol, and resolved operational questions. The runtime gates canonical profiles affected by unresolved source details; [source register](docs/sources.md#source-questions-affecting-profiles) records the model questions and relevant follow-up sources. The catalogue retains qualitative mechanisms and separate dynamics so their place in the book remains visible.
 
 The common abstraction and composition operations are engineering designs derived from the games. “Category” here means the organized family of models and operations. A formal mathematical category would require separately specified objects, morphisms, and laws.
 
-For further reading, use the [catalogue](docs/catalogue.md), [learning rules](docs/learning-rules.md), [architecture](docs/architecture.md), [source register](docs/sources.md), [Astra review](docs/astra-review.md), and [repository plan](docs/repository-plan.md). The five game specification sheets expand the mechanisms and chapter citations presented here.
+For further reading, use the [catalogue](docs/catalogue.md), [learning rules](docs/learning-rules.md), [finite dynamics](docs/finite-dynamics.md), [source register](docs/sources.md). The five game specification sheets expand the mechanisms and chapter citations presented here.

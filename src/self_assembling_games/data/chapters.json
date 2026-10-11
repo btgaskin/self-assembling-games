@@ -1,8 +1,7 @@
 {
   "schema_version": 1,
   "source": "Self-Assembling Games",
-  "accessed": "2026-10-11",
-  "basis": "User-provided excerpts and read-only Zotero chapter PDFs",
+  "basis": "Chapter bibliographic references and printed page intervals",
   "chapters": [
     {
       "id": "B1",
@@ -15,9 +14,6 @@
         "start": 1,
         "end": 12
       },
-      "zotero_item_key": "LNKHQH6J",
-      "zotero_attachment_key": "A8XZDK5U",
-      "pdf_sha256": "c8e718a0c9e5d9eaa53dba088d995ac0c2e1d1552c6f5248798357058feaa63d",
       "pdf_page_count": 12
     },
     {
@@ -31,9 +27,6 @@
         "start": 13,
         "end": 37
       },
-      "zotero_item_key": "FI7M6QUQ",
-      "zotero_attachment_key": "EECRSDAW",
-      "pdf_sha256": "370469c35a64167502989c03bac1849da9c8a0fb8b503ae2ee7feb16f526496c",
       "pdf_page_count": 25
     },
     {
@@ -47,9 +40,6 @@
         "start": 38,
         "end": 55
       },
-      "zotero_item_key": "3NPW2V83",
-      "zotero_attachment_key": "SB7FDVYD",
-      "pdf_sha256": "516396bdce2627bdd28b0357146c593ec0df57730784748ab96b8f572d604c51",
       "pdf_page_count": 18
     },
     {
@@ -63,9 +53,6 @@
         "start": 56,
         "end": 69
       },
-      "zotero_item_key": "I58NMTQK",
-      "zotero_attachment_key": "4N3K8DM3",
-      "pdf_sha256": "24677fcff24e3c063bf54fc2365a9a96fb5654edfdc90d4819b0f3faf8b56e20",
       "pdf_page_count": 14
     },
     {
@@ -79,9 +66,6 @@
         "start": 70,
         "end": 96
       },
-      "zotero_item_key": "MEF3WKDB",
-      "zotero_attachment_key": "J7ZQWZEY",
-      "pdf_sha256": "0fda170e42be5274990a5c3e7cb0f8975979770a0403eab544f96b692063ba98",
       "pdf_page_count": 27
     },
     {
@@ -95,9 +79,6 @@
         "start": 97,
         "end": 111
       },
-      "zotero_item_key": "C7SH935B",
-      "zotero_attachment_key": "TXHUR89H",
-      "pdf_sha256": "13537c1ce87274cdb6e10608e12b711cad4092c35a2770e47766140c54a9f447",
       "pdf_page_count": 15
     },
     {
@@ -111,9 +92,6 @@
         "start": 112,
         "end": 128
       },
-      "zotero_item_key": "NFKCK45Z",
-      "zotero_attachment_key": "49D7Y67S",
-      "pdf_sha256": "3d4deb0d0cd9597ba75d8189f26e833947146e5f2d72341c639429a45cf9f258",
       "pdf_page_count": 17
     },
     {
@@ -127,9 +105,6 @@
         "start": 129,
         "end": 147
       },
-      "zotero_item_key": "U6CZRIUN",
-      "zotero_attachment_key": "8VTATQKW",
-      "pdf_sha256": "df57cead9a2c26b31cfa189e6e7d281752554ba8c54229d581743fb25646345d",
       "pdf_page_count": 19
     },
     {
@@ -143,9 +118,6 @@
         "start": 148,
         "end": 168
       },
-      "zotero_item_key": "TTA2JW9K",
-      "zotero_attachment_key": "EPK49ATD",
-      "pdf_sha256": "580cd9ff1d87cc5e29b08f3824ff46a29f5c942536a9c5e00844f607b2175764",
       "pdf_page_count": 21
     },
     {
@@ -159,9 +131,6 @@
         "start": 169,
         "end": 185
       },
-      "zotero_item_key": "HRMUITCY",
-      "zotero_attachment_key": "Y3A8W6GN",
-      "pdf_sha256": "72e180dcdd79ed85aacb2d73dc5d01047f82938a424cda40d687b43e7868e551",
       "pdf_page_count": 17
     },
     {
@@ -175,9 +144,6 @@
         "start": 186,
         "end": 232
       },
-      "zotero_item_key": "A8VPXVB4",
-      "zotero_attachment_key": "8X5NLKGH",
-      "pdf_sha256": "55fb9e8a626774af7221b526df253da11b0180074cd7d4ea64bdd66571d72193",
       "pdf_page_count": 47
     },
     {
@@ -191,9 +157,6 @@
         "start": 233,
         "end": 270
       },
-      "zotero_item_key": "RCNE4S32",
-      "zotero_attachment_key": "73K9F653",
-      "pdf_sha256": "97f89ea1b3a35ce8564155383ec3ae1001e68d6a121a60d6cc18e4e129ff4d42",
       "pdf_page_count": 38
     },
     {
@@ -207,9 +170,6 @@
         "start": 271,
         "end": 276
       },
-      "zotero_item_key": "CXDQ2VRY",
-      "zotero_attachment_key": "9X45M872",
-      "pdf_sha256": "fec66f7b05483d892666c7be0572dc6d57cbf79db9cefef34d720da25f23b9ac",
       "pdf_page_count": 6
     }
   ]

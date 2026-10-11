@@ -11,3 +11,7 @@ dist/
 .coverage
 htmlcov/
 .ruff_cache/
+
+# Local agent guidance and development records
+.internal/
+AGENTS.md

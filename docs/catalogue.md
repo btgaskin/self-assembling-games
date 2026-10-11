@@ -6,19 +6,19 @@ This catalogue covers the supplied book's thirteen chapters. “Specified” mea
 
 | Chapter | Role in the framework | Specification |
 |---|---|---|
-| B1 — Self-Assembly and Games | Decisions, adaptive dispositions, explanatory aim | [Architecture](architecture.md) |
+| B1 — Self-Assembly and Games | Decisions, adaptive dispositions, explanatory aim | [Framework](../README.md#components-and-capacities) |
 | B2 — Learning to Signal | Core learner; simple signaling; pooling; alternative dynamics | [Signaling](games/signaling.md), [rules](learning-rules.md) |
 | B3 — Generalized Signaling Games | Coding, NAND, hierarchical expression and control | [Signaling](games/signaling.md) |
 | B4 — Assembling Games from Decisions | Ritualization, cue reading, sensory manipulation | [Transfer](games/transfer.md) |
 | B5 — Rule Following and Template Transfer | Ordering, analogy, incomplete training, logical transfer | [Transfer](games/transfer.md) |
-| B6 — Modular Composition and the Evolution of Salience | Chains, source selection, self-assembling coding | [Transfer](games/transfer.md), [architecture](architecture.md) |
+| B6 — Modular Composition and the Evolution of Salience | Chains, source selection, self-assembling coding | [Transfer](games/transfer.md), [finite dynamics](finite-dynamics.md) |
 | B7 — The Self-Assembly of Computation | Composed NAND; arithmetic and comparison | [Computation](games/computation-discourse.md) |
 | B8 — Learning to Take Turns | Questions, dialogue, learned timing | [Discourse](games/computation-discourse.md) |
 | B9 — The Evolution of Networks | Partner choice, strategies, subscriptions and bargaining | [Networks](games/networks-inquiry.md) |
 | B10 — The Self-Assembly of Inquiry | Empirical and social source choice | [Inquiry](games/networks-inquiry.md) |
 | B11 — The Ways of Learning | Punishment, phases, reference points, invention, hybrids | [Rules](learning-rules.md), [adaptive learning](games/adaptive-learning.md) |
 | B12 — Learning How to Learn | Bandits, meta-learning, generalization, attention | [Adaptive learning](games/adaptive-learning.md) |
-| B13 — Self-Assembling Games and Explanation | Interpretive synthesis and how-possible explanations | [Architecture](architecture.md), [review](review.md) |
+| B13 — Self-Assembling Games and Explanation | Interpretive synthesis and how-possible explanations | [Framework](../README.md#the-book-and-its-central-question), [sources](sources.md) |
 
 ## Stable model identifiers
 
@@ -65,14 +65,3 @@ This catalogue covers the supplied book's thirteen chapters. “Specified” mea
 | RIT | Ritualization of learning | Saliences and adaptive dispositions | Primitive dynamics unspecified | Proposal |
 
 These IDs are repository labels. Source names and attributions remain in the game sheets. Families share mechanisms; they need not each become a separate class. For example, SIG with R3 and META-RULE choosing R3 are different experiments using the same learner.
-
-## A useful ordering for executable work
-
-1. Finite full-state urns and R1/R2: SIG, COD, NAND, HIER.
-2. Structural breadth and frozen composition: SCOD, COMP-NAND, TR-LOG, dialogue, networks, inquiry.
-3. Provisional invention and dynamic rows: INV, ORD, ADD, then learned TR-ORD/TR-PART/ADD-COMP.
-4. Turn-based histories: finite DIAL, then source-resolved ASK/costly dialogue.
-5. Partner and consultation schedulers: VIS/STAG/FFSR, INQ.
-6. Extra learner state and nested tasks: R3/R4/R6, BOX/BAND/META, ATT-R/ATT-B.
-
-This is a proposed dependency order for review. The runtime and its current executable/source statuses are described in [runtime.md](runtime.md). The machine-readable registry separately tracks mechanism, profile, implementation, and source-reproduction status.

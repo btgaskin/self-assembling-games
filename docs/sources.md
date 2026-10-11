@@ -4,7 +4,7 @@
 
 Barrett, Jeffrey A. (2025). *Self-Assembling Games: Language, Learning, and Inquiry*. Oxford University Press. The chapter PDFs identify the short book title as *Self-Assembling Games*. Citations below use the book's printed page numbers, which are continuous across chapters.
 
-All thirteen chapters were read from the user's Zotero attachments for this specification. Chapters 2 and 3 were also supplied in the conversation. The register records selected parent items and attachment fingerprints. Duplicate chapter records were left in place. No PDFs or full extracted chapter text are distributed in this repository.
+The register covers all thirteen chapters, using printed page intervals and chapter DOI links. The repository distributes bibliographic references and model specifications.
 
 | ID | Chapter title | Printed pages | DOI |
 |---|---|---|---|
@@ -22,7 +22,7 @@ All thirteen chapters were read from the user's Zotero attachments for this spec
 | B12 | Learning How to Learn | 233–270 | [Chapter 12](https://doi.org/10.1093/9780197793572.003.0012) |
 | B13 | Self-Assembling Games and Explanation | 271–276 | [Chapter 13](https://doi.org/10.1093/9780197793572.003.0013) |
 
-## Quotations tied to implementation decisions
+## Model definitions and quotation anchors
 
 These short anchors accompany the original paraphrased specifications in this repository.
 
@@ -64,7 +64,7 @@ These short anchors accompany the original paraphrased specifications in this re
 
 ## Cited antecedents and clarification targets
 
-The references in this table are **Barrett's attributions**, as located in the named chapter. The present milestone derives rules from the book; it does not claim an independent reproduction or complete reading of each antecedent paper. Retrieve the relevant original before resolving a parameter that the book leaves open. Full bibliographic metadata and paper identifiers can be added when those sources are read.
+The references in this table are **Barrett's attributions**, as located in the named chapter. The model definitions follow the book; open operational questions identify the original sources needed to resolve them.
 
 | Names/year as cited | Book location | Role |
 |---|---|---|
@@ -90,12 +90,30 @@ The references in this table are **Barrett's attributions**, as located in the n
 | Herrmann and VanDrunen (2025) | B12 §12.6 | Attention games |
 | Beggs (2005); Hopkins and Posch (2005); Börgers and Sarin (1997) | B2 pp.25–27; B12 §12.2 | Reinforcement, mean-field, replicator connections |
 
-## Provenance and transcription notes
+## Source questions affecting profiles
+
+| Question | Source location | What needs resolution | Consequence |
+|---|---|---|---|
+| Q1 — Long/costly discourse | B8 §§8.2–8.3, pp.133–145 | Exchange versus individual-message cost; repeated-Q reward; negative returns; unlimited-history storage | Avoid importing HIER's signed floor silently into a simple-reinforcement dialogue |
+| Q2 — ARP across conditional decisions | B11 §11.2.4, pp.204–206; Bereby-Meyer and Erev (1998) | Per-unchosen experience increment; reference-point scope; forgetting scope; initial q | Exact printed two-option rule is clear; multi-option and multi-urn adaptation needs a chosen source profile |
+| Q3 — Invention in pair games | B5 §5.4; B7 §7.3; Alexander et al. (2012) | Receiver pair-row fate after failed new terms; joint novelty transaction; forgetting mutators/extinction | Dynamic state and subsequent exploration depend on retention/cleanup |
+| Q4 — Addition/comparison staging | B7 pp.121–125 | Old comparison pretraining; ties; frozen checkpoint criterion | Reproduction needs the exact staged protocol |
+| Q5 — Logical-transfer closure | B5 §5.8 and its template discussion | Which input/output permutations/translations are allowed | Functions with the same false-row count need not be equivalent under independent input recodings |
+| Q6 — FFSR exploration | B9 §9.4; Fulker et al. (2024) | Forgetting/error rates, order, strategy draws and visit schedule | Determines network/convention persistence |
+| Q7 — Bounded/self-tuning learners | B11 §§11.2.3,11.2.5; Barrett (2014); B12 §12.5 | Bound operation, numeric parameters, phase-adjustment criterion | Avoid conflating count ceilings, total bounds, and discounting |
+| Q8 — Attention extension | B12 §12.6; Herrmann and VanDrunen (2025) | Distractor sampling/correlation and sender conditional-table sharing | Defines what information is available and which policies can evolve |
+| Q9 — Nested task environments | B12 §§12.2–12.3 | Bandit distributions; trial parameters; positive failure return; oracle processes | Enables reproducible meta-learning comparisons |
+| Q10 — Qualitative assembly/network extensions | B4, B6 §6.1, B9 §§9.3,9.5–9.6, B12 §§12.4–12.7 | Primitive dynamics, imitation rate, subscription learner, generalization kernel | These are framework entries until a concrete source protocol is recovered |
+| Q11 — Partial ordering sampler | B5 §5.6 | Exact adjacent training-pair selection and held-out protocol | Demonstrations sample adjacent pairs in both directions explicitly |
+| Q12 — Frozen template lifecycle | B5, B7 | Pretraining budget/checkpoint selection; frozen mutator behavior; unseen receiver pairs | Export transforms and their lineage are explicit variants |
+| Q13 — Monty Hall host | B11 §11.4 | Exact host protocol | Demonstration opens a uniformly selected eligible goat door |
+
+Source-supported resolutions belong with the corresponding model and profile. Demonstrations state their operational choices explicitly.
+
+## Transcription notes
 
 The finite Skyrms family is registered from [Skyrms (2009), §§2–5](https://doi.org/10.1098/rstb.2008.0258). Its game definitions, equations, table discrepancies, dialogue information-set question, and supplementary-protocol gate are recorded in [finite dynamics](finite-dynamics.md). Source fidelity is recorded separately for the game, adaptive method, population specification, and numerical or encounter protocol.
 
-- [chapters.json](../sources/chapters.json) records the chosen Zotero items, attachments, PDF SHA-256 fingerprints, and verified printed page intervals. Local filesystem paths are omitted.
-- Duplicate parents were found for B5 (`BZUAI2BS`, attachment `LA27DJDS`) and B6 (`NGPK74Z9`, attachment `ZP9XS85L`). Selected parents are recorded in the manifest; library records were preserved.
 - Printed page numbers take priority over incomplete catalogue page fields. Repeated author/book-author metadata is normalized to one bibliographic author in this document.
 - B3's coding illustration mentions state 4 within a four-state `0…3` domain; the game sheet identifies the correction.
 - B11's ARP equations contain inconsistent payoff indices and an APR spelling. Its unchosen-option update is transcribed literally in the rule sheet pending original-source clarification.
