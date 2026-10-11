@@ -6,6 +6,8 @@ The repository contains a chapter-based rulebook and an executable Python packag
 
 The catalogue covers all thirteen chapters and contains **39 entries, 32 executable model families, and 45 profiles**. Entries also retain the book's analytical concepts, qualitative proposals, and related dynamics. This is a separate project from toyLIFE.
 
+The initial effort aims for parity with Barrett's book: preserve the games' structures, observations, learning rules, and experimental protocols, resolve source details, and reproduce the reported results. This work provides a foundation for extending the same game definitions to other methods, including population replicator dynamics, deterministic mean-field dynamics, Bayesian updating, and further learning rules. These extensions are planned; the current implementation centers on reinforcement learning.
+
 ## The book and its central question
 
 Barrett asks how agents acquire the dispositions that make an organized interaction possible. A sender and receiver can begin with arbitrary signals and random responses. Success reinforces the decisions that happened to work together. Over repeated encounters, they may acquire a convention: a signal comes to indicate a state and elicit a useful action.
