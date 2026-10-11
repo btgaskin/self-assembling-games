@@ -92,6 +92,8 @@ The references in this table are **Barrett's attributions**, as located in the n
 
 ## Provenance and transcription notes
 
+The finite Skyrms family is registered from [Skyrms (2009), §§2–5](https://doi.org/10.1098/rstb.2008.0258). Its game definitions, equations, table discrepancies, dialogue information-set question, and supplementary-protocol gate are recorded in [finite dynamics](finite-dynamics.md). Source fidelity is recorded separately for the game, adaptive method, population specification, and numerical or encounter protocol.
+
 - [chapters.json](../sources/chapters.json) records the chosen Zotero items, attachments, PDF SHA-256 fingerprints, and verified printed page intervals. Local filesystem paths are omitted.
 - Duplicate parents were found for B5 (`BZUAI2BS`, attachment `LA27DJDS`) and B6 (`NGPK74Z9`, attachment `ZP9XS85L`). Selected parents are recorded in the manifest; library records were preserved.
 - Printed page numbers take priority over incomplete catalogue page fields. Repeated author/book-author metadata is normalized to one bibliographic author in this document.

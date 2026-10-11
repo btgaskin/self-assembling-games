@@ -278,11 +278,20 @@ class Simulation:
 
 
 def build(profile: str | Profile | dict[str, Any], seed: int = 0) -> Simulation:
+    from .adaptive_runtime import build_adaptive, is_adaptive_profile
+
+    if is_adaptive_profile(profile):
+        return build_adaptive(profile, seed)
     return Simulation(load_profile(profile), seed)
 
 
 def resume(path: str | Path) -> Simulation:
-    return Simulation.restore(read_snapshot(path))
+    snapshot = read_snapshot(path)
+    if snapshot.get("engine") == "adaptive":
+        from .adaptive_runtime import restore_adaptive
+
+        return restore_adaptive(snapshot)
+    return Simulation.restore(snapshot)
 
 
 def run_ensemble(
@@ -293,7 +302,28 @@ def run_ensemble(
     threshold: float | None = None,
     plays: int | None = None,
     workers: int = 1,
+    duration: float | None = None,
+    metric: str | None = None,
 ) -> dict[str, Any]:
+    from .adaptive_runtime import is_adaptive_profile
+
+    if is_adaptive_profile(profile):
+        from .adaptive_experiments import adaptive_ensemble
+
+        return adaptive_ensemble(
+            profile,
+            seeds,
+            output=output,
+            threshold=threshold,
+            plays=plays,
+            duration=duration,
+            metric=metric,
+            workers=workers,
+        )
+    if duration is not None or metric not in {None, "cumulative_accuracy"}:
+        raise ValueError(
+            "Barrett encounter ensembles use plays and cumulative_accuracy"
+        )
     from .metrics import wilson
 
     resolved = load_profile(profile)
@@ -388,11 +418,46 @@ def _ensemble_run(task: tuple[dict[str, Any], int, int, str]) -> dict[str, Any]:
     return {"seed": seed, **sim.metrics.summary()}
 
 
-def benchmark(profile: str, plays: int = 10_000, seed: int = 0) -> dict[str, Any]:
+def benchmark(
+    profile: str,
+    plays: int | None = None,
+    seed: int = 0,
+    *,
+    duration: float | None = None,
+) -> dict[str, Any]:
     sim = build(profile, seed)
+    from .evolution import EvolutionSimulation
+    from .finite_learning import ReinforcementSimulation
+
+    if isinstance(sim, EvolutionSimulation):
+        if plays is not None:
+            raise ValueError("Evolution benchmarks use duration, not plays")
+        start = time.perf_counter()
+        sim.run(duration=duration)
+        return {
+            "profile": profile,
+            "clock": "evolutionary_time",
+            "evolutionary_time": sim.time,
+            "elapsed_seconds": time.perf_counter() - start,
+            "metadata": sim.metadata,
+            "solver": sim.protocol["solver"],
+        }
+    if duration is not None:
+        raise ValueError("Reinforcement benchmarks use plays")
+    plays = 10_000 if plays is None else plays
     start = time.perf_counter()
     sim.run(plays=plays)
     elapsed = time.perf_counter() - start
+    if isinstance(sim, ReinforcementSimulation):
+        return {
+            "profile": profile,
+            "clock": "plays",
+            "plays": plays,
+            "elapsed_seconds": elapsed,
+            "plays_per_second": plays / elapsed,
+            "metadata": sim.metadata,
+            "adaptive_vectors": len(sim.weights),
+        }
     return {
         "profile": profile,
         "plays": plays,

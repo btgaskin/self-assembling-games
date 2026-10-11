@@ -87,6 +87,22 @@ def evaluate(
     from .simulation import Simulation
 
     base = snapshot.snapshot() if isinstance(snapshot, Simulation) else snapshot
+    from .evolution import EvolutionSimulation
+    from .finite_learning import ReinforcementSimulation
+
+    if isinstance(snapshot, (EvolutionSimulation, ReinforcementSimulation)):
+        base = snapshot.snapshot()
+    if isinstance(base, dict) and base.get("engine") == "adaptive":
+        from .adaptive_runtime import restore_adaptive
+
+        sim = restore_adaptive(base)
+        if isinstance(sim, EvolutionSimulation):
+            if protocol != "exact":
+                raise ValueError(
+                    "Evolutionary population evaluation uses exact finite expectations"
+                )
+            return sim.evaluate()
+        return sim.evaluate(protocol=protocol, samples=samples, seed=seed)
     if protocol == "sampled":
         sim = Simulation.restore(base)
         import numpy as np

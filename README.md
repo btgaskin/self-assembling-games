@@ -1,12 +1,42 @@
 # Self-assembling games
 
-A research library for Jeffrey A. Barrett's *Self-Assembling Games: Language, Learning, and Inquiry* (Oxford University Press, 2025). It brings together the book's games, learning rules, and mechanisms for assembling language, computation, interaction networks, and inquiry from simple adaptive decisions.
+A research library for **self-assembling games**: organized interactions that acquire signaling conventions, computation, coordination, and inquiry through adaptive decisions. Game definitions describe what participants observe, choose, and receive. Adaptive methods describe how their decisions or inherited strategies change.
 
-The repository contains a chapter-based rulebook and an executable Python package. Its common unit is a **conditional decision**: a component observes a circumstance, selects an option, and changes its disposition through feedback. Connecting these decisions produces signaling, translation, attention, questions, partner selection, and learning-rule selection.
+The executable Python package separates games, method classes, and experimental protocols. Its common unit is a **conditional decision**: a component observes a circumstance and selects an option. Reinforcement changes its response through feedback; population evolution changes the frequencies of complete inherited plans. Connecting decisions produces signaling, translation, attention, questions, partner selection, and learning-rule selection.
 
-The catalogue covers all thirteen chapters and contains **39 entries, 32 executable model families, and 45 profiles**. Entries also retain the book's analytical concepts, qualitative proposals, and related dynamics. This is a separate project from toyLIFE.
+The source families currently include Jeffrey A. Barrett's *Self-Assembling Games: Language, Learning, and Inquiry* (2025), with **39 catalogue entries, 32 executable model families, and 45 encounter profiles**, and Brian Skyrms' *Evolution of signalling systems with multiple senders and receivers* (2009), with **six finite game families**. There are also **40 adaptive profiles** spanning the Skyrms games and selected Barrett adapters. Each profile records its game, method, assumptions, and protocol.
 
-The initial effort aims for parity with Barrett's book: preserve the games' structures, observations, learning rules, and experimental protocols, resolve source details, and reproduce the reported results. This work provides a foundation for extending the same game definitions to other methods, including population replicator dynamics, deterministic mean-field dynamics, Bayesian updating, and further learning rules. These extensions are planned; the current implementation centers on reinforcement learning.
+Source-specific definitions preserve observations, option sets, feedback, and timing. The finite core supports continuous-time replicator dynamics, birth-mutation replicator dynamics, conditional reinforcement, and complete-plan reinforcement. The Barrett encounter runtime additionally supports punishment, persistence, invention, and nested learning. Source questions and deliberate variants travel with configurations and checkpoints. See the [shared adaptive architecture](docs/finite-dynamics.md) and [source register](docs/sources.md).
+
+## Games, methods, and history
+
+The library takes self-assembling games as its organizing concept and traces each model's lineage through its source family. Lewis' sender–receiver game provides the convention-forming setting. Skyrms' 2009 paper studies evolutionary dynamics and extends that setting to complementary information, voting, teamwork, chains, and dialogue. Barrett develops conditional learning, modular composition, and the assembly of interaction and inquiry. The [chapter source register](docs/sources.md) records the antecedents of individual Barrett models.
+
+| Method class | Finite method | Adaptive state |
+|---|---|---|
+| Population evolution | `replicator.continuous` — default | Frequencies of complete inherited plans |
+| Population evolution | `replicator_mutator.birth_uniform` | Plan frequencies with uniform mutation at reproduction |
+| Reinforcement | `reinforcement.conditional.R1` | Propensities at permitted decision contexts |
+| Reinforcement | `reinforcement.strategy.R1` | Propensities over complete role plans |
+
+Solvers are separate from mathematical methods. The default replicator equation is Skyrms' continuous-time equation; DOP853 is the library's default numerical solver. Population grouping, role weights, fixed components, initialization, and mutation are explicit choices. Full inherited distributions retain correlations between roles. Additional finite games can be registered through `register_finite_game`.
+
+Install evolutionary support and list the families:
+
+```sh
+python -m pip install -e '.[dev,evolution]'
+sg list --all
+sg list --family skyrms
+sg methods
+sg run sk-sig.evolution.demo --seed 1 --time 20 --output runs/signal-evolution
+sg run sk-sig.strategy-r1.demo --seed 1 --plays 10000 --output runs/signal-learning
+sg evaluate runs/signal-evolution
+sg evaluate runs/signal-learning
+```
+
+These two signalling profiles use the same finite game and complete role-plan sets. Their final policies can be evaluated exactly by summing over all states and strategy combinations. Evolutionary time and learning encounters are reported separately. The frozen-endpoint translator offers a particularly simple comparison with one adaptive role and known plan payoffs; the voting game supplies an exact majority-rule success benchmark of `0.972`. See [comparison conditions and source questions](docs/finite-dynamics.md).
+
+The Skyrms profiles specify demonstration protocols. Historical reproduction remains gated by the missing supplementary simulation protocol, and dialogue exposes its unresolved reply information set as a named configuration choice.
 
 ## The book and its central question
 
@@ -93,7 +123,7 @@ In **R5**, a successful new token enters every input urn of its sender at weight
 
 Additional executable methods include **bounded reinforcement** with an explicit per-option ceiling, **discounting**, two-option **win-stay/lose-shift**, and **whole-strategy win-stay/lose-randomize**. The whole-strategy comparator replaces both full signaling maps on failure. R6 instead changes only the conditional assignments involved in that play. Exploration error, forgetting timing, and bounding policies are named profile choices.
 
-Barrett also discusses probe-and-adjust, Bayesian conditioning, best response with inertia, and population replicator dynamics. Replicator dynamics describes relative growth of successful strategies; a related mean-field approximation describes the leading expected change under simple reinforcement. Conditional visitation and growing urn totals affect its time scale. These dynamics remain documented extensions; the current execution engine implements the reinforcement and persistence cases above. See B2 pp.25–27 and the [method specifications](docs/learning-rules.md).
+Barrett also discusses probe-and-adjust, Bayesian conditioning, best response with inertia, and population replicator dynamics. The finite runtime now implements population replicator dynamics for supported game adapters. A related mean-field approximation describes the leading expected change under simple reinforcement; conditional visitation and growing urn totals affect its time scale. Bayesian conditioning and best response remain documented extensions. See B2 pp.25–27, the [method specifications](docs/learning-rules.md), and [finite dynamics](docs/finite-dynamics.md).
 
 ## The games
 
@@ -233,7 +263,7 @@ Reports include accuracy, net payoff, terms, exchanges, outcome status, and comp
 
 Ensembles fix seed sets and protocols, resume interrupted runs, and report distributions with bootstrap and Wilson confidence intervals. Independent workers preserve each seed's serial trajectory. Book-horizon profiles include `sig.n4.book` and `sig.n8.punishment.book`. Their registered long statistical reproductions await execution; source-reported percentages are documented reference results.
 
-The [qualification report](docs/qualification.md) records **108 passing tests**, formatting/lint checks, wheel and source builds, installed CLI checks, and serial timing measurements. Tests exercise numeric rules, all profiles, stochastic shared outputs, inquiry timing, dynamic rollback, frozen learned transfer, checkpoint continuation, replay, and parallel ensemble parity.
+The [Barrett qualification report](docs/qualification.md) records its original **108 passing tests**, formatting/lint checks, wheel and source builds, installed CLI checks, and serial timing measurements. The finite dynamics addition extends verification to source strategy spaces, exact game fixtures, role-grouped fitness, selection and mutation equations, numerical integration, reinforcement continuation, and exact policy comparisons. Current validation is recorded in [finite dynamics](docs/finite-dynamics.md).
 
 ## Source fidelity and further work
 

@@ -317,6 +317,12 @@ def validate_distribution(values: list[float], count: int) -> None:
 
 
 def load_profile(identifier: str | Path | dict[str, Any] | Profile) -> Profile:
+    from .adaptive_runtime import is_adaptive_profile
+
+    if is_adaptive_profile(identifier):
+        from .finite_profiles import load_adaptive_profile
+
+        return load_adaptive_profile(identifier)
     if isinstance(identifier, Profile):
         profile = copy.deepcopy(identifier)
     elif isinstance(identifier, dict):

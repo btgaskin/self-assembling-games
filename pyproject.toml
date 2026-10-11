@@ -5,11 +5,12 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "self-assembling-games"
 version = "0.1.0"
-description = "Source-based reinforcement models of signaling and self-assembling games"
+description = "Self-assembling games with source-grounded models, reinforcement learning, and evolutionary dynamics"
 requires-python = ">=3.11"
 dependencies = ["numpy>=1.26"]
 
 [project.optional-dependencies]
+evolution = ["scipy>=1.11"]
 dev = ["pytest>=8", "build>=1", "ruff>=0.12"]
 
 [project.scripts]

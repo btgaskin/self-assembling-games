@@ -1,0 +1,148 @@
+"""Shared build, restore, evaluation and checkpoint lifecycle for finite methods."""
+
+from __future__ import annotations
+
+import copy
+from collections import deque
+from pathlib import Path
+from typing import Any
+
+import numpy as np
+
+from .adaptive import adaptive_method
+from .finite_profiles import AdaptiveProfile, load_adaptive_profile
+
+
+def build_adaptive(
+    profile: str | dict[str, Any] | AdaptiveProfile, seed: int = 0, *, game=None
+):
+    resolved = load_adaptive_profile(profile)
+    method = adaptive_method(resolved.method)
+    if method.method_class == "population_evolution":
+        from .evolution import EvolutionSimulation
+
+        return EvolutionSimulation(resolved, seed, game=game)
+    from .finite_learning import ReinforcementSimulation
+
+    return ReinforcementSimulation(resolved, seed, game=game)
+
+
+def checkpoint(snapshot: dict[str, Any], path: str | Path) -> Path:
+    from .simulation import atomic_json
+
+    path = Path(path)
+    if path.suffix != ".json":
+        path = path / "checkpoint.json"
+    atomic_json(path, snapshot)
+    return path
+
+
+def restore_adaptive(snapshot: dict[str, Any], *, game=None):
+    from .simulation import digest, provenance
+
+    if snapshot.get("schema_version") != 1 or snapshot.get("engine") != "adaptive":
+        raise ValueError("Unsupported adaptive checkpoint schema")
+    if digest(snapshot["profile"]) != snapshot["configuration_hash"]:
+        raise ValueError("Adaptive checkpoint configuration hash mismatch")
+    current = provenance()
+    for field in ["package_version", "numpy", "source_hash"]:
+        if snapshot["metadata"].get(field) != current[field]:
+            raise ValueError(
+                f"Checkpoint {field} differs; use the pinned implementation"
+            )
+    if "scipy" in snapshot["metadata"]:
+        from importlib.metadata import version
+
+        if version("scipy") != snapshot["metadata"]["scipy"]:
+            raise ValueError(
+                "Checkpoint scipy differs; use the pinned numerical implementation"
+            )
+    simulation = build_adaptive(snapshot["profile"], snapshot["seed"], game=game)
+    if (
+        simulation.game_hash != snapshot["game_hash"]
+        or digest(snapshot["game"]) != snapshot["game_hash"]
+    ):
+        raise ValueError("Checkpoint finite-game specification differs")
+    if snapshot["method_class"] != simulation.method.method_class:
+        raise ValueError("Checkpoint method class mismatch")
+    if simulation.protocol != snapshot["protocol"]:
+        raise ValueError("Checkpoint protocol differs")
+    for field in ["metadata", "fidelity", "history", "status"]:
+        setattr(simulation, field, copy.deepcopy(snapshot[field]))
+    if simulation.method.method_class == "population_evolution":
+        from .finite import distribution
+
+        spec = copy.deepcopy(snapshot["population"])
+        spec.pop("strategy_counts")
+        spec.pop("inheritance")
+        from .evolution import PopulationSpec
+
+        population = PopulationSpec(
+            simulation.game,
+            **spec,
+            max_population_strategies=simulation.profile.resources.get(
+                "max_population_strategies", 100_000
+            ),
+        )
+        expected = simulation.population.to_dict()
+        expected["frozen"] = spec["frozen"]
+        if population.to_dict() != expected:
+            raise ValueError("Checkpoint population layout differs")
+        simulation.population = population
+        simulation.time = snapshot["time"]
+        simulation.frequencies = {
+            n: distribution(snapshot["frequencies"][n], size)
+            for n, size in population.counts.items()
+        }
+        simulation.initial_frequencies = {
+            n: distribution(snapshot["initial_frequencies"][n], size)
+            for n, size in population.counts.items()
+        }
+        simulation.integrals = np.asarray(snapshot["integrals"], dtype=float)
+        if (
+            simulation.integrals.shape != (len(simulation.game.roles) + 3,)
+            or not np.isfinite(simulation.integrals).all()
+        ):
+            raise ValueError("Invalid checkpoint integrals")
+        simulation.measurements = copy.deepcopy(snapshot["measurements"])
+    else:
+        for name in ["weights", "initial_weights"]:
+            vectors = getattr(simulation, name)
+            if vectors.keys() != snapshot[name].keys():
+                raise ValueError("Checkpoint policy addresses differ")
+            for address, weights in vectors.items():
+                values = np.asarray(snapshot[name][address], dtype=float)
+                if (
+                    values.shape != weights.shape
+                    or not np.isfinite(values).all()
+                    or np.any(values < 0)
+                    or values.sum() <= 0
+                ):
+                    raise ValueError("Invalid checkpoint reinforcement weights")
+                vectors[address] = values.copy()
+        simulation.rng.bit_generator.state = copy.deepcopy(snapshot["rng_state"])
+        simulation.frozen = set(snapshot["frozen"])
+        if not simulation.frozen <= simulation.weights.keys():
+            raise ValueError("Unknown frozen checkpoint policy")
+        for name in ["plays", "successes", "return_totals", "terms", "exchanges"]:
+            setattr(simulation, name, copy.deepcopy(snapshot[name]))
+        simulation.recent = deque(
+            snapshot["recent"], maxlen=simulation.protocol["window"]
+        )
+    return simulation
+
+
+def is_adaptive_profile(profile: Any) -> bool:
+    from .finite_profiles import adaptive_profiles
+
+    if isinstance(profile, AdaptiveProfile):
+        return True
+    if isinstance(profile, dict):
+        return "method" in profile
+    if isinstance(profile, (str, Path)):
+        import json
+
+        if Path(profile).is_file():
+            return "method" in json.loads(Path(profile).read_text())
+        return any(p["id"] == str(profile) for p in adaptive_profiles())
+    return False
