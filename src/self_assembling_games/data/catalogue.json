@@ -1434,5 +1434,47 @@
         "owner": "organism"
       }
     }
+  },
+  {
+    "id": "LC-LOG",
+    "name": "LaCroix contextual logical composition",
+    "adaptive_choices": "Sender activation, messages, symbolic state and context interpretation",
+    "source_learning": "R1; all involved successful choices gain one",
+    "mechanism_status": "Source protocols specified",
+    "implemented": true,
+    "required_fields": [
+      "case"
+    ],
+    "source_questions": [],
+    "learners": [
+      "R1"
+    ],
+    "validation_status": "mechanism_tests",
+    "profile_status": "source_protocols_and_constructed_control",
+    "source_reproduction_status": "protocol_specific",
+    "analysis_available": true,
+    "source_family": "lacroix2022",
+    "modules": {
+      "A": {
+        "role": "base_sender",
+        "owner": "sender_A"
+      },
+      "B": {
+        "role": "base_sender",
+        "owner": "sender_B"
+      },
+      "ES": {
+        "role": "executive_sender",
+        "owner": "executive_sender"
+      },
+      "R": {
+        "role": "base_receiver",
+        "owner": "receiver"
+      },
+      "ER": {
+        "role": "executive_receiver",
+        "owner": "executive_receiver"
+      }
+    }
   }
 ]

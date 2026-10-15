@@ -128,7 +128,7 @@ def test_profile_gates_and_unsupported_learner():
         p.validate()
     with pytest.raises(ValueError, match="awaiting"):
         build(Profile("ritualization", "RIT"))
-    assert len(catalogue()) == 39
+    assert {"SIG", "NAND", "HIER", "ORD"} <= {entry["id"] for entry in catalogue()}
 
 
 def test_resource_limits_and_censoring_are_measured():

@@ -1118,5 +1118,67 @@
     "assumptions": [
       "Declared finite line 0..19, uniform prior, unnormalized kernels without wrapping or cutoff; not a Figure 6 reproduction."
     ]
+  },
+  {
+    "id": "lacroix.logic.stipulated",
+    "model": "LC-LOG",
+    "parameters": {
+      "case": "stipulated_roles"
+    },
+    "learner": {
+      "rule": "R1"
+    },
+    "kind": "source_resolved",
+    "plays": 10000,
+    "source": [
+      "lacroix2022",
+      "https://doi.org/10.1093/bjps/axz049"
+    ],
+    "assumptions": [
+      "Section 3.2: A observes the unary game; B observes its input; sender roles and unary output interpretations are supplied.",
+      "Uniform independent game, input and context; initial weights one; successful involved choices gain one.",
+      "Contextual symbolic correctness and hard signal relevance; finite execution budget is separate from published benchmarks."
+    ]
+  },
+  {
+    "id": "lacroix.logic.role-free",
+    "model": "LC-LOG",
+    "parameters": {
+      "case": "role_free"
+    },
+    "learner": {
+      "rule": "R1"
+    },
+    "kind": "source_resolved",
+    "plays": 10000,
+    "source": [
+      "lacroix2022",
+      "https://doi.org/10.1093/bjps/axz049"
+    ],
+    "assumptions": [
+      "Section 3.5: both senders observe the game-input state, without context, and learn their representational roles.",
+      "Unary output interpretations remain supplied; both send iff context requires both; contextual symbolic correctness.",
+      "Uniform nature, weights one, success reward one; simultaneous learning without a pretrained or frozen phase."
+    ]
+  },
+  {
+    "id": "lacroix.logic.observation-control",
+    "model": "LC-LOG",
+    "parameters": {
+      "case": "full_observation_fixed_roles"
+    },
+    "learner": {
+      "rule": "R1"
+    },
+    "kind": "deliberate_variant",
+    "plays": 10000,
+    "source": [
+      "lacroix2022",
+      "https://doi.org/10.1093/bjps/axz049"
+    ],
+    "assumptions": [
+      "Constructed factorial control: full-world sender observation with section 3.2 fixed A/B relevance.",
+      "Combines observation and relevance choices explicitly; this is not a published LaCroix section 3.4 case."
+    ]
   }
 ]
