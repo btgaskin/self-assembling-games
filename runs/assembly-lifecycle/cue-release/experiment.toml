@@ -3,7 +3,6 @@ seeds = [
     0,
     1,
     2,
-    3,
 ]
 workers = 1
 
@@ -24,12 +23,12 @@ name = "release"
 [[conditions.phases]]
 id = "precursor"
 preset = "cue.demo"
-budget = 1000
+budget = 100
 
 [[conditions.phases]]
 id = "test"
 preset = "sig.demo"
-budget = 1000
+budget = 100
 
 [conditions.phases.start]
 kind = "carry"
@@ -52,12 +51,12 @@ name = "release-acquired-side-frozen"
 [[conditions.phases]]
 id = "precursor"
 preset = "cue.demo"
-budget = 1000
+budget = 100
 
 [[conditions.phases]]
 id = "test"
 preset = "sig.demo"
-budget = 1000
+budget = 100
 
 [conditions.phases.start]
 kind = "carry"
@@ -87,12 +86,12 @@ name = "fixed-side-retained"
 [[conditions.phases]]
 id = "precursor"
 preset = "cue.demo"
-budget = 1000
+budget = 100
 
 [[conditions.phases]]
 id = "test"
 preset = "cue.demo"
-budget = 1000
+budget = 100
 
 [conditions.phases.start]
 kind = "carry"
@@ -104,11 +103,11 @@ kind = "identity"
 [[conditions]]
 name = "fresh-online-budget"
 phases = [
-    { id = "test", preset = "sig.demo", budget = 1000 },
+    { id = "test", preset = "sig.demo", budget = 100 },
 ]
 
 [[conditions]]
 name = "fresh-total-budget"
 phases = [
-    { id = "test", preset = "sig.demo", budget = 2000 },
+    { id = "test", preset = "sig.demo", budget = 200 },
 ]

@@ -16,9 +16,56 @@ Experiments can also live in `runs/<workspace>/experiment.toml`. Shared defaults
 
 The scientific kernels and their source-level APIs remain available for detailed work. The examples below document those mechanisms; new experiment studies use the v0.2 workflow above. Version 0.1 checkpoints retain their original implementation requirements.
 
-The source families currently include Jeffrey A. Barrett's *Self-Assembling Games: Language, Learning, and Inquiry* (2025), with **39 catalogue entries, 32 executable model families, and 45 encounter profiles**, and Brian Skyrms' *Evolution of signalling systems with multiple senders and receivers* (2009), with **six finite game families**. Three constructed multilocus assays examine intracellular coordination, fixed-template transfer, and composition. There are **46 adaptive profiles** spanning the Skyrms games, selected Barrett adapters, and these constructed assays. Each profile records its game, method, assumptions, and protocol.
+The source families currently include Jeffrey A. Barrett's *Self-Assembling Games: Language, Learning, and Inquiry* (2025), with **39 catalogue entries, 32 executable model families, and 45 encounter profiles**, and Brian Skyrms' *Evolution of signalling systems with multiple senders and receivers* (2009), with **six finite game families**. Three constructed multilocus assays examine intracellular coordination, fixed-template transfer, and composition. There are **49 adaptive profiles** spanning the Skyrms games, selected Barrett adapters, and these constructed assays. Each profile records its game, method, assumptions, and protocol.
 
 Source-specific definitions preserve observations, option sets, feedback, and timing. The finite core supports continuous-time replicator dynamics, birth-mutation replicator dynamics, conditional reinforcement, and complete-plan reinforcement. Multilocus realisations add deterministic haplotype recursions and haploid Wright–Fisher sampling with explicit expression, recombination, and locus mutation. The Barrett encounter runtime additionally supports punishment, persistence, invention, and nested learning. Source questions and deliberate variants travel with configurations and checkpoints. See the [shared adaptive architecture](docs/finite-dynamics.md), [multilocus methods and equations](docs/multilocus.md), and [source register](docs/sources.md).
+
+## Assembly lifecycles and comparison games
+
+Assembly experiments can now preserve acquired state across declared phases:
+continue a learner, freeze or release selected components, export a learned
+component, and compose it into a new interaction. Checkpoints retain the native
+clock and random state; descendants record their parent checkpoint. Immutable
+component exports preserve conditional policies and source provenance. See the
+[phase workflow](docs/experiments.md#ordered-phases) and
+[runtime guide](docs/runtime.md).
+
+```python
+from self_assembling_games import model
+
+acquired = model("cue.demo").instantiate(seed=7).advance(100)
+released = acquired.transition(
+    model("sig.demo"),
+    {"kind": "release_fixed", "fixed_weight": 9, "other_weight": 1},
+)
+released.advance(100)
+```
+
+Here the receiver retains its learned state, while the supplied sender assignment
+becomes an adaptive propensity distribution under the declared weights. The
+transition records this intervention. Independent phases can instead pretrain
+NAND modules and import frozen copies into transfer or composition tasks.
+
+Two adjacent source families add focused comparisons:
+
+| Source family | Executable cases | Comparison |
+| --- | --- | --- |
+| [LaCroix, *Using Logic to Evolve More Logic*](https://doi.org/10.1093/bjps/axz049) | `lacroix.logic.stipulated`, `lacroix.logic.role-free` | Simultaneously learn executive coordination and signalling, with stipulated or acquired sender roles |
+| [O’Connor, *Evolving to Generalize*](https://doi.org/10.1093/bjps/axv038) | `oconnor.generalization.binary`, `oconnor.generalization.gaussian` | Compare direct reinforcement with reinforcement spread across similar observations |
+
+The LaCroix cases retain supplied unary meanings and test context-relevant
+symbolic correctness. Their observation control is explicitly constructed.
+O’Connor’s binary case follows §4.2; the twenty-state Gaussian case declares its
+own geometry, payoff scale and kernel widths. Its generalization kernel has peak
+one and receives no row normalization. Cumulative training reward and detached
+policy evaluation remain separate measurements. These configurations extend the
+assembly programme with identifiable mechanisms and source protocols; historical
+benchmark reproductions require their own budgets and measurement plans.
+
+
+Conflict comparisons add distinct participant utilities and local feedback, a published three-state signalling game, costly-signalling equilibria, and a constructed SCOD utility-mixture grid. The encounter catalogue now has **41 entries and 58 profiles** across its source families. `sg sources` lists bibliographic identities and protocol scopes.
+
+The [extension design and study rationale](docs/assembly-extension.md) connects these cases to the assembly programme. Complete TOML comparisons live under `runs/assembly-*`; [retained smoke results](studies/assembly-smoke.md) report their first bounded execution.
 
 ## Chemical realisations
 

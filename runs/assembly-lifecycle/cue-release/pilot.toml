@@ -1,0 +1,114 @@
+schema_version = 3
+seeds = [
+    0,
+    1,
+    2,
+    3,
+]
+workers = 1
+
+[analysis]
+sample_interval = 100
+bootstrap_samples = 1000
+bootstrap_seed = 7
+confidence = 0.95
+threshold_metric = "success_probability"
+threshold = 0.9
+
+[analysis.evaluation]
+protocol = "exact"
+
+[[conditions]]
+name = "release"
+
+[[conditions.phases]]
+id = "precursor"
+preset = "cue.demo"
+budget = 1000
+
+[[conditions.phases]]
+id = "test"
+preset = "sig.demo"
+budget = 1000
+
+[conditions.phases.start]
+kind = "carry"
+phase = "precursor"
+
+[conditions.phases.start.transition]
+kind = "release_fixed"
+fixed_weight = 9.0
+other_weight = 1.0
+
+[conditions.phases.overrides.source]
+kind = "deliberate_variant"
+assumptions = [
+    "The declared fixed side becomes proportional R1 with weights nine for its old option and one for each other option.",
+]
+
+[[conditions]]
+name = "release-acquired-side-frozen"
+
+[[conditions.phases]]
+id = "precursor"
+preset = "cue.demo"
+budget = 1000
+
+[[conditions.phases]]
+id = "test"
+preset = "sig.demo"
+budget = 1000
+
+[conditions.phases.start]
+kind = "carry"
+phase = "precursor"
+
+[conditions.phases.start.transition]
+kind = "release_fixed"
+fixed_weight = 9.0
+other_weight = 1.0
+
+[conditions.phases.overrides.source]
+kind = "deliberate_variant"
+assumptions = [
+    "The declared fixed side becomes proportional R1 with weights nine for its old option and one for each other option.",
+]
+
+[[conditions.phases.interventions]]
+kind = "trainability"
+modules = [
+    "receiver",
+]
+enabled = false
+
+[[conditions]]
+name = "fixed-side-retained"
+
+[[conditions.phases]]
+id = "precursor"
+preset = "cue.demo"
+budget = 1000
+
+[[conditions.phases]]
+id = "test"
+preset = "cue.demo"
+budget = 1000
+
+[conditions.phases.start]
+kind = "carry"
+phase = "precursor"
+
+[conditions.phases.start.transition]
+kind = "identity"
+
+[[conditions]]
+name = "fresh-online-budget"
+phases = [
+    { id = "test", preset = "sig.demo", budget = 1000 },
+]
+
+[[conditions]]
+name = "fresh-total-budget"
+phases = [
+    { id = "test", preset = "sig.demo", budget = 2000 },
+]

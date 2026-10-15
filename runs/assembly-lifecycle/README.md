@@ -157,3 +157,8 @@ Schema 3 `additional_budget` extends only the final phase of each condition;
 the precursor endpoints and exported components remain immutable. See the
 [phase workflow](../../docs/experiments.md#ordered-phases) for the receipt and
 continuation contracts.
+
+
+## Execution tiers
+
+`experiment.toml` is the bounded smoke tier: seeds 0–2 and budgets scaled to one tenth of the pilot. `pilot.toml` retains the four-seed, longer-horizon proposal described above. Run directories retain the exact executed declaration. The smoke tier tests integration and measures early dispositions; it does not estimate learning limits.

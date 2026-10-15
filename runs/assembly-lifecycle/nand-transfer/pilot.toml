@@ -1,0 +1,113 @@
+schema_version = 3
+seeds = [
+    0,
+    1,
+    2,
+    3,
+]
+workers = 1
+
+[analysis]
+sample_interval = 100
+bootstrap_samples = 1000
+bootstrap_seed = 7
+confidence = 0.95
+threshold_metric = "success_probability"
+threshold = 0.9
+
+[analysis.evaluation]
+protocol = "exact"
+
+[[conditions]]
+name = "learned-short"
+
+[[conditions.phases]]
+id = "nand"
+preset = "nand.demo"
+budget = 100
+
+[[conditions.phases]]
+id = "test"
+preset = "tr-log.demo"
+budget = 1000
+
+[conditions.phases.start]
+kind = "compose"
+
+[conditions.phases.start.bindings.template]
+phase = "nand"
+
+[conditions.phases.start.bindings.template.export]
+interface = "NAND"
+
+[[conditions]]
+name = "learned-long"
+
+[[conditions.phases]]
+id = "nand"
+preset = "nand.demo"
+budget = 1000
+
+[[conditions.phases]]
+id = "test"
+preset = "tr-log.demo"
+budget = 1000
+
+[conditions.phases.start]
+kind = "compose"
+
+[conditions.phases.start.bindings.template]
+phase = "nand"
+
+[conditions.phases.start.bindings.template.export]
+interface = "NAND"
+
+[[conditions]]
+name = "constructed-perfect"
+phases = [
+    { id = "test", preset = "tr-log.demo", budget = 1000 },
+]
+
+[[conditions]]
+name = "scratch-online-budget"
+
+[[conditions.phases]]
+id = "test"
+preset = "nand.demo"
+budget = 1000
+
+[conditions.phases.overrides.interaction.parameters]
+truth_table = [
+    0,
+    1,
+    1,
+    1,
+]
+
+[conditions.phases.overrides.source]
+kind = "deliberate_variant"
+assumptions = [
+    "Direct OR acquisition with two binary-input senders and a binary-output receiver.",
+]
+
+[[conditions]]
+name = "scratch-total-long-budget"
+
+[[conditions.phases]]
+id = "test"
+preset = "nand.demo"
+budget = 2000
+
+[conditions.phases.overrides.interaction.parameters]
+truth_table = [
+    0,
+    1,
+    1,
+    1,
+]
+
+[conditions.phases.overrides.source]
+kind = "deliberate_variant"
+assumptions = [
+    "Direct OR acquisition with two binary-input senders and a binary-output receiver.",
+]

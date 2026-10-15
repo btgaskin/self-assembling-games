@@ -3,7 +3,6 @@ seeds = [
     0,
     1,
     2,
-    3,
 ]
 workers = 1
 
@@ -24,12 +23,12 @@ name = "learned-short"
 [[conditions.phases]]
 id = "nand"
 preset = "nand.demo"
-budget = 100
+budget = 10
 
 [[conditions.phases]]
 id = "test"
 preset = "tr-log.demo"
-budget = 1000
+budget = 100
 
 [conditions.phases.start]
 kind = "compose"
@@ -46,12 +45,12 @@ name = "learned-long"
 [[conditions.phases]]
 id = "nand"
 preset = "nand.demo"
-budget = 1000
+budget = 100
 
 [[conditions.phases]]
 id = "test"
 preset = "tr-log.demo"
-budget = 1000
+budget = 100
 
 [conditions.phases.start]
 kind = "compose"
@@ -65,7 +64,7 @@ interface = "NAND"
 [[conditions]]
 name = "constructed-perfect"
 phases = [
-    { id = "test", preset = "tr-log.demo", budget = 1000 },
+    { id = "test", preset = "tr-log.demo", budget = 100 },
 ]
 
 [[conditions]]
@@ -74,7 +73,7 @@ name = "scratch-online-budget"
 [[conditions.phases]]
 id = "test"
 preset = "nand.demo"
-budget = 1000
+budget = 100
 
 [conditions.phases.overrides.interaction.parameters]
 truth_table = [
@@ -96,7 +95,7 @@ name = "scratch-total-long-budget"
 [[conditions.phases]]
 id = "test"
 preset = "nand.demo"
-budget = 2000
+budget = 200
 
 [conditions.phases.overrides.interaction.parameters]
 truth_table = [

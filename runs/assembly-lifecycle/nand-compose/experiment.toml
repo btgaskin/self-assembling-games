@@ -3,7 +3,6 @@ seeds = [
     0,
     1,
     2,
-    3,
 ]
 workers = 1
 
@@ -24,17 +23,17 @@ name = "learned-short-one"
 [[conditions.phases]]
 id = "nand-first"
 preset = "nand.demo"
-budget = 100
+budget = 10
 
 [[conditions.phases]]
 id = "nand-second"
 preset = "nand.demo"
-budget = 100
+budget = 10
 
 [[conditions.phases]]
 id = "test"
 preset = "comp-nand.1.demo"
-budget = 1000
+budget = 100
 
 [conditions.phases.start]
 kind = "compose"
@@ -57,17 +56,17 @@ name = "learned-long-one"
 [[conditions.phases]]
 id = "nand-first"
 preset = "nand.demo"
-budget = 1000
+budget = 100
 
 [[conditions.phases]]
 id = "nand-second"
 preset = "nand.demo"
-budget = 1000
+budget = 100
 
 [[conditions.phases]]
 id = "test"
 preset = "comp-nand.1.demo"
-budget = 1000
+budget = 100
 
 [conditions.phases.start]
 kind = "compose"
@@ -90,17 +89,17 @@ name = "learned-long-two"
 [[conditions.phases]]
 id = "nand-first"
 preset = "nand.demo"
-budget = 1000
+budget = 100
 
 [[conditions.phases]]
 id = "nand-second"
 preset = "nand.demo"
-budget = 1000
+budget = 100
 
 [[conditions.phases]]
 id = "test"
 preset = "comp-nand.2.demo"
-budget = 1000
+budget = 100
 
 [conditions.phases.start]
 kind = "compose"
@@ -123,17 +122,17 @@ name = "learned-long-one-uniform-route"
 [[conditions.phases]]
 id = "nand-first"
 preset = "nand.demo"
-budget = 1000
+budget = 100
 
 [[conditions.phases]]
 id = "nand-second"
 preset = "nand.demo"
-budget = 1000
+budget = 100
 
 [[conditions.phases]]
 id = "test"
 preset = "comp-nand.1.demo"
-budget = 1000
+budget = 100
 
 [conditions.phases.start]
 kind = "compose"
@@ -160,11 +159,11 @@ enabled = false
 [[conditions]]
 name = "constructed-perfect-1-selector"
 phases = [
-    { id = "test", preset = "comp-nand.1.demo", budget = 1000 },
+    { id = "test", preset = "comp-nand.1.demo", budget = 100 },
 ]
 
 [[conditions]]
 name = "constructed-perfect-2-selector"
 phases = [
-    { id = "test", preset = "comp-nand.2.demo", budget = 1000 },
+    { id = "test", preset = "comp-nand.2.demo", budget = 100 },
 ]

@@ -66,8 +66,10 @@ recovering the common-interest kernel. The costly-signalling fixtures first test
 analytically known payoffs and equilibrium residuals. Learning runs start from their
 own specified propensities and are a separate comparison.
 
-All initial declarations use seeds 0, 1 and 2, 100 learning encounters, or one unit
-of evolutionary time. These are integration smoke studies. They establish that
+Smoke declarations use seeds 0, 1 and 2, typically 100 learning encounters, or one unit
+of evolutionary time. Lifecycle controls use 10-encounter short acquisition and
+200-encounter matched-total exposure where specified; companion `pilot.toml` files
+retain the longer four-seed lifecycle proposals. These are integration smoke studies. They establish that
 resolved configurations execute and retain interpretable endpoints. Larger studies
 should first declare a longer horizon, more seeds, endpoint measures and stopping
 rules, and preserve the original smoke receipts. Report independent-seed uncertainty
