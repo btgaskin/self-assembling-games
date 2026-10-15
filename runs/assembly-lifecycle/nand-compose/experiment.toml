@@ -1,0 +1,170 @@
+schema_version = 3
+seeds = [
+    0,
+    1,
+    2,
+    3,
+]
+workers = 1
+
+[analysis]
+sample_interval = 100
+bootstrap_samples = 1000
+bootstrap_seed = 7
+confidence = 0.95
+threshold_metric = "success_probability"
+threshold = 0.9
+
+[analysis.evaluation]
+protocol = "exact"
+
+[[conditions]]
+name = "learned-short-one"
+
+[[conditions.phases]]
+id = "nand-first"
+preset = "nand.demo"
+budget = 100
+
+[[conditions.phases]]
+id = "nand-second"
+preset = "nand.demo"
+budget = 100
+
+[[conditions.phases]]
+id = "test"
+preset = "comp-nand.1.demo"
+budget = 1000
+
+[conditions.phases.start]
+kind = "compose"
+
+[conditions.phases.start.bindings.first]
+phase = "nand-first"
+
+[conditions.phases.start.bindings.first.export]
+interface = "NAND"
+
+[conditions.phases.start.bindings.second]
+phase = "nand-second"
+
+[conditions.phases.start.bindings.second.export]
+interface = "NAND"
+
+[[conditions]]
+name = "learned-long-one"
+
+[[conditions.phases]]
+id = "nand-first"
+preset = "nand.demo"
+budget = 1000
+
+[[conditions.phases]]
+id = "nand-second"
+preset = "nand.demo"
+budget = 1000
+
+[[conditions.phases]]
+id = "test"
+preset = "comp-nand.1.demo"
+budget = 1000
+
+[conditions.phases.start]
+kind = "compose"
+
+[conditions.phases.start.bindings.first]
+phase = "nand-first"
+
+[conditions.phases.start.bindings.first.export]
+interface = "NAND"
+
+[conditions.phases.start.bindings.second]
+phase = "nand-second"
+
+[conditions.phases.start.bindings.second.export]
+interface = "NAND"
+
+[[conditions]]
+name = "learned-long-two"
+
+[[conditions.phases]]
+id = "nand-first"
+preset = "nand.demo"
+budget = 1000
+
+[[conditions.phases]]
+id = "nand-second"
+preset = "nand.demo"
+budget = 1000
+
+[[conditions.phases]]
+id = "test"
+preset = "comp-nand.2.demo"
+budget = 1000
+
+[conditions.phases.start]
+kind = "compose"
+
+[conditions.phases.start.bindings.first]
+phase = "nand-first"
+
+[conditions.phases.start.bindings.first.export]
+interface = "NAND"
+
+[conditions.phases.start.bindings.second]
+phase = "nand-second"
+
+[conditions.phases.start.bindings.second.export]
+interface = "NAND"
+
+[[conditions]]
+name = "learned-long-one-uniform-route"
+
+[[conditions.phases]]
+id = "nand-first"
+preset = "nand.demo"
+budget = 1000
+
+[[conditions.phases]]
+id = "nand-second"
+preset = "nand.demo"
+budget = 1000
+
+[[conditions.phases]]
+id = "test"
+preset = "comp-nand.1.demo"
+budget = 1000
+
+[conditions.phases.start]
+kind = "compose"
+
+[conditions.phases.start.bindings.first]
+phase = "nand-first"
+
+[conditions.phases.start.bindings.first.export]
+interface = "NAND"
+
+[conditions.phases.start.bindings.second]
+phase = "nand-second"
+
+[conditions.phases.start.bindings.second.export]
+interface = "NAND"
+
+[[conditions.phases.interventions]]
+kind = "trainability"
+modules = [
+    "P",
+]
+enabled = false
+
+[[conditions]]
+name = "constructed-perfect-1-selector"
+phases = [
+    { id = "test", preset = "comp-nand.1.demo", budget = 1000 },
+]
+
+[[conditions]]
+name = "constructed-perfect-2-selector"
+phases = [
+    { id = "test", preset = "comp-nand.2.demo", budget = 1000 },
+]
