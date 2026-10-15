@@ -107,7 +107,14 @@ def restore_adaptive(snapshot: dict[str, Any], *, game=None):
             game.fixed_decisions.update(copy.deepcopy(profile.fixed_decisions))
             game.__post_init__()
         validate_finite_game(profile, game)
-    simulation = build_adaptive(snapshot["profile"], snapshot["seed"], game=game)
+    if snapshot.get("sampled_construction"):
+        from .finite_learning import ReinforcementSimulation
+
+        simulation = ReinforcementSimulation(
+            snapshot["profile"], snapshot["seed"], game=game, sampled=True
+        )
+    else:
+        simulation = build_adaptive(snapshot["profile"], snapshot["seed"], game=game)
     declaration = snapshot.get("model_specification")
     if declaration is not None and digest(declaration) != snapshot.get(
         "model_specification_hash"

@@ -14,6 +14,7 @@ import itertools
 import json
 import math
 from dataclasses import dataclass, field
+from collections.abc import MutableMapping
 from typing import Any, Callable
 
 import numpy as np
@@ -116,6 +117,37 @@ def distribution(values: Any, size: int) -> np.ndarray:
     return p.copy()
 
 
+class _LazyRoleArrays(MutableMapping):
+    """Materialise a role's numerical array only when it is requested."""
+
+    def __init__(self, factories):
+        self.factories = dict(factories)
+        self.cache = {}
+
+    def __getitem__(self, role):
+        if role not in self.cache:
+            self.cache[role] = self.factories[role]()
+        return self.cache[role]
+
+    def __setitem__(self, role, value):
+        self.factories[role] = lambda: value
+        self.cache[role] = value
+
+    def __delitem__(self, role):
+        del self.factories[role]
+        self.cache.pop(role, None)
+
+    def __iter__(self):
+        return iter(self.factories)
+
+    def __len__(self):
+        return len(self.factories)
+
+    def defer(self, role, factory):
+        self.factories[role] = factory
+        self.cache.pop(role, None)
+
+
 @dataclass
 class FiniteGame:
     id: str
@@ -161,27 +193,66 @@ class FiniteGame:
             )
             for role in self.roles
         }
-        self.plans: dict[str, np.ndarray] = {}
-        for role, rows in self.rows.items():
-            count = math.prod(len(row.options) for row in rows)
-            if count > self.max_role_strategies:
-                raise ValueError(
-                    f"{role} needs {count} plans; max_role_strategies="
-                    f"{self.max_role_strategies}"
-                )
-            values = list(itertools.product(*(range(len(r.options)) for r in rows)))
-            self.plans[role] = np.asarray(values, dtype=int).reshape(count, len(rows))
+        self.plan_counts = {
+            role: math.prod(len(row.options) for row in rows)
+            for role, rows in self.rows.items()
+        }
+        self.plans = _LazyRoleArrays(
+            {role: lambda role=role: self._enumerate_plans(role) for role in self.roles}
+        )
         self.row_indices = {
             (role, row.context): i
             for role, rows in self.rows.items()
             for i, row in enumerate(rows)
         }
-        self.strategy_costs = {r: np.zeros(len(self.plans[r])) for r in self.roles}
+        self.strategy_costs = _LazyRoleArrays(
+            {
+                role: lambda role=role: self._zero_strategy_costs(role)
+                for role in self.roles
+            }
+        )
         self.payoff_matrices: tuple[np.ndarray, np.ndarray] | None = None
         self._compiled = False
 
+    def _enumerate_plans(self, role):
+        count = self.plan_counts[role]
+        if count > self.max_role_strategies:
+            raise ValueError(
+                f"{role} needs {count} plans; max_role_strategies="
+                f"{self.max_role_strategies}; exact finite capability unavailable"
+            )
+        rows = self.rows[role]
+        values = list(itertools.product(*(range(len(r.options)) for r in rows)))
+        return np.asarray(values, dtype=int).reshape(count, len(rows))
+
+    def _zero_strategy_costs(self, role):
+        # Exact costs share the same resource gate as complete plans.
+        self.plans[role]
+        return np.zeros(self.plan_counts[role])
+
     def decision(self, role: str, context: str) -> FiniteDecision:
         return self._rows[role, context]
+
+    def declaration(self):
+        """Decision structure and choices, available before exact compilation."""
+        return {
+            "id": self.id,
+            "parameters": copy.deepcopy(self.parameters),
+            "fidelity": copy.deepcopy(self.fidelity),
+            "roles": list(self.roles),
+            "decisions": [
+                {
+                    "role": d.role,
+                    "context": d.context,
+                    "options": list(d.options),
+                    "module": d.module,
+                }
+                for d in self.decisions
+            ],
+            "fixed_decisions": copy.deepcopy(self.fixed_decisions),
+            "strategy_counts": dict(self.plan_counts),
+            "strategy_order": "lexicographic option indices in declared decision order",
+        }
 
     def to_dict(self) -> dict[str, Any]:
         self.compile()
@@ -254,6 +325,8 @@ class FiniteGame:
         """Enumerate finite paths once; chance mass excludes decision probabilities."""
         if self._compiled:
             return
+        for role in self.roles:
+            self.plans[role]
         pending = [([], 1.0)]
         leaves = []
         visited = 0

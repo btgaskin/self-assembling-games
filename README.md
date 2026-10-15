@@ -2,7 +2,19 @@
 
 A research library for **self-assembling games**: organized interactions that acquire signaling conventions, computation, coordination, and inquiry through adaptive decisions. Game definitions describe what participants observe, choose, and receive. Adaptive methods describe how their decisions or inherited strategies change.
 
-Every executable simulation exposes a **game**, its **organisation**, its **realisation**, and a resolved **specification** through `simulation.model_instance`. A conditional decision expresses a component's current disposition to act under a permitted observation. Its adaptive disposition depends on the realised state and the mechanism that changes it. Reinforcement modifies propensities and assignments; population methods change inherited-plan or multilocus genotype distributions. Connecting these dispositions produces signaling, translation, attention, questions, partner selection, and learning-rule selection. See the [domain model and native construction API](docs/model.md).
+The v0.2 workflow uses **Model**, **Experiment**, and **Run**. A model resolves four scientific components: interaction, organisation, realisation, and adaptation. A bound System holds their state and random generators, advances on the model's native clock, and supports inspection, evaluation and checkpoint continuation. See the [architecture](docs/architecture.md) and [TOML experiment workflow](docs/experiments.md).
+
+```python
+from self_assembling_games import model, experiment, run
+
+signalling = model("sig.demo")
+study = experiment(signalling, seeds=[0, 1, 2], budget=1000)
+result = run(study)  # runs/<timestamp-id>/ contains this entire study
+```
+
+Experiments can also live in `runs/<workspace>/experiment.toml`. Shared defaults and per-condition changes resolve before execution; each invocation creates a separate timestamped directory within the workspace. The [ECG-inspired fixture](docs/situated-interactions.md) demonstrates private observations and ordinary movement actions without assigned communicative roles.
+
+The scientific kernels and their source-level APIs remain available for detailed work. The examples below document those mechanisms; new experiment studies use the v0.2 workflow above. Version 0.1 checkpoints retain their original implementation requirements.
 
 The source families currently include Jeffrey A. Barrett's *Self-Assembling Games: Language, Learning, and Inquiry* (2025), with **39 catalogue entries, 32 executable model families, and 45 encounter profiles**, and Brian Skyrms' *Evolution of signalling systems with multiple senders and receivers* (2009), with **six finite game families**. Three constructed multilocus assays examine intracellular coordination, fixed-template transfer, and composition. There are **46 adaptive profiles** spanning the Skyrms games, selected Barrett adapters, and these constructed assays. Each profile records its game, method, assumptions, and protocol.
 

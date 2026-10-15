@@ -45,16 +45,18 @@ class ReinforcementSimulation:
         *,
         game: FiniteGame | None = None,
         protocol=None,
+        sampled=False,
     ):
         from .simulation import digest, provenance
 
         specification = (
             profile
             if isinstance(profile, ModelSpecification)
-            else ModelSpecification.from_profile(profile, game=game)
+            else ModelSpecification.from_profile(profile, game=game, sampled=sampled)
         )
         if isinstance(profile, ModelSpecification) and game is not None:
             specification = specification.with_game(game)
+        self.sampled = sampled
         self.profile = specification.to_profile(protocol)
         method = adaptive_method(specification.realisation_parameters["method"])
         if method.method_class != "reinforcement":
@@ -64,7 +66,7 @@ class ReinforcementSimulation:
         self.protocol = specification.execution_parameters(protocol)
         organisation = Organisation.for_finite(self.game)
         self._realisation = FiniteReinforcementRealisation(
-            self.game, organisation, method, self.protocol, seed
+            self.game, organisation, method, self.protocol, seed, sampled=sampled
         )
         self.model_instance = ModelInstance(
             specification, self.game, organisation, self._realisation
@@ -85,7 +87,9 @@ class ReinforcementSimulation:
         self.status = "ready"
         self.metadata = provenance()
         self.configuration_hash = digest(self.profile.to_dict())
-        self.game_hash = digest(self.game.to_dict())
+        self.game_hash = digest(
+            self.game.declaration() if sampled else self.game.to_dict()
+        )
         self.fidelity = {
             **copy.deepcopy(self.game.fidelity),
             "population": {
@@ -188,7 +192,9 @@ class ReinforcementSimulation:
             },
             "mean_terms": self.terms / self.plays if self.plays else None,
             "mean_exchanges": self.exchanges / self.plays if self.plays else None,
-            "final_policy": self.evaluate(),
+            "final_policy": self.evaluate(protocol="sampled")
+            if self.sampled
+            else self.evaluate(),
         }
 
     def set_policy(
@@ -248,7 +254,10 @@ class ReinforcementSimulation:
                 "profile": self.profile.to_dict(),
                 "configuration_hash": self.configuration_hash,
                 "game_hash": self.game_hash,
-                "game": self.game.to_dict(),
+                "game": self.game.declaration()
+                if self.sampled
+                else self.game.to_dict(),
+                **({"sampled_construction": True} if self.sampled else {}),
                 "fidelity": self.fidelity,
                 "seed": self.seed,
                 "metadata": self.metadata,

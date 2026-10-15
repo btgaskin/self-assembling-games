@@ -1,0 +1,15 @@
+# Architectural fixture: private observations and ordinary world actions.
+# Controllers are supplied; this does not model acquired human signalhood.
+preset = "ecg.demo"
+seeds = [0, 1, 2]
+budget = 10
+
+[[conditions]]
+name = "random"
+
+[[conditions]]
+name = "scripted"
+preset = "ecg.scripted"
+
+[analysis]
+sample_interval = 5

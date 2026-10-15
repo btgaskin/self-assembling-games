@@ -1,0 +1,20 @@
+# Small reproducible comparison of independent conditional learners.
+preset = "sig.demo"
+seeds = [0, 1, 2, 3]
+budget = 200
+
+[[conditions]]
+name = "symmetric"
+
+[[conditions]]
+name = "biased-nature"
+
+[conditions.overrides.interaction.parameters]
+state_probabilities = [0.8, 0.2]
+
+[analysis]
+sample_interval = 50
+threshold_metric = "success_probability"
+threshold = 0.9
+bootstrap_seed = 0
+bootstrap_samples = 1000

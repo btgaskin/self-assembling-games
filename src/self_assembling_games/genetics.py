@@ -132,7 +132,7 @@ class ExpressionMap:
                 raw.shape != (genome.count,)
                 or raw.dtype.kind not in {"i", "u"}
                 or np.any(raw < 0)
-                or np.any(raw >= len(game.plans[slot]))
+                or np.any(raw >= game.plan_counts[slot])
             ):
                 raise ValueError(
                     f"Expression needs a valid plan index per haplotype for {slot}"

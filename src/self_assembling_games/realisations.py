@@ -9,8 +9,18 @@ import numpy as np
 from .finite import DecisionProvider, distribution
 
 
-def validate_finite_realisation(game, method):
+def validate_finite_realisation(game, method, *, sampled=False):
     """Shared method/game gate used during resolution and construction."""
+    if sampled:
+        if method.representation != "conditional_decisions":
+            raise ValueError(
+                "Sampled finite construction requires conditional decisions"
+            )
+        if game.payoff_matrices is not None or game.parameters.get("listening_cost", 0):
+            raise ValueError(
+                "Conditional R1 with strategy-level listening/table costs needs a defined mechanism; SKQ3"
+            )
+        return
     if method.representation == "conditional_decisions" and (
         game.payoff_matrices is not None
         or any(np.any(c) for c in game.strategy_costs.values())
@@ -89,7 +99,9 @@ class _Sampling(DecisionProvider):
 
 
 class FiniteReinforcementRealisation:
-    def __init__(self, game, organisation, method, parameters, seed=0):
+    def __init__(
+        self, game, organisation, method, parameters, seed=0, *, sampled=False
+    ):
         self.method, self.parameters = method, parameters
         self.organisation = organisation
         self.id = (
@@ -97,7 +109,7 @@ class FiniteReinforcementRealisation:
             if method.representation == "complete_role_plans"
             else "finite.conditional"
         )
-        validate_finite_realisation(game, method)
+        validate_finite_realisation(game, method, sampled=sampled)
         initial = parameters["initial_weight"]
         self.weights = (
             {

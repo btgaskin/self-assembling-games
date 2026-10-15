@@ -3,7 +3,11 @@ __pycache__/
 .venv/
 *.egg-info/
 .DS_Store
-runs/
+runs/**
+!runs/**/
+!runs/**/experiment.toml
+# Workspace-local staged writes are replaced atomically by the runner.
+*.json.tmp
 private-sources/
 *.pdf
 build/

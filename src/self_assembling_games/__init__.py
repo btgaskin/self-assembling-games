@@ -48,7 +48,10 @@ from .simulation import (
     run_ensemble,
 )
 
-__version__ = "0.1.0"
+from .config import load, save
+from .experiments import Run, run, resume as _resume_study
+
+__version__ = "0.2.0"
 __all__ = [
     "Locus",
     "GenomeSpec",
@@ -111,4 +114,53 @@ __all__ = [
     "reproduction_protocols",
     "resume",
     "run_ensemble",
+]
+
+# The v0.2 public workflow. Numerical kernel imports above remain available.
+from .domain import Model, Experiment, model, experiment, resolve
+from .system import System
+
+__all__ += ["Model", "Experiment", "System", "model", "experiment", "resolve"]
+
+_resume_kernel = resume
+
+
+def resume(path, **parameters):
+    from pathlib import Path
+
+    target = Path(path)
+    if (target / "manifest.json").is_file():
+        import json
+
+        if (
+            json.loads((target / "manifest.json").read_text()).get("schema_version")
+            == 2
+        ):
+            return _resume_study(target, **parameters)
+    return _resume_kernel(path, **parameters)
+
+
+_kernel_evaluate = evaluate
+
+
+def evaluate(subject, *args, **parameters):
+    """Evaluate a bound system on detached state, or a numerical kernel."""
+    if isinstance(subject, System):
+        return subject.evaluate(*args, **parameters)
+    return _kernel_evaluate(subject, *args, **parameters)
+
+
+__all__ = [
+    "Model",
+    "Experiment",
+    "Run",
+    "System",
+    "model",
+    "experiment",
+    "load",
+    "save",
+    "resolve",
+    "run",
+    "evaluate",
+    "resume",
 ]

@@ -39,7 +39,7 @@ def atomic_json(path: Path, value: Any) -> None:
 
 
 @lru_cache(maxsize=1)
-def provenance() -> dict[str, Any]:
+def _cached_provenance() -> dict[str, Any]:
     try:
         revision = subprocess.run(
             ["git", "-C", str(Path(__file__).parent), "rev-parse", "HEAD"],
@@ -56,13 +56,18 @@ def provenance() -> dict[str, Any]:
         if p.suffix in {".py", ".json"}
     ]
     return {
-        "package_version": "0.1.0",
+        "package_version": "0.2.0",
         "python": platform.python_version(),
         "numpy": np.__version__,
         "rng": "PCG64",
         "repository_revision": revision,
         "source_hash": digest(contents),
     }
+
+
+def provenance() -> dict[str, Any]:
+    """Return owned metadata so solver-specific additions stay local."""
+    return copy.deepcopy(_cached_provenance())
 
 
 def read_snapshot(path: str | Path) -> dict[str, Any]:

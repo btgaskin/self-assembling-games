@@ -33,7 +33,16 @@ LIFE_CYCLE = (
 )
 
 
-def resolve_genetics(game, method, genetics, organisation, initialization, resources):
+def resolve_genetics(
+    game,
+    method,
+    genetics,
+    organisation,
+    initialization,
+    resources,
+    *,
+    declaration_only=False,
+):
     """Shared construction gates, with declared orders and effective defaults."""
     genetics = copy.deepcopy(genetics)
     if (
@@ -47,7 +56,8 @@ def resolve_genetics(game, method, genetics, organisation, initialization, resou
     genome = GenomeSpec.from_dict(
         genetics["genome"], max_haplotypes=limits["max_haplotypes"]
     )
-    game.compile()
+    if not declaration_only:
+        game.compile()
     if organisation.keys() - {"individuals", "return_weights", "sampling"}:
         raise ValueError(
             "Unknown multilocus organisation fields: "
@@ -59,7 +69,8 @@ def resolve_genetics(game, method, genetics, organisation, initialization, resou
         )
     binding = MultilocusPopulationSpec(game, **organisation)
     if (
-        len(game.chance_mass) * genome.count * len(binding.individuals)
+        not declaration_only
+        and len(game.chance_mass) * genome.count * len(binding.individuals)
         > limits["max_genotype_mask_entries"]
     ):
         raise ValueError("Expression exceeds max_genotype_mask_entries")
@@ -70,16 +81,17 @@ def resolve_genetics(game, method, genetics, organisation, initialization, resou
         max_recombination_patterns=limits["max_recombination_patterns"],
         max_transmission_work=limits["max_transmission_work"],
     )
-    work = (
-        genome.count
-        * len(game.chance_mass)
-        * (2 * len(game.roles) + len(binding.individuals))
-        + transmission.estimated_work
-    )
-    if game.payoff_matrices is not None:
-        work += sum(matrix.size for matrix in game.payoff_matrices)
-    if work > limits["max_generation_work"]:
-        raise ValueError("Genotype contractions exceed max_generation_work")
+    if not declaration_only:
+        work = (
+            genome.count
+            * len(game.chance_mass)
+            * (2 * len(game.roles) + len(binding.individuals))
+            + transmission.estimated_work
+        )
+        if game.payoff_matrices is not None:
+            work += sum(matrix.size for matrix in game.payoff_matrices)
+        if work > limits["max_generation_work"]:
+            raise ValueError("Genotype contractions exceed max_generation_work")
     fitness = copy.deepcopy(genetics.get("fitness", {"background": 1.0, "scale": 1.0}))
     if set(fitness) != {"background", "scale"} or any(
         not isinstance(v, (int, float))

@@ -155,3 +155,14 @@ reproductive weights and encounter sampling with replacement are declared model
 choices. Barrett/Skyrms source-model observations and adaptive laws retain their
 existing definitions and source gates. The multilocus toy demonstrations are
 listed separately through `sg list --family constructed`.
+
+## Situated colour-board coordination
+
+Scott-Phillips, T. C., Kirby, S., & Ritchie, G. R. S. (2009). *Signalling
+signalhood and the emergence of communication*. Cognition.
+[doi:10.1016/j.cognition.2009.08.009](https://doi.org/10.1016/j.cognition.2009.08.009).
+The [situated interaction guide](situated-interactions.md) specifies `ecg.demo` as
+a constructed discrete-time variant with private colour boards, ordinary movement
+and finish actions, synchronous ticks and an explicit truncation cap. Random and
+scripted local controllers qualify its mechanics; human signalhood recognition
+and learned communication remain research questions for further models.

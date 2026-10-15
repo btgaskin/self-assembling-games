@@ -190,7 +190,7 @@ class ModelSpecification:
         return result
 
     @classmethod
-    def from_profile(cls, value, *, game=None):
+    def from_profile(cls, value, *, game=None, sampled=False):
         from .registry import Profile, catalogue, load_profile
         from .adaptive_runtime import is_adaptive_profile
         from .finite_profiles import load_adaptive_profile
@@ -242,7 +242,7 @@ class ModelSpecification:
             org = copy.deepcopy(profile.population)
             from .realisations import validate_finite_realisation
 
-            validate_finite_realisation(obj._finite_game, method)
+            validate_finite_realisation(obj._finite_game, method, sampled=sampled)
             if method.method_class == "population_evolution":
                 from .organisation import PopulationSpec
 
@@ -345,7 +345,11 @@ class ModelSpecification:
                     "implementation": definition.implementation,
                     "parameters": gp,
                     **(
-                        {"resolved_game": obj._finite_game.to_dict()}
+                        {
+                            "resolved_game": obj._finite_game.declaration()
+                            if sampled
+                            else obj._finite_game.to_dict()
+                        }
                         if obj._finite_game is not None
                         else {}
                     ),
@@ -393,7 +397,13 @@ class ModelSpecification:
 
     def construct_finite_game(self):
         game = copy.deepcopy(self._finite_game)
-        if game.to_dict() != self.to_dict()["game"]["resolved_game"]:
+        resolved = self.to_dict()["game"]["resolved_game"]
+        current = (
+            game.to_dict()
+            if "finite_semantics_hash" in resolved
+            else game.declaration()
+        )
+        if current != resolved:
             raise ValueError("Resolved finite game has changed")
         return game
 

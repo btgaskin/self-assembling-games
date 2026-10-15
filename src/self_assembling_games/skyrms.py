@@ -316,24 +316,33 @@ def skyrms_game(
         **budgets,
     )
     if model == "SK-SIG":
-        # A receiver pays for contingency, not for the realized act or invocation.
-        full = []
-        for row in (r for r in rows if r.role == "receiver"):
-            frozen = game.fixed_decisions.get("receiver/" + row.context)
-            if frozen is not None:
-                if listening and np.count_nonzero(frozen) != 1:
+        # Contingency costs are exact role-plan arrays. Keep their construction
+        # deferred so declaration and sampled execution use only decision rows.
+        def receiver_costs():
+            full = []
+            for row in (r for r in rows if r.role == "receiver"):
+                frozen = game.fixed_decisions.get("receiver/" + row.context)
+                if frozen is not None:
+                    full.append(
+                        np.full(game.plan_counts["receiver"], int(np.argmax(frozen)))
+                    )
+                else:
+                    full.append(
+                        game.plans["receiver"][
+                            :, game.row_indices["receiver", row.context]
+                        ]
+                    )
+            contingent = np.any(np.array(full) != full[0], axis=0)
+            return contingent.astype(float) * listening
+
+        if listening:
+            for row in (r for r in rows if r.role == "receiver"):
+                frozen = game.fixed_decisions.get("receiver/" + row.context)
+                if frozen is not None and np.count_nonzero(frozen) != 1:
                     raise ValueError(
                         "Listening with stochastic frozen rows needs a complete plan; SKQ3"
                     )
-                full.append(
-                    np.full(len(game.plans["receiver"]), int(np.argmax(frozen)))
-                )
-            else:
-                full.append(
-                    game.plans["receiver"][:, game.row_indices["receiver", row.context]]
-                )
-        contingent = np.any(np.array(full) != full[0], axis=0)
-        game.strategy_costs["receiver"] = contingent.astype(float) * listening
+            game.strategy_costs.defer("receiver", receiver_costs)
         if p.get("cost_interpretation") == "table_literal":
             if game.fixed_decisions:
                 raise ValueError(
@@ -366,5 +375,7 @@ def skyrms_game(
                 sender_matrix[np.ix_(order, order)],
                 receiver_matrix[np.ix_(order, order)],
             )
-            game.strategy_costs["receiver"][:] = 0
+            game.strategy_costs.defer(
+                "receiver", lambda: game._zero_strategy_costs("receiver")
+            )
     return game

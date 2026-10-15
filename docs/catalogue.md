@@ -65,3 +65,13 @@ This catalogue covers the supplied book's thirteen chapters. “Specified” mea
 | RIT | Ritualization of learning | Saliences and adaptive dispositions | Primitive dynamics unspecified | Proposal |
 
 These IDs are repository labels. Source names and attributions remain in the game sheets. Families share mechanisms; they need not each become a separate class. For example, SIG with R3 and META-RULE choosing R3 are different experiments using the same learner.
+
+## Situated constructed variants
+
+| ID | Preset | Interaction | Source status |
+|---|---|---|---|
+| ECG | `ecg.demo` | Two private colour boards; synchronous ordinary movement and finish actions | Constructed discrete-time variant inspired by Scott-Phillips, Kirby and Ritchie (2009), [doi:10.1016/j.cognition.2009.08.009](https://doi.org/10.1016/j.cognition.2009.08.009) |
+
+The [situated interaction guide](situated-interactions.md) defines board sampling,
+private observations, termination and truncation, local controller state and exact
+checkpoint continuation. Random and scripted policies provide runnable fixtures.

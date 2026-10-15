@@ -4,10 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "self-assembling-games"
-version = "0.1.0"
+version = "0.2.0"
 description = "Self-assembling games with source-grounded models, reinforcement learning, and evolutionary dynamics"
 requires-python = ">=3.11"
-dependencies = ["numpy>=1.26"]
+dependencies = ["numpy>=1.26", "tomli-w>=1.2"]
 
 [project.optional-dependencies]
 evolution = ["scipy>=1.11"]

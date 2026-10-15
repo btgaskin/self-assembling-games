@@ -132,6 +132,7 @@ class PopulationSpec:
         frozen: list[str] | None = None,
         matching: str = "independent_individuals",
         max_population_strategies: int = 100_000,
+        enumerate_components: bool = True,
     ):
         self.groups = copy.deepcopy(
             groups if groups is not None else {r: [r] for r in game.roles}
@@ -172,15 +173,17 @@ class PopulationSpec:
         self.counts = {}
         for name in self.names:
             rs = self.groups[name]
-            sizes = [len(game.plans[r]) for r in rs]
+            sizes = [game.plan_counts[r] for r in rs]
             count = math.prod(sizes)
-            if count > max_population_strategies:
+            if enumerate_components and count > max_population_strategies:
                 raise ValueError(
                     f"{name} needs {count} inherited types; max_population_strategies="
                     f"{max_population_strategies}"
                 )
-            index = np.arange(count)
             self.counts[name] = count
+            if not enumerate_components:
+                continue
+            index = np.arange(count)
             self.components[name] = {
                 r: (index // math.prod(sizes[k + 1 :])) % sizes[k]
                 for k, r in enumerate(rs)
