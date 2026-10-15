@@ -26,7 +26,22 @@ def main():
         result = run(str(config), directory=root / 'runs', workspace=str(config.parent.relative_to(root / "runs")))
         status = result.status()
         verification = result.verify()
-        evaluation = result.evaluate()
+        verification["path"] = str(result.path.relative_to(root))
+        # Use the already retained endpoint measurement instead of rerunning it.
+        measurements = []
+        for trial in status['trials']:
+            trial_path = result.path / trial['path']
+            measured = {'condition': trial['condition'], 'seed': trial['seed']}
+            if status['schema_version'] == 3:
+                measured['phases'] = []
+                for receipt in sorted(trial_path.glob('phases/*/results.json')):
+                    phase = json.loads(receipt.read_text())
+                    measured['phases'].append({'id': phase['id'], 'position': phase['position'],
+                                              'evaluation': phase['samples'][-1]['evaluation']})
+            else:
+                measured['evaluation'] = json.loads((trial_path / 'results.json').read_text())['evaluation']
+            measurements.append(measured)
+        evaluation = {'trials': measurements}
         if status['schema_version'] == 2:
             for trial, measured in zip(status['trials'], evaluation['trials']):
                 checkpoint = result.path / trial['path'] / 'checkpoint.json'
@@ -41,7 +56,7 @@ def main():
                  'evaluation': evaluation, 'elapsed_seconds':elapsed}
         report['studies'].append(entry)
         failed |= status['status'] != 'complete' or not verification['valid']
-        print(f"{config.name}: {status['status']} ({elapsed:.2f}s)", flush=True)
+        print(f"{config.parent.name}: {status['status']} ({elapsed:.2f}s)", flush=True)
     memory = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
     report['peak_process_rss_bytes'] = memory if sys.platform == 'darwin' else memory * 1024
     report['note'] = 'Bounded integration studies; peak RSS covers this sequential process, not an isolated trial.'

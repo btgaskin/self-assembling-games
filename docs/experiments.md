@@ -345,3 +345,6 @@ measurements. Their existing `trajectory.json` continues to contain interval
 samples; off-grid endpoints and pending measurements are additionally retained
 in the recovery journal. The existing schema 2 extension semantics still add
 budget to every independent trial.
+
+For schema 3 studies, `sg run ... --budget N` overrides each condition's final-phase budget. Earlier acquisition budgets stay as declared. `--seeds`
+replaces the trial seed set.

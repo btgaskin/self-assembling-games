@@ -4,7 +4,7 @@ These four schema 3 workspaces declare bounded pilot comparisons of precursor
 coordination, acquired-module transfer and computational composition. They fix
 their seed sets, phase budgets, export endpoints and measurement schedules
 before execution. Loading each TOML resolves its declarations without running
-the study. The budgets and four-seed samples are starting experimental choices;
+the study. The companion pilot budgets and four-seed samples are starting experimental choices;
 these files contain hypotheses and protocols, with results retained in the
 timestamped directories created by `sg run`.
 
@@ -14,6 +14,9 @@ timestamped directories created by `sg run`.
 | [man-release](man-release/experiment.toml) | Sender choices acting on a fixed receiver | Mutual signalling after releasing the receiver |
 | [nand-transfer](nand-transfer/experiment.toml) | A learned stochastic NAND module | New input translators producing OR |
 | [nand-compose](nand-compose/experiment.toml) | Two independently learned stochastic NAND modules | Selection of component outputs as another component's inputs |
+
+The numerical budgets in the rationale below describe `pilot.toml`. The executed
+smoke tier uses the scaled budgets described under Execution tiers.
 
 ## What the source supplies
 

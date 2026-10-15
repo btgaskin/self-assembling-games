@@ -166,3 +166,13 @@ a constructed discrete-time variant with private colour boards, ordinary movemen
 and finish actions, synchronous ticks and an explicit truncation cap. Random and
 scripted local controllers qualify its mechanics; human signalhood recognition
 and learned communication remain research questions for further models.
+
+
+## Assembly extension register
+
+`sg sources` emits bibliographic records with stable identifiers, DOI links,
+protocol locators and implementation scope. Matching records accompany resolved
+models. The [assembly extension](assembly-extension.md) maps implemented LaCroix,
+O’Connor and conflict comparisons to these protocols and distinguishes constructed
+controls from published cases. Broader bargaining, cultural and ecological cases
+remain a cited roadmap.
