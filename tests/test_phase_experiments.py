@@ -1,7 +1,9 @@
 """Declared acquisition, state carry and recovery on retained phase boundaries."""
 
 import json
+import hashlib
 from pathlib import Path
+import shutil
 import tomllib
 
 import pytest
@@ -11,6 +13,7 @@ from self_assembling_games.domain import experiment, model
 from self_assembling_games.experiments import Run, resume, run
 from self_assembling_games.phase_experiments import phase_seed
 from self_assembling_games.system import System
+from self_assembling_games.simulation import digest
 
 
 def read(path):
@@ -231,6 +234,86 @@ def test_phase_checkpoint_tampering_is_rejected(tmp_path):
     assert not study.verify()["valid"]
     with pytest.raises(ValueError, match="verification"):
         resume(study.path)
+
+
+def rewrite_receipts(directory, transform):
+    """Rehash valid documents so tests exercise declaration binding itself."""
+    previous = None
+    for path in sorted((directory / "commits").glob("*/receipt.json")):
+        receipt = read(path)
+        checkpoint_path = path.parent / "checkpoint.json"
+        state = read(checkpoint_path)
+        transform(receipt, state)
+        state.pop("checkpoint_hash")
+        state["checkpoint_hash"] = digest(state)
+        checkpoint_path.write_text(json.dumps(state))
+        receipt["checkpoint_file_hash"] = hashlib.sha256(checkpoint_path.read_bytes()).hexdigest()
+        receipt["previous_receipt_hash"] = previous
+        receipt.pop("receipt_hash")
+        receipt["receipt_hash"] = digest(receipt)
+        path.write_text(json.dumps(receipt))
+        previous = receipt["receipt_hash"]
+
+
+@pytest.mark.parametrize("retag_trial", [False, True])
+def test_valid_phase_journal_cannot_be_transplanted_between_seeds(tmp_path, retag_trial):
+    study = run(phases(seeds=[1, 2], phases=[{"id": "a", "budget": 2}]), directory=tmp_path)
+    source = Path(phase_result(study, trial=0)["checkpoint"]).parents[2]
+    destination = Path(phase_result(study, trial=1)["checkpoint"]).parents[2]
+    shutil.rmtree(destination)
+    shutil.copytree(source, destination)
+    if retag_trial:
+        rewrite_receipts(destination, lambda receipt, state: receipt.update(trial_seed=2))
+    assert not study.verify()["valid"]
+    with pytest.raises(ValueError, match="verification"):
+        resume(study.path)
+
+
+@pytest.mark.parametrize("change", ["drop", "duplicate", "seed", "path"])
+def test_manifest_inventory_must_match_all_declared_trials(tmp_path, change):
+    study = run(phases(seeds=[1, 2], phases=[{"id": "a", "budget": 1}]), directory=tmp_path)
+    manifest = read(study.path / "manifest.json")
+    if change == "drop":
+        manifest["trials"].pop()
+    elif change == "duplicate":
+        manifest["trials"][1] = manifest["trials"][0]
+    elif change == "seed":
+        manifest["trials"][1]["seed"] = 9
+    else:
+        manifest["trials"][1]["path"] = manifest["trials"][0]["path"]
+    (study.path / "manifest.json").write_text(json.dumps(manifest))
+    report = study.verify()
+    assert not report["valid"] and "inventory" in report["errors"][0]
+    with pytest.raises(ValueError, match="inventory"):
+        study.status()
+    with pytest.raises(ValueError, match="inventory"):
+        study.evaluate()
+
+
+@pytest.mark.parametrize("change", ["phase", "protocol", "interventions", "start-kind", "transition", "start-position", "seed"])
+def test_carry_receipts_are_bound_to_the_declared_operation(tmp_path, change):
+    study = run(phases(), directory=tmp_path)
+    directory = Path(phase_result(study, 1)["checkpoint"]).parents[2]
+
+    def alter(receipt, state):
+        if change == "phase":
+            receipt["phase"] = "another-phase"
+        elif change == "protocol":
+            state["protocol"] = {"window": 7}
+        elif change == "interventions":
+            receipt["interventions"] = [{"kind": "trainability", "modules": ["sender"], "enabled": False}]
+        elif change == "start-kind":
+            receipt["inputs"]["kind"] = "fresh"
+        elif change == "transition":
+            receipt["inputs"]["transition"] = {"kind": "release_fixed", "fixed_weight": 9, "other_weight": 1}
+        elif change == "start-position":
+            receipt["start_position"] = 0
+            receipt["phase_position"] = receipt["position"]
+        else:
+            receipt["phase_seed"] = state["seed"] = 999
+
+    rewrite_receipts(directory, alter)
+    assert not study.verify()["valid"]
 
 
 def test_trainability_intervention_preserves_frozen_policy(tmp_path):

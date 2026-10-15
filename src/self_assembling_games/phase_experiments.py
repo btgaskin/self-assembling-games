@@ -134,8 +134,39 @@ def _budget(phase, index, condition, extension):
     return phase["budget"] + (extension if index == len(condition["phases"]) - 1 else 0)
 
 
+def _trial_inventory(config):
+    return [
+        {"condition": condition["name"], "seed": seed,
+         "path": f"trials/{index:03d}-{_slug(condition['name'])}/seed-{seed}"}
+        for index, condition in enumerate(config["conditions"])
+        for seed in config["seeds"]
+    ]
+
+
+def _checked_trials(manifest, config):
+    expected = _trial_inventory(config)
+    if digest(manifest.get("trials")) != digest(expected):
+        raise ValueError("Run trial inventory differs from resolved conditions and seeds")
+    return expected
+
+
+def _component_model(declared, templates):
+    from .domain import model
+
+    assumptions = [
+        assumption for assumption in declared["source"]["assumptions"]
+        if not assumption.lower().startswith("constructed perfect")
+    ]
+    assumptions.append("Frozen components imported from the declared earlier-phase endpoint exports.")
+    return model(
+        declared,
+        interaction={"parameters": {"template_mode": "artifact", "templates": templates}},
+        source={"kind": "deliberate_variant", "assumptions": assumptions},
+    )
+
+
 def _initial_system(root, trial, phase, directory, endpoints):
-    from .domain import Model, model
+    from .domain import Model
     from .system import System
 
     start = phase["start"]
@@ -169,20 +200,12 @@ def _initial_system(root, trial, phase, directory, endpoints):
                     "parent_receipt_hash": source["receipt_hash"],
                     "export": binding["export"],
                 }
-            assumptions = [
-                assumption for assumption in target.to_dict()["source"]["assumptions"]
-                if not assumption.lower().startswith("constructed perfect")
-            ]
-            assumptions.append("Frozen components imported from the declared earlier-phase endpoint exports.")
-            target = model(
-                target,
-                interaction={"parameters": {"template_mode": "artifact", "templates": templates}},
-                source={"kind": "deliberate_variant", "assumptions": assumptions},
-            )
+            target = _component_model(target.to_dict(), templates)
         system = target.instantiate(seed=seed, protocol=phase["protocol"])
     for intervention in phase["interventions"]:
         system.set_trainable(intervention["modules"], intervention["enabled"])
     return system, {
+        "condition": trial["condition"], "trial_seed": trial["seed"],
         "phase": phase["id"], "declared_model_hash": digest(phase["model"]),
         "effective_model": system.model.to_dict(), "phase_seed": seed,
         "start_position": system.position, "inputs": inputs,
@@ -239,7 +262,7 @@ def _execute_phase(root, trial, index, phase, budget, endpoints):
             return _phase_result(directory, phase, budget, receipts)
         system = _latest_system(directory, receipts)
         context = {key: copy.deepcopy(previous[key]) for key in (
-            "phase", "declared_model_hash", "effective_model", "phase_seed", "start_position", "inputs", "interventions"
+            "condition", "trial_seed", "phase", "declared_model_hash", "effective_model", "phase_seed", "start_position", "inputs", "interventions"
         )}
         if system.position != previous["position"]:
             raise ValueError("Phase checkpoint position differs from its receipt")
@@ -329,7 +352,7 @@ def status(root):
     manifest, config = _read(root / "manifest.json"), _configuration(root)
     entries, extension = _extensions(root, config)
     conditions = {c["name"]: c for c in config["conditions"]}
-    trials = [_trial_status(root, t, conditions[t["condition"]], extension) for t in manifest["trials"]]
+    trials = [_trial_status(root, t, conditions[t["condition"]], extension) for t in _checked_trials(manifest, config)]
     reports = _read(root / "results.json").get("trials", []) if (root / "results.json").is_file() else []
     failures = {(t["condition"], t["seed"], p["id"]): p for t in reports for p in t["phases"] if p["status"] == "failed"}
     for trial in trials:
@@ -348,6 +371,91 @@ def status(root):
     return result
 
 
+def _verify_phase_binding(directory, trial, phase, receipt, checkpoint, parents):
+    """Bind a valid checkpoint to the trial and operation that produced it."""
+    start = phase["start"]
+    expected_seed = phase_seed(trial["seed"], phase["id"])
+    expected_position = 0
+    expected_protocol = phase["protocol"]
+    expected_inputs = {"kind": start["kind"], "artifacts": {}}
+    expected_model = phase["model"]
+    if start["kind"] == "carry":
+        parent = parents[start["phase"]]
+        if not parent["complete"]:
+            raise ValueError("State carry requires a completed parent phase endpoint")
+        expected_seed = parent["checkpoint"]["seed"]
+        expected_position = parent["position"]
+        expected_protocol = parent["checkpoint"]["protocol"]
+        if phase["protocol"] and phase["protocol"] != expected_protocol:
+            raise ValueError("Carry protocol differs from its declared parent")
+        expected_inputs.update(
+            parent_phase=start["phase"], parent_receipt_hash=parent["receipt_hash"],
+            transition=start["transition"],
+        )
+    elif start["kind"] == "compose":
+        from .component_artifacts import load_component_snapshot
+
+        artifacts = receipt["inputs"].get("artifacts", {})
+        if set(artifacts) != set(start["bindings"]):
+            raise ValueError("Phase component slots differ from declared bindings")
+        templates = receipt["effective_model"]["interaction"]["parameters"].get("templates", {})
+        if set(templates) != set(start["bindings"]):
+            raise ValueError("Effective model component slots differ from declared bindings")
+        for slot, binding in start["bindings"].items():
+            parent = parents[binding["phase"]]
+            if not parent["complete"]:
+                raise ValueError("Composition requires completed parent phase endpoints")
+            relative = "artifacts/" + hashlib.sha256(slot.encode()).hexdigest() + ".json"
+            expected_inputs["artifacts"][slot] = {
+                "path": relative, "sha256": _hash(directory / relative),
+                "parent_phase": binding["phase"],
+                "parent_receipt_hash": parent["receipt_hash"],
+                "export": binding["export"],
+            }
+            # Absolute template paths describe the original archive location.
+            # The receipt's relative, hashed asset remains authoritative after a
+            # run directory is moved; retain the original effective model hash.
+            origin = templates[slot]
+            if not isinstance(origin, str) or Path(origin).name != Path(relative).name or Path(origin).parent.name != "artifacts":
+                raise ValueError("Effective model template path differs from its declared slot")
+            load_component_snapshot(directory / relative)
+            source = _read(directory / relative)["source"]
+            selected = parent["checkpoint"]
+            if (
+                source.get("checkpoint_hash") != selected["checkpoint_hash"]
+                or source.get("snapshot_hash") != digest(selected)
+                or source.get("model_hash") != selected["model_hash"]
+                or source.get("seed") != selected["seed"]
+                or source.get("position") != parent["position"]
+            ):
+                raise ValueError("Component source differs from the selected parent endpoint")
+        expected_model = _component_model(phase["model"], templates).to_dict()
+    if receipt.get("condition") != trial["condition"] or type(receipt.get("trial_seed")) is not int or receipt["trial_seed"] != trial["seed"]:
+        raise ValueError("Phase receipt trial identity differs")
+    if receipt["phase"] != phase["id"]:
+        raise ValueError("Phase receipt id differs from its declaration")
+    if type(receipt["phase_seed"]) is not int or type(checkpoint["seed"]) is not int or receipt["phase_seed"] != expected_seed or checkpoint["seed"] != expected_seed:
+        raise ValueError("Phase checkpoint seed differs from its declared trial and parent")
+    if digest(checkpoint["protocol"]) != digest(expected_protocol):
+        raise ValueError("Phase checkpoint protocol differs from its declaration")
+    if digest(receipt["interventions"]) != digest(phase["interventions"]):
+        raise ValueError("Phase interventions differ from their declaration")
+    if digest(receipt["inputs"]) != digest(expected_inputs):
+        raise ValueError("Phase initialization differs from its declaration")
+    if receipt["effective_model"] != expected_model or checkpoint["model"] != expected_model:
+        raise ValueError("Phase effective model differs from its declaration")
+    if receipt["start_position"] != expected_position:
+        raise ValueError("Phase starting position differs from its declared parent")
+    if receipt["position"] < expected_position or receipt["phase_position"] != receipt["position"] - expected_position:
+        raise ValueError("Phase progress differs from its native starting position")
+    observation = receipt.get("measurement")
+    if observation is not None and (
+        observation["position"] != receipt["position"]
+        or observation["phase_position"] != receipt["phase_position"]
+    ):
+        raise ValueError("Phase measurement position differs from its checkpoint")
+
+
 def verify(root):
     from .system import System
 
@@ -355,12 +463,15 @@ def verify(root):
     errors = []
     try:
         manifest, config = _read(root / "manifest.json"), _configuration(root)
+        trials = _checked_trials(manifest, config)
+        if set(manifest["hashes"]) != {"config.toml", "resolved.toml", "resolved.json"}:
+            raise ValueError("Run configuration hash inventory differs")
         for relative, expected in manifest["hashes"].items():
             if not (root / relative).is_file() or _hash(root / relative) != expected:
                 errors.append(f"File changed or missing: {relative}")
-        _, extension = _extensions(root, config)
+        extensions, extension = _extensions(root, config)
         conditions = {c["name"]: c for c in config["conditions"]}
-        for trial in manifest["trials"]:
+        for trial in trials:
             endpoints = {}
             condition = conditions[trial["condition"]]
             for index, phase in enumerate(condition["phases"]):
@@ -369,11 +480,18 @@ def verify(root):
                 if not receipts:
                     continue
                 budget = _budget(phase, index, condition, extension)
+                previous_position = None
+                allowed_budgets = {phase["budget"]}
+                if index == len(condition["phases"]) - 1:
+                    amount = phase["budget"]
+                    for entry in extensions:
+                        amount += entry["additional_budget"]
+                        allowed_budgets.add(amount)
                 for path, receipt in receipts:
                     if receipt["declared_model_hash"] != digest(phase["model"]):
                         raise ValueError("Phase receipt declaration differs")
-                    if receipt["budget"] > budget:
-                        raise ValueError("Phase receipt exceeds declared budget")
+                    if receipt["budget"] not in allowed_budgets or receipt["budget"] > budget:
+                        raise ValueError("Phase receipt budget differs from its declared extension history")
                     checkpoint = _read(path.parent / "checkpoint.json")
                     # Restore the latest numerical state; earlier snapshots have
                     # their full System integrity hash checked without rebuilding.
@@ -382,18 +500,19 @@ def verify(root):
                         raise ValueError(f"System checkpoint integrity mismatch: {path}")
                     if digest(checkpoint["model"]) != checkpoint["model_hash"]:
                         raise ValueError("Phase checkpoint model integrity mismatch")
-                    if checkpoint["model"] != receipt["effective_model"]:
-                        raise ValueError("Phase checkpoint effective model differs")
-                    inputs = receipt["inputs"]
-                    if inputs["kind"] == "carry" and inputs["parent_receipt_hash"] != endpoints.get(inputs["parent_phase"]):
-                        raise ValueError("Carry parent endpoint differs")
-                    for artifact in inputs.get("artifacts", {}).values():
-                        if artifact["parent_receipt_hash"] != endpoints.get(artifact["parent_phase"]):
-                            raise ValueError("Component parent endpoint differs")
+                    _verify_phase_binding(directory, trial, phase, receipt, checkpoint, endpoints)
+                    if previous_position is not None and receipt["position"] < previous_position:
+                        raise ValueError("Phase checkpoint clock moves backwards")
+                    previous_position = receipt["position"]
                 restored = System.restore(_read(receipts[-1][0].parent / "checkpoint.json"))
                 if restored.position != receipts[-1][1]["position"]:
                     raise ValueError("Phase position differs from checkpoint")
-                endpoints[phase["id"]] = receipts[-1][1]["receipt_hash"]
+                endpoints[phase["id"]] = {
+                    "receipt_hash": receipts[-1][1]["receipt_hash"],
+                    "position": receipts[-1][1]["position"],
+                    "complete": receipts[-1][1]["complete"],
+                    "checkpoint": _read(receipts[-1][0].parent / "checkpoint.json"),
+                }
     except (ValueError, KeyError, TypeError, OSError) as error:
         errors.append(str(error))
     return {"path": str(root), "valid": not errors, "errors": errors}
@@ -404,7 +523,7 @@ def evaluate(root, **parameters):
     manifest = _read(root / "manifest.json")
     conditions = {c["name"]: c for c in config["conditions"]}
     results = []
-    for trial in manifest["trials"]:
+    for trial in _checked_trials(manifest, config):
         phases = []
         for index, phase in enumerate(conditions[trial["condition"]]["phases"]):
             system = _latest_system(_phase_path(root, trial, index, phase))
@@ -424,7 +543,7 @@ def _complete(root):
     conditions = {c["name"]: c for c in config["conditions"]}
     manifest.update(status="running", updated_at=_stamp())
     _write(root / "manifest.json", manifest)
-    tasks = [(str(root), t, conditions[t["condition"]], extension) for t in manifest["trials"]]
+    tasks = [(str(root), t, conditions[t["condition"]], extension) for t in _checked_trials(manifest, config)]
     try:
         if config["workers"] == 1:
             results = [_execute_trial(task) for task in tasks]
@@ -470,7 +589,7 @@ def run(experiment, directory="runs", *, workspace=None, original=None):
     (root / "config.toml").write_text(original or resolved, encoding="utf-8")
     (root / "resolved.toml").write_text(resolved, encoding="utf-8")
     _write(root / "resolved.json", config)
-    trials = [{"condition": condition["name"], "seed": seed, "path": f"trials/{index:03d}-{_slug(condition['name'])}/seed-{seed}"} for index, condition in enumerate(config["conditions"]) for seed in config["seeds"]]
+    trials = _trial_inventory(config)
     _write(root / "manifest.json", {
         "schema_version": 3, "kind": "run", "status": "pending", "created_at": _stamp(),
         "software": {"self_assembling_games": __version__, "python": sys.version, "platform": platform.platform()},
