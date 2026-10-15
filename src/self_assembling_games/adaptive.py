@@ -40,6 +40,13 @@ class AdaptiveMethod:
         if self.id == "replicator.continuous":
             if mutation_rate != 0:
                 raise ValueError("Pure replicator selection has no mutation parameter")
+            # A common payoff offset cancels on the simplex. Choose a
+            # nonnegative gauge so rounding in sum(x) is damped, rather than
+            # amplified by a negative mean in full-coordinate ODE solvers.
+            minimum = float(np.min(fitness))
+            if minimum < 0:
+                relative = fitness - minimum
+                return frequencies * (relative - float(frequencies @ relative))
             return frequencies * (fitness - mean)
         if self.id == "replicator_mutator.birth_uniform":
             if np.any(fitness < 0):

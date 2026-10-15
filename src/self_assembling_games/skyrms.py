@@ -376,6 +376,8 @@ def skyrms_game(
                 receiver_matrix[np.ix_(order, order)],
             )
             game.strategy_costs.defer(
-                "receiver", lambda: game._zero_strategy_costs("receiver")
+                "receiver",
+                lambda: game._zero_strategy_costs("receiver"),
+                known_zero=True,
             )
     return game

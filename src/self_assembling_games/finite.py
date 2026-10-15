@@ -120,9 +120,10 @@ def distribution(values: Any, size: int) -> np.ndarray:
 class _LazyRoleArrays(MutableMapping):
     """Materialise a role's numerical array only when it is requested."""
 
-    def __init__(self, factories):
+    def __init__(self, factories, *, known_zero=False):
         self.factories = dict(factories)
         self.cache = {}
+        self.possibly_nonzero = {role: not known_zero for role in factories}
 
     def __getitem__(self, role):
         if role not in self.cache:
@@ -132,10 +133,12 @@ class _LazyRoleArrays(MutableMapping):
     def __setitem__(self, role, value):
         self.factories[role] = lambda: value
         self.cache[role] = value
+        self.possibly_nonzero[role] = bool(np.any(value))
 
     def __delitem__(self, role):
         del self.factories[role]
         self.cache.pop(role, None)
+        del self.possibly_nonzero[role]
 
     def __iter__(self):
         return iter(self.factories)
@@ -143,9 +146,16 @@ class _LazyRoleArrays(MutableMapping):
     def __len__(self):
         return len(self.factories)
 
-    def defer(self, role, factory):
+    def defer(self, role, factory, *, known_zero=False):
         self.factories[role] = factory
         self.cache.pop(role, None)
+        self.possibly_nonzero[role] = not known_zero
+
+    def may_have_nonzero_values(self):
+        """A cheap capability check; unknown deferred values remain possible."""
+        return any(self.possibly_nonzero.values()) or any(
+            np.any(value) for value in self.cache.values()
+        )
 
 
 @dataclass
@@ -209,7 +219,8 @@ class FiniteGame:
             {
                 role: lambda role=role: self._zero_strategy_costs(role)
                 for role in self.roles
-            }
+            },
+            known_zero=True,
         )
         self.payoff_matrices: tuple[np.ndarray, np.ndarray] | None = None
         self._compiled = False
@@ -232,6 +243,16 @@ class FiniteGame:
 
     def decision(self, role: str, context: str) -> FiniteDecision:
         return self._rows[role, context]
+
+    @property
+    def has_strategy_costs(self) -> bool:
+        """Declare plan-level costs without materialising complete plans.
+
+        Deferred custom costs are treated as possible unless their factory
+        explicitly declares known_zero=True. Cached arrays are also checked
+        because callers can modify these numerical arrays in place.
+        """
+        return self.strategy_costs.may_have_nonzero_values()
 
     def declaration(self):
         """Decision structure and choices, available before exact compilation."""

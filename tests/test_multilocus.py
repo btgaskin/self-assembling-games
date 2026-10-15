@@ -496,8 +496,12 @@ def test_signed_game_returns_use_explicit_reproductive_transformation():
 def test_zero_mean_reproduction_and_resource_failures_preserve_state():
     p = profile()
     p.genetics["fitness"] = {"background": 0, "scale": 0}
-    with pytest.raises(ValueError, match="Mean reproduction"):
-        sg.build(p)
+    stopped = sg.build(p)
+    assert stopped.status == "no_reproduction"
+    assert stopped.evaluate()["mean_reproduction_fitness"] == 0
+    before = stopped.snapshot()
+    stopped.run(3)
+    assert stopped.snapshot() == before
     p = profile()
     p.resources = {"max_measurements": 1}
     simulation = sg.build(p)

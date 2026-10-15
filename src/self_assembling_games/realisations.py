@@ -9,6 +9,26 @@ import numpy as np
 from .finite import DecisionProvider, distribution
 
 
+def _conditional_credits(game, draws, credits, returns):
+    """Addressed local feedback for adaptive rows, including unvisited targets."""
+    values = (
+        credits
+        if credits is not None
+        else (
+            (role, context, option, returns[game.roles.index(role)])
+            for role, context, option in draws
+        )
+    )
+    for role, context, option, value in values:
+        row = game.decision(role, context)
+        if not isinstance(option, (int, np.integer)) or not 0 <= option < len(
+            row.options
+        ):
+            raise ValueError("Reinforcement credit needs a valid option index")
+        if (role, context) in game.row_indices:
+            yield role, context, option, value
+
+
 def validate_finite_realisation(game, method, *, sampled=False):
     """Shared method/game gate used during resolution and construction."""
     if sampled:
@@ -16,7 +36,7 @@ def validate_finite_realisation(game, method, *, sampled=False):
             raise ValueError(
                 "Sampled finite construction requires conditional decisions"
             )
-        if game.payoff_matrices is not None or game.parameters.get("listening_cost", 0):
+        if game.payoff_matrices is not None or game.has_strategy_costs:
             raise ValueError(
                 "Conditional R1 with strategy-level listening/table costs needs a defined mechanism; SKQ3"
             )
@@ -30,6 +50,20 @@ def validate_finite_realisation(game, method, *, sampled=False):
         )
     game.compile()
     if method.nonnegative_returns:
+        if method.representation == "conditional_decisions":
+            for draws, credits, returns in zip(
+                game.draw_paths, game.credit_paths, game.returns
+            ):
+                if any(
+                    not math.isfinite(value) or value < 0
+                    for _, _, _, value in _conditional_credits(
+                        game, draws, credits, returns
+                    )
+                ):
+                    raise ValueError(
+                        "R1 requires finite nonnegative reinforcement credit; no implicit payoff shift"
+                    )
+            return
         minimum = (
             min(float(m.min()) for m in game.payoff_matrices)
             if game.payoff_matrices is not None
@@ -153,21 +187,16 @@ class FiniteReinforcementRealisation:
                 if self.game.rows[r]
             ]
         else:
-            credits = (
-                [
-                    (self.organisation.policy_address(r, c), option, value)
-                    for r, c, option, value in provider.credits
-                ]
-                if provider.credits is not None
-                else [
-                    (
-                        self.organisation.policy_address(r, c),
-                        option,
-                        outcome.returns[tuple(self.organisation.slots).index(r)],
-                    )
-                    for r, c, option in provider.draws
-                ]
-            )
+            credits = [
+                (self.organisation.policy_address(r, c), option, value)
+                for r, c, option, value in _conditional_credits(
+                    self.game,
+                    provider.draws if provider.credits is None else (),
+                    provider.credits,
+                    outcome.returns,
+                )
+            ]
+        credits = [credit for credit in credits if credit[0] not in self.frozen]
         # Validate the entire update before applying any credit.
         if any(not math.isfinite(value) or value < 0 for _, _, value in credits):
             raise ValueError("R1 requires finite nonnegative reinforcement credit")

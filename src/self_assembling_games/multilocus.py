@@ -258,8 +258,8 @@ class MultilocusRealisation:
                 "Transformed reproductive weights must be finite and nonnegative"
             )
         mean = float(x @ reproductive)
-        if not math.isfinite(mean) or mean <= 0:
-            raise ValueError("Mean reproduction must be positive and finite")
+        if not math.isfinite(mean) or mean < 0:
+            raise ValueError("Mean reproduction must be finite and nonnegative")
         return {
             "success_probability": float(mass @ game.success),
             "expected_returns": {
@@ -278,6 +278,10 @@ class MultilocusRealisation:
         if self.finite:
             validate_counts(self.counts, self.genome.count, self.population_size)
         result = self.expectations(x)
+        if result["mean_reproduction_fitness"] == 0:
+            # This census has a valid assay but supplies no parents for the
+            # next generation. Keep it available for reporting/intervention.
+            return None, result
         y = (
             x
             * np.asarray(result["reproductive_weights"])
@@ -387,6 +391,8 @@ class MultilocusSimulation:
         }
         self.status = "ready"
         self.measurements = [self.evaluate()]
+        if self.measurements[-1]["mean_reproduction_fitness"] == 0:
+            self.status = "no_reproduction"
 
     @property
     def game(self):
@@ -412,15 +418,22 @@ class MultilocusSimulation:
         }
 
     def step(self):
+        if self.status == "no_reproduction":
+            return {"status": "no_reproduction", "generation": self.generation}
         retain = (self.generation + 1) % self.protocol["sample_interval"] == 0
         if retain and len(self.measurements) >= self._realisation.parameters[
             "resources"
         ].get("max_measurements", RESOURCE_DEFAULTS["max_measurements"]):
             raise ValueError("Generation measurements exceed max_measurements")
         record, result = self._realisation.advance()
+        if record is None:
+            self.status = "no_reproduction"
+            return {"status": "no_reproduction", "generation": self.generation}
         self.generation += 1
         self.success_sum += record["assay_before_reproduction"]["success_probability"]
-        self.status = "running"
+        self.status = (
+            "no_reproduction" if result["mean_reproduction_fitness"] == 0 else "running"
+        )
         if retain:
             self.measurements.append(
                 {
@@ -441,6 +454,8 @@ class MultilocusSimulation:
             or generations < 0
         ):
             raise ValueError("generations must be a nonnegative integer")
+        if self.status == "no_reproduction":
+            generations = 0
         if generations and len(self.history) >= self._realisation.parameters[
             "resources"
         ].get("max_history_entries", RESOURCE_DEFAULTS["max_history_entries"]):
@@ -458,7 +473,9 @@ class MultilocusSimulation:
         start = self.generation
         for _ in range(generations):
             self.step()
-        if generations:
+            if self.status == "no_reproduction":
+                break
+        if self.generation > start:
             self.history.append(
                 {
                     "phase": "run",
@@ -466,7 +483,8 @@ class MultilocusSimulation:
                     "to_generation": self.generation,
                 }
             )
-            self.status = "complete"
+            if self.status != "no_reproduction":
+                self.status = "complete"
         if output is not None:
             from pathlib import Path
             from .simulation import atomic_json
@@ -500,12 +518,18 @@ class MultilocusSimulation:
                 self._realisation.genome.count,
                 self._realisation.population_size,
             )
-            self._realisation.expectations(counts / self._realisation.population_size)
+            result = self._realisation.expectations(
+                counts / self._realisation.population_size
+            )
             self._realisation.counts = counts
         else:
             frequencies = distribution(values, self._realisation.genome.count)
-            self._realisation.expectations(frequencies)
+            result = self._realisation.expectations(frequencies)
             self._realisation._frequencies = frequencies
+        if result["mean_reproduction_fitness"] == 0:
+            self.status = "no_reproduction"
+        elif self.status == "no_reproduction":
+            self.status = "ready"
         self.history.append(
             {
                 "phase": "population_intervention",
