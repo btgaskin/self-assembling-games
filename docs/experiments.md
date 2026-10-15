@@ -5,6 +5,10 @@ seeds, a budget for each condition, and analysis settings. Loading TOML resolves
 its defaults and validates declarations. Running constructs seeded systems and
 archives the whole study under one timestamped directory.
 
+Schema 2 describes independent single-model trials. Schema 3 adds ordered phases
+whose starting states can be fresh systems, descendants of an earlier phase, or
+fresh systems assembled from explicitly exported components.
+
 Install the package with its runtime dependencies, including `tomli-w`, then:
 
 ```sh
@@ -189,3 +193,155 @@ proportion. These are observations on the sampling schedule; a crossing between
 observations can occur earlier. Runtime terminal statuses remain visible
 alongside failures and budget censoring. The underlying evaluation retains any
 truncation or incomplete-mass fields supplied by that runtime.
+
+## Ordered phases
+
+This declaration acquires a cue response, releases the sender into mutual
+signalling, and branches from the same acquired endpoint with a frozen receiver:
+
+```toml
+schema_version = 3
+seeds = [0, 1, 2]
+
+[[phases]]
+id = "cue"
+preset = "cue.demo"
+budget = 100
+
+[[phases]]
+id = "mutual"
+preset = "sig.demo"
+budget = 100
+[phases.start]
+kind = "carry"
+phase = "cue"
+[phases.start.transition]
+kind = "release_fixed"
+fixed_weight = 9.0
+other_weight = 1.0
+
+[[phases]]
+id = "frozen-receiver"
+preset = "sig.demo"
+budget = 100
+[phases.start]
+kind = "carry"
+phase = "cue"
+[phases.start.transition]
+kind = "release_fixed"
+fixed_weight = 9.0
+other_weight = 1.0
+[[phases.interventions]]
+kind = "trainability"
+modules = ["receiver"]
+enabled = false
+
+[analysis]
+sample_interval = 25
+```
+
+These budgets are illustrative configuration choices. The release distribution
+is an explicit experimental intervention: its old fixed option receives weight
+9 and each other option receives weight 1, then proportional R1 becomes active.
+The acquired receiver, world, random generator, native clocks and accumulated
+measurements carry into both descendants. Each descendant owns a separate copy.
+An `identity` transition carries the same scientific model without changing its
+state. Supported transitions validate their observation/action domains,
+ownership, adaptation and execution schedule.
+
+Top-level `phases` gives a single condition named `default`. Multiple conditions
+use `[[conditions]]` with nested `[[conditions.phases]]`. Every phase has a
+unique `id` within its condition. `preset`, `model`, `overrides`, `budget`,
+`protocol` and `analysis` inherit from the experiment and condition; phase values
+take precedence. Resolved phases retain `model`, `budget`, `start`, `protocol`,
+`interventions` and `analysis`. References name earlier phase ids in the same
+condition and seed trial. A missing `start` means `kind = "fresh"`.
+
+Fresh and composed phases use the first eight bytes of
+`SHA256(JSON([trial_seed, phase_id]))`, interpreted as an unsigned big-endian
+integer, as their seed. The JSON encoding uses no separator whitespace. This
+rule preserves fresh phase seeds under condition reordering and worker changes.
+Carry phases retain their parent's generator state and seed. An explicit carry
+protocol must equal the retained System protocol; changing numerical controls
+during a carry is currently unsupported.
+
+Python accepts the same declarations through `config.from_dict(...)` or:
+
+```python
+from self_assembling_games import experiment, run
+
+study = experiment("sig.demo", seeds=[2, 5], phases=[
+    {"id": "acquire", "budget": 100},
+    {"id": "continue", "budget": 50,
+     "start": {"kind": "carry", "phase": "acquire",
+               "transition": {"kind": "identity"}}},
+])
+result = run(study, workspace="phases")
+```
+
+### Component composition
+
+A composed phase starts a new target system using immutable exports of named
+earlier endpoints. For example:
+
+```toml
+schema_version = 3
+seeds = [3]
+
+[[phases]]
+id = "nand"
+preset = "nand.demo"
+budget = 100
+
+[[phases]]
+id = "transfer"
+preset = "tr-log.demo"
+budget = 100
+[phases.start]
+kind = "compose"
+[phases.start.bindings.template]
+phase = "nand"
+```
+
+Each binding names a destination template slot, an earlier `phase`, and an
+optional `export` table with the component export specification. The target's
+effective model uses `template_mode = "artifact"` and binds archived component
+paths in `interaction.parameters.templates`. The report retains both the
+declared model hash and this effective model, the export specification, source
+endpoint receipt hash and component file hash. Module pretraining remains a
+separate measured phase. Exporting an invented vocabulary requires explicit
+choices for mutator suppression and completion of unseen receiver pairs.
+
+### Retained state and continuation
+
+Phase directories contain immutable numbered checkpoint generations. Each
+`receipt.json` links to the previous receipt and hashes its generation's
+`checkpoint.json`. A receipt records native and phase positions, the actual
+starting position, initialization lineage, effective model, trainability
+interventions, measurement and pending-measurement status. The final endpoint
+is preserved alongside all earlier committed generations. Reports give both
+native `position` and local `phase_position`; carrying a system preserves its
+native clock rather than resetting a learner's internal phase schedule.
+
+The receipt is committed after the checkpoint. A hard stop can leave an
+unfinished generation, which recovery ignores, or a stale `cursor.json` or
+manifest, which recovery reconstructs from complete receipts. A failed
+measurement is retried at its retained boundary before any further advance.
+Every evaluated endpoint is retained, including endpoints between sampling
+intervals, so a later continuation preserves observed threshold crossings.
+
+`resume(path)` completes declared phases. For schema 3,
+`resume(path, additional_budget=N)` extends only the final phase in each
+condition. Its earlier endpoints and all ancestor phases remain immutable; the
+extension receives a hash-linked journal entry with scope `final_phase`.
+Budgets remain additional native clock units within the phase. Different
+conditions can use different final-phase clocks, so interpret their budgets on
+those clocks. Verification checks configuration hashes, checkpoint/receipt
+chains, component hashes and parent endpoint identities. Cursors and report
+files are derived views that can be regenerated after an interrupted write.
+
+Schema 2 runs also retain immutable recovery checkpoints and boundary
+measurements. Their existing `trajectory.json` continues to contain interval
+samples; off-grid endpoints and pending measurements are additionally retained
+in the recovery journal. The existing schema 2 extension semantics still add
+budget to every independent trial.

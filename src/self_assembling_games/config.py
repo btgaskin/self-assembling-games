@@ -76,11 +76,22 @@ def from_dict(declaration: dict):
     from .domain import Experiment, Model, model
 
     data = _decode_nulls(declaration)
-    if "schema_version" in data and data["schema_version"] != 2:
-        raise ValueError("Configuration schema_version must be 2")
+    if "schema_version" in data and data["schema_version"] not in (2, 3):
+        raise ValueError("Configuration schema_version must be 2 or 3")
     kind = data.get("kind", "model" if "interaction" in data else "experiment")
     if kind not in {"model", "experiment"}:
         raise ValueError("Configuration kind must be model or experiment")
+    phased = (
+        data.get("schema_version") == 3
+        or "phases" in data
+        or any("phases" in condition for condition in data.get("conditions", []))
+    )
+    if phased:
+        if kind != "experiment":
+            raise ValueError("Schema 3 describes phased experiments; models use schema 2")
+        if data.get("schema_version") == 2:
+            raise ValueError("Phased experiments require schema_version = 3")
+        return _phased(data)
     if kind == "model" and "interaction" in data:
         unknown = data.keys() - {
             "schema_version",
@@ -189,6 +200,62 @@ def from_dict(declaration: dict):
             "analysis": data.get("analysis", {}),
         }
     )
+
+
+def _phased(data):
+    from .domain import Experiment, model
+
+    allowed = {
+        "schema_version", "kind", "preset", "model", "overrides", "seeds",
+        "budget", "workers", "analysis", "conditions", "protocol", "phases",
+    }
+    if data.keys() - allowed:
+        raise ValueError("Unknown configuration fields: " + ", ".join(sorted(data.keys() - allowed)))
+    if "preset" in data and "model" in data:
+        raise ValueError("Choose either preset or model")
+    base = data.get("preset", data.get("model"))
+    shared = data.get("overrides", {})
+    if not isinstance(shared, dict):
+        raise ValueError("overrides must be a table")
+    conditions = data.get("conditions", [{"name": "default", "phases": data.get("phases")}])
+    if not isinstance(conditions, list) or not conditions:
+        raise ValueError("An experiment requires at least one condition")
+    resolved = []
+    for index, condition in enumerate(conditions):
+        if condition.keys() - {"name", "phases", "preset", "model", "overrides", "budget", "protocol", "analysis"}:
+            raise ValueError("Unknown phased condition fields")
+        if "preset" in condition and "model" in condition:
+            raise ValueError("Choose either condition preset or model")
+        phases = condition.get("phases", data.get("phases"))
+        if not isinstance(phases, list) or not phases:
+            raise ValueError("A phased condition requires at least one phase")
+        items = []
+        for phase in phases:
+            if not isinstance(phase, dict) or phase.keys() - {
+                "id", "preset", "model", "overrides", "budget", "start", "interventions", "analysis", "protocol"
+            }:
+                raise ValueError("Unknown phase fields")
+            if "preset" in phase and "model" in phase:
+                raise ValueError("Choose either phase preset or model")
+            chosen = phase.get("preset", phase.get("model", condition.get("preset", condition.get("model", base))))
+            if chosen is None:
+                raise ValueError("Each phase requires a model or an inherited preset")
+            overrides = merge(merge(shared, condition.get("overrides", {})), phase.get("overrides", {}))
+            specification = model(chosen, **overrides).to_dict()
+            items.append({
+                "id": phase.get("id"), "model": specification,
+                "budget": phase.get("budget", condition.get("budget", data.get("budget", specification["execution"]["budget"]))),
+                "start": phase.get("start", {"kind": "fresh"}),
+                "interventions": phase.get("interventions", []),
+                "protocol": merge(merge(data.get("protocol", {}), condition.get("protocol", {})), phase.get("protocol", {})),
+                "analysis": merge(merge(data.get("analysis", {}), condition.get("analysis", {})), phase.get("analysis", {})),
+            })
+        resolved.append({"name": condition.get("name", "default" if len(conditions) == 1 else f"condition-{index + 1}"), "phases": items})
+    return Experiment.from_dict({
+        "schema_version": 3, "kind": "experiment", "conditions": resolved,
+        "seeds": data.get("seeds", [0]), "workers": data.get("workers", 1),
+        "analysis": data.get("analysis", {}),
+    })
 
 
 def load(path: str | Path):
