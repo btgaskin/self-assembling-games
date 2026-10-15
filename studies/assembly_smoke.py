@@ -5,6 +5,8 @@ Each invocation creates fresh run directories. Configs determine all budgets/see
 """
 from pathlib import Path
 import json
+import hashlib
+import tarfile
 import resource
 import sys
 import time
@@ -60,6 +62,12 @@ def main():
     memory = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
     report['peak_process_rss_bytes'] = memory if sys.platform == 'darwin' else memory * 1024
     report['note'] = 'Bounded integration studies; peak RSS covers this sequential process, not an isolated trial.'
+    archive = root / 'studies' / 'assembly-smoke-runs.tar.gz'
+    with tarfile.open(archive, 'w:gz') as bundle:
+        for study in report['studies']:
+            bundle.add(root / study['run'], arcname=study['run'])
+    report['archive'] = {'path': str(archive.relative_to(root)),
+                         'sha256': hashlib.sha256(archive.read_bytes()).hexdigest()}
     output = root / 'studies' / 'assembly-smoke-results.json'
     output.write_text(json.dumps(report, indent=2, sort_keys=True) + '\n')
     if failed:

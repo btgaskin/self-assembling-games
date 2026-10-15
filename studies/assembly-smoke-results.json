@@ -1,0 +1,4107 @@
+{
+  "archive": {
+    "path": "studies/assembly-smoke-runs.tar.gz",
+    "sha256": "915737ed1edd8e9fbdcb7fab26dd8545d36da2f5aaebda867e1f68b8ddf736b3"
+  },
+  "note": "Five groups ran in one sequential process; the two release groups were rerun with a zero-acquisition control. Peak RSS is the maximum across these processes. Wall times are per retained group.",
+  "peak_process_rss_bytes": 88227840,
+  "provenance": {
+    "numpy": "2.5.4",
+    "package_version": "0.2.0",
+    "python": "3.12.13",
+    "repository_revision": "ff5d3e0cfa2a74df6049f5c111d1ede3e9607e41",
+    "rng": "PCG64",
+    "source_hash": "a07a67800e539d55767788b4c8d4490b164a4f19871c4e9116540a95ec2b197b"
+  },
+  "studies": [
+    {
+      "configuration": "runs/assembly-coadaptation/experiment.toml",
+      "elapsed_seconds": 39.77653637499316,
+      "evaluation": {
+        "trials": [
+          {
+            "condition": "stipulated",
+            "evaluation": {
+              "completed_mass": 0.9999999999999996,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 0.2534808522961968,
+              "expected_terms": 1.2380952380952348,
+              "leaves": 1728,
+              "protocol": "exact",
+              "success_probability": 0.2534808522961968,
+              "truncated_mass": 0.0
+            },
+            "seed": 0
+          },
+          {
+            "condition": "stipulated",
+            "evaluation": {
+              "completed_mass": 1.000000000000019,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 0.04629629629629633,
+              "expected_terms": 1.3333333333333568,
+              "leaves": 1728,
+              "protocol": "exact",
+              "success_probability": 0.04629629629629633,
+              "truncated_mass": 0.0
+            },
+            "seed": 1
+          },
+          {
+            "condition": "stipulated",
+            "evaluation": {
+              "completed_mass": 1.0000000000000016,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 0.3047934755573645,
+              "expected_terms": 1.2555555555555558,
+              "leaves": 1728,
+              "protocol": "exact",
+              "success_probability": 0.3047934755573645,
+              "truncated_mass": 0.0
+            },
+            "seed": 2
+          },
+          {
+            "condition": "role-free",
+            "evaluation": {
+              "completed_mass": 1.000000000000005,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 0.19701273360127508,
+              "expected_terms": 1.2589743589743678,
+              "leaves": 1728,
+              "protocol": "exact",
+              "success_probability": 0.19701273360127508,
+              "truncated_mass": 0.0
+            },
+            "seed": 0
+          },
+          {
+            "condition": "role-free",
+            "evaluation": {
+              "completed_mass": 1.0000000000000062,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 0.19217560379898577,
+              "expected_terms": 1.2182539682539713,
+              "leaves": 1728,
+              "protocol": "exact",
+              "success_probability": 0.19217560379898577,
+              "truncated_mass": 0.0
+            },
+            "seed": 1
+          },
+          {
+            "condition": "role-free",
+            "evaluation": {
+              "completed_mass": 0.9999999999999988,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 0.315376113078244,
+              "expected_terms": 1.261988304093562,
+              "leaves": 1728,
+              "protocol": "exact",
+              "success_probability": 0.315376113078244,
+              "truncated_mass": 0.0
+            },
+            "seed": 2
+          },
+          {
+            "condition": "observation-control",
+            "evaluation": {
+              "completed_mass": 0.9999999999999974,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 0.24046847161483653,
+              "expected_terms": 1.238095238095235,
+              "leaves": 1728,
+              "protocol": "exact",
+              "success_probability": 0.24046847161483653,
+              "truncated_mass": 0.0
+            },
+            "seed": 0
+          },
+          {
+            "condition": "observation-control",
+            "evaluation": {
+              "completed_mass": 1.000000000000019,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 0.04629629629629633,
+              "expected_terms": 1.3333333333333568,
+              "leaves": 1728,
+              "protocol": "exact",
+              "success_probability": 0.04629629629629633,
+              "truncated_mass": 0.0
+            },
+            "seed": 1
+          },
+          {
+            "condition": "observation-control",
+            "evaluation": {
+              "completed_mass": 0.9999999999999992,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 0.2896442492849805,
+              "expected_terms": 1.2555555555555558,
+              "leaves": 1728,
+              "protocol": "exact",
+              "success_probability": 0.2896442492849805,
+              "truncated_mass": 0.0
+            },
+            "seed": 2
+          }
+        ]
+      },
+      "run": "runs/assembly-coadaptation/20261015T101703.407764Z-3166e894",
+      "status": "complete",
+      "verification": {
+        "errors": [],
+        "path": "runs/assembly-coadaptation/20261015T101703.407764Z-3166e894",
+        "valid": true
+      }
+    },
+    {
+      "configuration": "runs/assembly-conflict/experiment.toml",
+      "elapsed_seconds": 15.46670287498273,
+      "evaluation": {
+        "trials": [
+          {
+            "condition": "gm16.table1.r1",
+            "evaluation": {
+              "completed_mass": 1.0,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 0.1879548071180507,
+              "expected_owner_returns": {
+                "receiver": 4.6658638635782665,
+                "sender": 4.16922168014936
+              },
+              "expected_terms": 0.0,
+              "leaves": 27,
+              "protocol": "exact",
+              "success_probability": 0.1879548071180507,
+              "truncated_mass": 0.0
+            },
+            "seed": 0,
+            "signalling_information": {
+              "joint_state_signal_action": [
+                [
+                  [
+                    0.0008442380751371887,
+                    0.000222785047605647,
+                    0.0013484358144552318
+                  ],
+                  [
+                    0.0018771566597653555,
+                    0.32474810213940647,
+                    0.0018771566597653555
+                  ],
+                  [
+                    0.0011193590196771532,
+                    2.9456816307293507e-05,
+                    0.0012666431012136208
+                  ]
+                ],
+                [
+                  [
+                    0.0876044253781892,
+                    0.023117834474799925,
+                    0.13992373497905217
+                  ],
+                  [
+                    1.4765596160944997e-05,
+                    0.0025544481358434844,
+                    1.4765596160944997e-05
+                  ],
+                  [
+                    0.03712106888510745,
+                    0.0009768702338186172,
+                    0.04200542005420054
+                  ]
+                ],
+                [
+                  [
+                    0.08473080317740513,
+                    0.022359517505148575,
+                    0.13533392174168873
+                  ],
+                  [
+                    0.0002813852813852814,
+                    0.04867965367965368,
+                    0.0002813852813852814
+                  ],
+                  [
+                    0.019308943089430895,
+                    0.000508130081300813,
+                    0.02184959349593496
+                  ]
+                ]
+              ],
+              "protocol": "exact_signalling_policy",
+              "signal_action_mutual_information_bits": 0.7190432282077205,
+              "state_action_mutual_information_bits": 0.5427187335399964,
+              "state_signal_mutual_information_bits": 0.706651432721324
+            }
+          },
+          {
+            "condition": "gm16.table1.r1",
+            "evaluation": {
+              "completed_mass": 1.0,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 0.3184059519792958,
+              "expected_owner_returns": {
+                "receiver": 4.519038782587738,
+                "sender": 4.555371061113698
+              },
+              "expected_terms": 0.0,
+              "leaves": 27,
+              "protocol": "exact",
+              "success_probability": 0.3184059519792958,
+              "truncated_mass": 0.0
+            },
+            "seed": 1,
+            "signalling_information": {
+              "joint_state_signal_action": [
+                [
+                  [
+                    0.002288278681240558,
+                    0.27916999911134804,
+                    0.002288278681240558
+                  ],
+                  [
+                    1.1925631760342504e-05,
+                    0.0006559097468188377,
+                    0.002086985558059938
+                  ],
+                  [
+                    0.002295684113865932,
+                    0.0027548209366391185,
+                    0.04178145087235997
+                  ]
+                ],
+                [
+                  [
+                    2.378913312398896e-05,
+                    0.002902274241126653,
+                    2.378913312398896e-05
+                  ],
+                  [
+                    0.001238682654611858,
+                    0.06812754600365219,
+                    0.21676946455707516
+                  ],
+                  [
+                    0.0021690091965989935,
+                    0.0026028110359187923,
+                    0.03947596737810168
+                  ]
+                ],
+                [
+                  [
+                    0.0001363565529063425,
+                    0.016635499454573786,
+                    0.0001363565529063425
+                  ],
+                  [
+                    0.0013593491854361418,
+                    0.0747642051989878,
+                    0.2378861074513248
+                  ],
+                  [
+                    0.00011840484986265036,
+                    0.00014208581983518045,
+                    0.002154968267500237
+                  ]
+                ]
+              ],
+              "protocol": "exact_signalling_policy",
+              "signal_action_mutual_information_bits": 0.46435590779783964,
+              "state_action_mutual_information_bits": 0.25787148670287546,
+              "state_signal_mutual_information_bits": 0.7353056241034351
+            }
+          },
+          {
+            "condition": "gm16.table1.r1",
+            "evaluation": {
+              "completed_mass": 1.0,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 0.24595871589999538,
+              "expected_owner_returns": {
+                "receiver": 5.185547661042569,
+                "sender": 3.4829568939876996
+              },
+              "expected_terms": 0.0,
+              "leaves": 27,
+              "protocol": "exact",
+              "success_probability": 0.24595871589999538,
+              "truncated_mass": 0.0
+            },
+            "seed": 2,
+            "signalling_information": {
+              "joint_state_signal_action": [
+                [
+                  [
+                    0.0011737089201877935,
+                    0.022300469483568074,
+                    0.22652582159624413
+                  ],
+                  [
+                    0.0003968253968253968,
+                    0.019444444444444445,
+                    0.021825396825396824
+                  ],
+                  [
+                    0.0002012882447665056,
+                    0.0002012882447665056,
+                    0.04126409017713365
+                  ]
+                ],
+                [
+                  [
+                    8.84149845715852e-06,
+                    0.00016798847068601186,
+                    0.0017064092022315942
+                  ],
+                  [
+                    0.000125549278091651,
+                    0.006151914626490898,
+                    0.0069052102950408045
+                  ],
+                  [
+                    0.0015375237679339864,
+                    0.0015375237679339864,
+                    0.3151923724264672
+                  ]
+                ],
+                [
+                  [
+                    0.0007412898443291327,
+                    0.01408450704225352,
+                    0.1430689399555226
+                  ],
+                  [
+                    0.0016429963798384854,
+                    0.08050682261208578,
+                    0.09036480089111669
+                  ],
+                  [
+                    1.4125490860807412e-05,
+                    1.4125490860807412e-05,
+                    0.0028957256264655193
+                  ]
+                ]
+              ],
+              "protocol": "exact_signalling_policy",
+              "signal_action_mutual_information_bits": 0.17663758360638854,
+              "state_action_mutual_information_bits": 0.07350412241215276,
+              "state_signal_mutual_information_bits": 0.7393515453164328
+            }
+          },
+          {
+            "condition": "gm16.table1.evolution",
+            "evaluation": {
+              "absent_strategy_invasion_advantage": {
+                "receiver": null,
+                "sender": null
+              },
+              "candidate_classification": "nonstationary",
+              "completed_mass": 1.0000000000000004,
+              "diagnostic_tolerance": 1e-08,
+              "expected_exchanges": 0.0,
+              "expected_returns": {
+                "receiver": 4.079368204172553,
+                "sender": 2.967075684063028
+              },
+              "expected_terms": 0.0,
+              "mean_reproduction_fitness": {
+                "receiver": 4.079368204172553,
+                "sender": 2.967075684063028
+              },
+              "protocol": "exact_finite",
+              "selection_regret": {
+                "receiver": 0.920631795827445,
+                "sender": 0.5790037893921287
+              },
+              "stability_assessed": false,
+              "stationarity_residual": {
+                "receiver": 0.07255167161776373,
+                "sender": 0.042739337963066816
+              },
+              "success_probability": 0.31866327543668455,
+              "time": 1.0
+            },
+            "seed": 0,
+            "signalling_information": {
+              "joint_state_signal_action": [
+                [
+                  [
+                    0.03028636165633614,
+                    0.053073136029089064,
+                    0.036140178606206365
+                  ],
+                  [
+                    0.023459345895421133,
+                    0.01666871189508072,
+                    0.04747130336870765
+                  ],
+                  [
+                    0.035165787699970696,
+                    0.05382672275256845,
+                    0.037241785429953364
+                  ]
+                ],
+                [
+                  [
+                    0.025542910991180667,
+                    0.04476082023309772,
+                    0.03047990299457367
+                  ],
+                  [
+                    0.04657511355511431,
+                    0.0330932990541053,
+                    0.09424735688979229
+                  ],
+                  [
+                    0.016333978864127324,
+                    0.025001702201780256,
+                    0.017298248549562
+                  ]
+                ],
+                [
+                  [
+                    0.02804288508645449,
+                    0.04914171836583558,
+                    0.0334630777759916
+                  ],
+                  [
+                    0.0300849386194639,
+                    0.021376434639932183,
+                    0.06087856219010242
+                  ],
+                  [
+                    0.03073961809176206,
+                    0.047051779833912045,
+                    0.0325543187298793
+                  ]
+                ]
+              ],
+              "protocol": "exact_signalling_policy",
+              "signal_action_mutual_information_bits": 0.057366533825183,
+              "state_action_mutual_information_bits": 0.0027571364096778224,
+              "state_signal_mutual_information_bits": 0.04321358917643061
+            }
+          },
+          {
+            "condition": "gm16.table1.evolution",
+            "evaluation": {
+              "absent_strategy_invasion_advantage": {
+                "receiver": null,
+                "sender": null
+              },
+              "candidate_classification": "nonstationary",
+              "completed_mass": 1.0000000000000002,
+              "diagnostic_tolerance": 1e-08,
+              "expected_exchanges": 0.0,
+              "expected_returns": {
+                "receiver": 4.165324825586488,
+                "sender": 3.04370889912064
+              },
+              "expected_terms": 0.0,
+              "mean_reproduction_fitness": {
+                "receiver": 4.165324825586488,
+                "sender": 3.04370889912064
+              },
+              "protocol": "exact_finite",
+              "selection_regret": {
+                "receiver": 0.8346751744135119,
+                "sender": 0.8333177882930451
+              },
+              "stability_assessed": false,
+              "stationarity_residual": {
+                "receiver": 0.10524316656932405,
+                "sender": 0.06832137449800145
+              },
+              "success_probability": 0.33322899927784244,
+              "time": 1.0
+            },
+            "seed": 1,
+            "signalling_information": {
+              "joint_state_signal_action": [
+                [
+                  [
+                    0.023845009031244556,
+                    0.020402241344065427,
+                    0.08521214315531525
+                  ],
+                  [
+                    0.04415278070970277,
+                    0.055964908352146216,
+                    0.04389032475374267
+                  ],
+                  [
+                    0.01251163519706718,
+                    0.018893522514820595,
+                    0.02846076827522874
+                  ]
+                ],
+                [
+                  [
+                    0.028325414338626002,
+                    0.024235760982521056,
+                    0.1012232479507113
+                  ],
+                  [
+                    0.03403180796232555,
+                    0.04313628684434925,
+                    0.0338295137795304
+                  ],
+                  [
+                    0.01432682886300513,
+                    0.021634603265336522,
+                    0.032589869346928216
+                  ]
+                ],
+                [
+                  [
+                    0.025737396514208467,
+                    0.022021403915710006,
+                    0.09197474881809159
+                  ],
+                  [
+                    0.03647752618191951,
+                    0.04623630441548881,
+                    0.03626069399488058
+                  ],
+                  [
+                    0.015596251254248633,
+                    0.023551527804136895,
+                    0.03547748043464894
+                  ]
+                ]
+              ],
+              "protocol": "exact_signalling_policy",
+              "signal_action_mutual_information_bits": 0.07738258430140837,
+              "state_action_mutual_information_bits": 0.00045366244498942104,
+              "state_signal_mutual_information_bits": 0.006077689094252979
+            }
+          },
+          {
+            "condition": "gm16.table1.evolution",
+            "evaluation": {
+              "absent_strategy_invasion_advantage": {
+                "receiver": null,
+                "sender": null
+              },
+              "candidate_classification": "nonstationary",
+              "completed_mass": 1.0000000000000002,
+              "diagnostic_tolerance": 1e-08,
+              "expected_exchanges": 0.0,
+              "expected_returns": {
+                "receiver": 4.239388782713145,
+                "sender": 3.0068219511572516
+              },
+              "expected_terms": 0.0,
+              "mean_reproduction_fitness": {
+                "receiver": 4.239388782713145,
+                "sender": 3.0068219511572516
+              },
+              "protocol": "exact_finite",
+              "selection_regret": {
+                "receiver": 0.7606112172868551,
+                "sender": 0.21138038747632226
+              },
+              "stability_assessed": false,
+              "stationarity_residual": {
+                "receiver": 0.07207891683429604,
+                "sender": 0.021078090602005606
+              },
+              "success_probability": 0.32989535777402174,
+              "time": 1.0
+            },
+            "seed": 2,
+            "signalling_information": {
+              "joint_state_signal_action": [
+                [
+                  [
+                    0.016752224502361666,
+                    0.049105376346865036,
+                    0.05191951747917395
+                  ],
+                  [
+                    0.009361615530601131,
+                    0.048153021984235066,
+                    0.06458107986089169
+                  ],
+                  [
+                    0.020058029898660977,
+                    0.027084896460503046,
+                    0.04631757127004086
+                  ]
+                ],
+                [
+                  [
+                    0.014323930975994098,
+                    0.041987380317375034,
+                    0.0443936018511311
+                  ],
+                  [
+                    0.006039596010662177,
+                    0.031065663669552525,
+                    0.041664137030315684
+                  ],
+                  [
+                    0.03302046288422736,
+                    0.04458841784640508,
+                    0.07625014274767036
+                  ]
+                ],
+                [
+                  [
+                    0.009279260650224472,
+                    0.027200064468195898,
+                    0.028758851426282026
+                  ],
+                  [
+                    0.010251354383080617,
+                    0.05272954132361897,
+                    0.07071894097038614
+                  ],
+                  [
+                    0.028843259103246248,
+                    0.03894782739590186,
+                    0.06660423361239717
+                  ]
+                ]
+              ],
+              "protocol": "exact_signalling_policy",
+              "signal_action_mutual_information_bits": 0.025722507886653197,
+              "state_action_mutual_information_bits": 0.0005851842382208336,
+              "state_signal_mutual_information_bits": 0.03407029982980987
+            }
+          },
+          {
+            "condition": "zbh13.separating.signed",
+            "evaluation": {
+              "completed_mass": 1.0,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 0.1786631447648397,
+              "expected_owner_returns": {
+                "receiver": 0.8213368552351603,
+                "sender": 0.07477988113581334
+              },
+              "expected_terms": 0.0,
+              "leaves": 8,
+              "protocol": "exact",
+              "success_probability": 0.8213368552351603,
+              "truncated_mass": 0.0
+            },
+            "seed": 0,
+            "signalling_information": {
+              "joint_state_signal_action": [
+                [
+                  [
+                    0.022342064714946062,
+                    0.00038520801232665625
+                  ],
+                  [
+                    0.09740259740259741,
+                    0.12987012987012989
+                  ]
+                ],
+                [
+                  [
+                    0.655367231638418,
+                    0.011299435028248588
+                  ],
+                  [
+                    0.03571428571428571,
+                    0.047619047619047616
+                  ]
+                ]
+              ],
+              "protocol": "exact_signalling_policy",
+              "signal_action_mutual_information_bits": 0.3082718358933325,
+              "state_action_mutual_information_bits": 0.15225057966911715,
+              "state_signal_mutual_information_bits": 0.4065538151264714
+            }
+          },
+          {
+            "condition": "zbh13.separating.signed",
+            "evaluation": {
+              "completed_mass": 0.9999999999999999,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 0.1954421261798311,
+              "expected_owner_returns": {
+                "receiver": 0.8045578738201687,
+                "sender": 0.05316040971778678
+              },
+              "expected_terms": 0.0,
+              "leaves": 8,
+              "protocol": "exact",
+              "success_probability": 0.8045578738201687,
+              "truncated_mass": 0.0
+            },
+            "seed": 1,
+            "signalling_information": {
+              "joint_state_signal_action": [
+                [
+                  [
+                    0.024838549428713348,
+                    0.00041397582381188917
+                  ],
+                  [
+                    0.10113636363636364,
+                    0.12361111111111113
+                  ]
+                ],
+                [
+                  [
+                    0.6323185011709601,
+                    0.01053864168618267
+                  ],
+                  [
+                    0.04821428571428571,
+                    0.05892857142857143
+                  ]
+                ]
+              ],
+              "protocol": "exact_signalling_policy",
+              "signal_action_mutual_information_bits": 0.2985997862799477,
+              "state_action_mutual_information_bits": 0.12485754226012943,
+              "state_signal_mutual_information_bits": 0.35504413848626515
+            }
+          },
+          {
+            "condition": "zbh13.separating.signed",
+            "evaluation": {
+              "completed_mass": 0.9999999999999999,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 0.1523240589198036,
+              "expected_owner_returns": {
+                "receiver": 0.8476759410801964,
+                "sender": 0.20162438625204582
+              },
+              "expected_terms": 0.0,
+              "leaves": 8,
+              "protocol": "exact",
+              "success_probability": 0.8476759410801964,
+              "truncated_mass": 0.0
+            },
+            "seed": 2,
+            "signalling_information": {
+              "joint_state_signal_action": [
+                [
+                  [
+                    0.01042553191489362,
+                    0.0002127659574468086
+                  ],
+                  [
+                    0.009206219312602291,
+                    0.23015548281505727
+                  ]
+                ],
+                [
+                  [
+                    0.6125,
+                    0.0125
+                  ],
+                  [
+                    0.004807692307692308,
+                    0.1201923076923077
+                  ]
+                ]
+              ],
+              "protocol": "exact_signalling_policy",
+              "signal_action_mutual_information_bits": 0.7695939034351835,
+              "state_action_mutual_information_bits": 0.34097792957005446,
+              "state_signal_mutual_information_bits": 0.39525784432164235
+            }
+          },
+          {
+            "condition": "zbh13.separating.evolution",
+            "evaluation": {
+              "absent_strategy_invasion_advantage": {
+                "receiver": null,
+                "sender": null
+              },
+              "candidate_classification": "nonstationary",
+              "completed_mass": 1.0,
+              "diagnostic_tolerance": 1e-08,
+              "expected_exchanges": 0.0,
+              "expected_returns": {
+                "receiver": 0.5930074736292634,
+                "sender": -0.19472527529200503
+              },
+              "expected_terms": 0.0,
+              "mean_reproduction_fitness": {
+                "receiver": 0.5930074736292634,
+                "sender": -0.19472527529200503
+              },
+              "protocol": "exact_finite",
+              "selection_regret": {
+                "receiver": 0.15699252637073657,
+                "sender": 0.3063947329884249
+              },
+              "stability_assessed": false,
+              "stationarity_residual": {
+                "receiver": 0.07541575386143208,
+                "sender": 0.09004576236948877
+              },
+              "success_probability": 0.5930074736292634,
+              "time": 1.0
+            },
+            "seed": 0,
+            "signalling_information": {
+              "joint_state_signal_action": [
+                [
+                  [
+                    0.1366820025404251,
+                    0.001806118298174306
+                  ],
+                  [
+                    0.054913714997502555,
+                    0.056598164163898027
+                  ]
+                ],
+                [
+                  [
+                    0.3298457950996352,
+                    0.004358587926959203
+                  ],
+                  [
+                    0.20475739606755594,
+                    0.21103822090584973
+                  ]
+                ]
+              ],
+              "protocol": "exact_signalling_policy",
+              "signal_action_mutual_information_bits": 0.27221446064042787,
+              "state_action_mutual_information_bits": 0.0019969195282658267,
+              "state_signal_mutual_information_bits": 0.006366633291713955
+            }
+          },
+          {
+            "condition": "zbh13.separating.evolution",
+            "evaluation": {
+              "absent_strategy_invasion_advantage": {
+                "receiver": null,
+                "sender": null
+              },
+              "candidate_classification": "nonstationary",
+              "completed_mass": 0.9999999999999999,
+              "diagnostic_tolerance": 1e-08,
+              "expected_exchanges": 0.0,
+              "expected_returns": {
+                "receiver": 0.5504817332030173,
+                "sender": -0.018369065338404933
+              },
+              "expected_terms": 0.0,
+              "mean_reproduction_fitness": {
+                "receiver": 0.5504817332030173,
+                "sender": -0.018369065338404933
+              },
+              "protocol": "exact_finite",
+              "selection_regret": {
+                "receiver": 0.19951826679698248,
+                "sender": 0.8170157587687183
+              },
+              "stability_assessed": false,
+              "stationarity_residual": {
+                "receiver": 0.03367365562076327,
+                "sender": 0.23290265718926387
+              },
+              "success_probability": 0.5504817332030173,
+              "time": 1.0
+            },
+            "seed": 1,
+            "signalling_information": {
+              "joint_state_signal_action": [
+                [
+                  [
+                    0.026393345481564665,
+                    0.10468642634443288
+                  ],
+                  [
+                    0.11088886797325956,
+                    0.008031360200742872
+                  ]
+                ],
+                [
+                  [
+                    0.07204222108254074,
+                    0.28574788581896937
+                  ],
+                  [
+                    0.3657217255753008,
+                    0.026488167523188916
+                  ]
+                ]
+              ],
+              "protocol": "exact_signalling_policy",
+              "signal_action_mutual_information_bits": 0.44714075629164957,
+              "state_action_mutual_information_bits": 0.0006588497044004871,
+              "state_signal_mutual_information_bits": 0.0012091775031302966
+            }
+          },
+          {
+            "condition": "zbh13.separating.evolution",
+            "evaluation": {
+              "absent_strategy_invasion_advantage": {
+                "receiver": null,
+                "sender": null
+              },
+              "candidate_classification": "nonstationary",
+              "completed_mass": 1.0000000000000002,
+              "diagnostic_tolerance": 1e-08,
+              "expected_exchanges": 0.0,
+              "expected_returns": {
+                "receiver": 0.41830723800811026,
+                "sender": 0.44889509597221045
+              },
+              "expected_terms": 0.0,
+              "mean_reproduction_fitness": {
+                "receiver": 0.41830723800811026,
+                "sender": 0.44889509597221045
+              },
+              "protocol": "exact_finite",
+              "selection_regret": {
+                "receiver": 0.33169276199188985,
+                "sender": 0.2867959091836183
+              },
+              "stability_assessed": false,
+              "stationarity_residual": {
+                "receiver": 0.06385514823755258,
+                "sender": 0.1740218178807884
+              },
+              "success_probability": 0.4183072380081103,
+              "time": 1.0
+            },
+            "seed": 2,
+            "signalling_information": {
+              "joint_state_signal_action": [
+                [
+                  [
+                    0.056520717839200214,
+                    0.15732262060837382
+                  ],
+                  [
+                    0.017033771996308372,
+                    0.01912288955611765
+                  ]
+                ],
+                [
+                  [
+                    0.1424690309533341,
+                    0.39655549614355723
+                  ],
+                  [
+                    0.09939269689028471,
+                    0.1115827760128241
+                  ]
+                ]
+              ],
+              "protocol": "exact_signalling_policy",
+              "signal_action_mutual_information_bits": 0.025516327068413405,
+              "state_action_mutual_information_bits": 0.0005046530745313488,
+              "state_signal_mutual_information_bits": 0.01473109542701341
+            }
+          },
+          {
+            "condition": "zbh13.hybrid-equilibrium.signed",
+            "evaluation": {
+              "completed_mass": 1.0,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 0.36215353260869565,
+              "expected_owner_returns": {
+                "receiver": 0.6378464673913045,
+                "sender": 0.03296422101449275
+              },
+              "expected_terms": 0.0,
+              "leaves": 8,
+              "protocol": "exact",
+              "success_probability": 0.6378464673913045,
+              "truncated_mass": 0.0
+            },
+            "seed": 0,
+            "signalling_information": {
+              "joint_state_signal_action": [
+                [
+                  [
+                    0.024166666666666656,
+                    0.000833333333333333
+                  ],
+                  [
+                    0.14765625000000002,
+                    0.07734375
+                  ]
+                ],
+                [
+                  [
+                    0.21014492753623207,
+                    0.007246376811594209
+                  ],
+                  [
+                    0.349524456521739,
+                    0.18308423913043473
+                  ]
+                ]
+              ],
+              "protocol": "exact_signalling_policy",
+              "signal_action_mutual_information_bits": 0.08487359991475535,
+              "state_action_mutual_information_bits": 0.002342302230574843,
+              "state_signal_mutual_information_bits": 0.03034500272582563
+            }
+          },
+          {
+            "condition": "zbh13.hybrid-equilibrium.signed",
+            "evaluation": {
+              "completed_mass": 1.0,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 0.256095443848617,
+              "expected_owner_returns": {
+                "receiver": 0.7439045561513831,
+                "sender": 0.05441793435526268
+              },
+              "expected_terms": 0.0,
+              "leaves": 8,
+              "protocol": "exact",
+              "success_probability": 0.7439045561513831,
+              "truncated_mass": 0.0
+            },
+            "seed": 1,
+            "signalling_information": {
+              "joint_state_signal_action": [
+                [
+                  [
+                    0.03549245785270627,
+                    0.000739426205264714
+                  ],
+                  [
+                    0.13941398865784502,
+                    0.074354127284184
+                  ]
+                ],
+                [
+                  [
+                    0.5375808860129417,
+                    0.011199601791936284
+                  ],
+                  [
+                    0.13123011664899265,
+                    0.0699893955461294
+                  ]
+                ]
+              ],
+              "protocol": "exact_signalling_policy",
+              "signal_action_mutual_information_bits": 0.15444523808890015,
+              "state_action_mutual_information_bits": 0.033939005978467246,
+              "state_signal_mutual_information_bits": 0.2005424110422493
+            }
+          },
+          {
+            "condition": "zbh13.hybrid-equilibrium.signed",
+            "evaluation": {
+              "completed_mass": 1.0,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 0.2975904922779923,
+              "expected_owner_returns": {
+                "receiver": 0.7024095077220077,
+                "sender": -0.06077340733590716
+              },
+              "expected_terms": 0.0,
+              "leaves": 8,
+              "protocol": "exact",
+              "success_probability": 0.7024095077220077,
+              "truncated_mass": 0.0
+            },
+            "seed": 2,
+            "signalling_information": {
+              "joint_state_signal_action": [
+                [
+                  [
+                    0.1254826254826255,
+                    0.009652509652509654
+                  ],
+                  [
+                    0.10108108108108105,
+                    0.013783783783783778
+                  ]
+                ],
+                [
+                  [
+                    0.3627232142857148,
+                    0.027901785714285754
+                  ],
+                  [
+                    0.31624999999999953,
+                    0.043124999999999934
+                  ]
+                ]
+              ],
+              "protocol": "exact_signalling_policy",
+              "signal_action_mutual_information_bits": 0.0049709191211856855,
+              "state_action_mutual_information_bits": 1.4509380941270722e-06,
+              "state_signal_mutual_information_bits": 0.00021084092948731297
+            }
+          },
+          {
+            "condition": "zbh13.hybrid-equilibrium.evolution",
+            "evaluation": {
+              "absent_strategy_invasion_advantage": {
+                "receiver": null,
+                "sender": null
+              },
+              "candidate_classification": "nonstationary",
+              "completed_mass": 0.9999999999999999,
+              "diagnostic_tolerance": 1e-08,
+              "expected_exchanges": 0.0,
+              "expected_returns": {
+                "receiver": 0.5488609544964312,
+                "sender": 0.09482901345863745
+              },
+              "expected_terms": 0.0,
+              "mean_reproduction_fitness": {
+                "receiver": 0.5488609544964312,
+                "sender": 0.09482901345863745
+              },
+              "protocol": "exact_finite",
+              "selection_regret": {
+                "receiver": 0.20113904550356876,
+                "sender": 0.07518138676862421
+              },
+              "stability_assessed": false,
+              "stationarity_residual": {
+                "receiver": 0.10002407521154819,
+                "sender": 0.017329360678651717
+              },
+              "success_probability": 0.5488609544964311,
+              "time": 1.0
+            },
+            "seed": 0,
+            "signalling_information": {
+              "joint_state_signal_action": [
+                [
+                  [
+                    0.14376611735961112,
+                    0.002038151058176606
+                  ],
+                  [
+                    0.052617760789729025,
+                    0.05157797079248322
+                  ]
+                ],
+                [
+                  [
+                    0.23880770193405634,
+                    0.003385541595869506
+                  ],
+                  [
+                    0.25643713071171503,
+                    0.25136962575835897
+                  ]
+                ]
+              ],
+              "protocol": "exact_signalling_policy",
+              "signal_action_mutual_information_bits": 0.23814277115650606,
+              "state_action_mutual_information_bits": 0.01042239713941183,
+              "state_signal_mutual_information_bits": 0.03786388179491946
+            }
+          },
+          {
+            "condition": "zbh13.hybrid-equilibrium.evolution",
+            "evaluation": {
+              "absent_strategy_invasion_advantage": {
+                "receiver": null,
+                "sender": null
+              },
+              "candidate_classification": "nonstationary",
+              "completed_mass": 0.9999999999999998,
+              "diagnostic_tolerance": 1e-08,
+              "expected_exchanges": 0.0,
+              "expected_returns": {
+                "receiver": 0.63346697141841,
+                "sender": 0.16585333472399
+              },
+              "expected_terms": 0.0,
+              "mean_reproduction_fitness": {
+                "receiver": 0.63346697141841,
+                "sender": 0.16585333472399
+              },
+              "protocol": "exact_finite",
+              "selection_regret": {
+                "receiver": 0.11653302858158998,
+                "sender": 0.6419038511193293
+              },
+              "stability_assessed": false,
+              "stationarity_residual": {
+                "receiver": 0.018932197487750043,
+                "sender": 0.11772329634486964
+              },
+              "success_probability": 0.63346697141841,
+              "time": 1.0
+            },
+            "seed": 1,
+            "signalling_information": {
+              "joint_state_signal_action": [
+                [
+                  [
+                    0.028713275176457515,
+                    0.12064614458867248
+                  ],
+                  [
+                    0.09425690636320652,
+                    0.0063836738716634344
+                  ]
+                ],
+                [
+                  [
+                    0.0506198049147625,
+                    0.21269201319827594
+                  ],
+                  [
+                    0.45581734804331164,
+                    0.030870833843649807
+                  ]
+                ]
+              ],
+              "protocol": "exact_signalling_policy",
+              "signal_action_mutual_information_bits": 0.4594936204215258,
+              "state_action_mutual_information_bits": 0.019069030166460513,
+              "state_signal_mutual_information_bits": 0.033501134473590204
+            }
+          },
+          {
+            "condition": "zbh13.hybrid-equilibrium.evolution",
+            "evaluation": {
+              "absent_strategy_invasion_advantage": {
+                "receiver": null,
+                "sender": null
+              },
+              "candidate_classification": "nonstationary",
+              "completed_mass": 1.0000000000000002,
+              "diagnostic_tolerance": 1e-08,
+              "expected_exchanges": 0.0,
+              "expected_returns": {
+                "receiver": 0.43751331419834927,
+                "sender": 0.546733080626495
+              },
+              "expected_terms": 0.0,
+              "mean_reproduction_fitness": {
+                "receiver": 0.43751331419834927,
+                "sender": 0.546733080626495
+              },
+              "protocol": "exact_finite",
+              "selection_regret": {
+                "receiver": 0.31248668580165095,
+                "sender": 0.1984653287922129
+              },
+              "stability_assessed": false,
+              "stationarity_residual": {
+                "receiver": 0.07041591892551911,
+                "sender": 0.10068312385552185
+              },
+              "success_probability": 0.43751331419834927,
+              "time": 1.0
+            },
+            "seed": 2,
+            "signalling_information": {
+              "joint_state_signal_action": [
+                [
+                  [
+                    0.054879732233358486,
+                    0.16050248774477624
+                  ],
+                  [
+                    0.016731376535753333,
+                    0.017886403486111997
+                  ]
+                ],
+                [
+                  [
+                    0.11525337812390214,
+                    0.33707259778923326
+                  ],
+                  [
+                    0.14387104484355887,
+                    0.15380297924330597
+                  ]
+                ]
+              ],
+              "protocol": "exact_signalling_policy",
+              "signal_action_mutual_information_bits": 0.03693161682452725,
+              "state_action_mutual_information_bits": 0.002167028667255752,
+              "state_signal_mutual_information_bits": 0.045364953148095855
+            }
+          },
+          {
+            "condition": "scod.conflict.lambda-0.r1",
+            "evaluation": {
+              "completed_mass": 0.9999999999999999,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 0.321038989533722,
+              "expected_owner_returns": {
+                "A": 0.321038989533722,
+                "B": 0.321038989533722,
+                "receiver": 0.321038989533722
+              },
+              "expected_terms": 0.0,
+              "leaves": 192,
+              "protocol": "exact",
+              "success_probability": 0.321038989533722,
+              "truncated_mass": 0.0
+            },
+            "seed": 0
+          },
+          {
+            "condition": "scod.conflict.lambda-0.r1",
+            "evaluation": {
+              "completed_mass": 1.0000000000000002,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 0.3773467181238442,
+              "expected_owner_returns": {
+                "A": 0.3773467181238442,
+                "B": 0.3773467181238442,
+                "receiver": 0.3773467181238442
+              },
+              "expected_terms": 0.0,
+              "leaves": 192,
+              "protocol": "exact",
+              "success_probability": 0.3773467181238442,
+              "truncated_mass": 0.0
+            },
+            "seed": 1
+          },
+          {
+            "condition": "scod.conflict.lambda-0.r1",
+            "evaluation": {
+              "completed_mass": 0.9999999999999996,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 0.3376101352578067,
+              "expected_owner_returns": {
+                "A": 0.3376101352578067,
+                "B": 0.3376101352578067,
+                "receiver": 0.3376101352578067
+              },
+              "expected_terms": 0.0,
+              "leaves": 192,
+              "protocol": "exact",
+              "success_probability": 0.3376101352578067,
+              "truncated_mass": 0.0
+            },
+            "seed": 2
+          },
+          {
+            "condition": "scod.conflict.lambda-0.25.r1",
+            "evaluation": {
+              "completed_mass": 1.0000000000000007,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 0.30498266731026963,
+              "expected_owner_returns": {
+                "A": 0.285185720933544,
+                "B": 0.2874649465554291,
+                "receiver": 0.30498266731026963
+              },
+              "expected_terms": 0.0,
+              "leaves": 192,
+              "protocol": "exact",
+              "success_probability": 0.30498266731026963,
+              "truncated_mass": 0.0
+            },
+            "seed": 0
+          },
+          {
+            "condition": "scod.conflict.lambda-0.25.r1",
+            "evaluation": {
+              "completed_mass": 1.0,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 0.3519163719898852,
+              "expected_owner_returns": {
+                "A": 0.3087177010555027,
+                "B": 0.31647607945589273,
+                "receiver": 0.3519163719898852
+              },
+              "expected_terms": 0.0,
+              "leaves": 192,
+              "protocol": "exact",
+              "success_probability": 0.3519163719898852,
+              "truncated_mass": 0.0
+            },
+            "seed": 1
+          },
+          {
+            "condition": "scod.conflict.lambda-0.25.r1",
+            "evaluation": {
+              "completed_mass": 0.9999999999999998,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 0.28457355930704764,
+              "expected_owner_returns": {
+                "A": 0.27365600679341284,
+                "B": 0.27730923354272324,
+                "receiver": 0.28457355930704764
+              },
+              "expected_terms": 0.0,
+              "leaves": 192,
+              "protocol": "exact",
+              "success_probability": 0.28457355930704764,
+              "truncated_mass": 0.0
+            },
+            "seed": 2
+          },
+          {
+            "condition": "scod.conflict.lambda-0.5.r1",
+            "evaluation": {
+              "completed_mass": 0.9999999999999996,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 0.2731817293661427,
+              "expected_owner_returns": {
+                "A": 0.2569414251970618,
+                "B": 0.2602518894571188,
+                "receiver": 0.2731817293661427
+              },
+              "expected_terms": 0.0,
+              "leaves": 192,
+              "protocol": "exact",
+              "success_probability": 0.2731817293661427,
+              "truncated_mass": 0.0
+            },
+            "seed": 0
+          },
+          {
+            "condition": "scod.conflict.lambda-0.5.r1",
+            "evaluation": {
+              "completed_mass": 1.0000000000000002,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 0.3298359437755087,
+              "expected_owner_returns": {
+                "A": 0.25649905296054676,
+                "B": 0.276376990882986,
+                "receiver": 0.3298359437755087
+              },
+              "expected_terms": 0.0,
+              "leaves": 192,
+              "protocol": "exact",
+              "success_probability": 0.3298359437755087,
+              "truncated_mass": 0.0
+            },
+            "seed": 1
+          },
+          {
+            "condition": "scod.conflict.lambda-0.5.r1",
+            "evaluation": {
+              "completed_mass": 0.9999999999999998,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 0.26765199206214074,
+              "expected_owner_returns": {
+                "A": 0.26035244743951624,
+                "B": 0.2586268249455062,
+                "receiver": 0.26765199206214074
+              },
+              "expected_terms": 0.0,
+              "leaves": 192,
+              "protocol": "exact",
+              "success_probability": 0.26765199206214074,
+              "truncated_mass": 0.0
+            },
+            "seed": 2
+          },
+          {
+            "condition": "scod.conflict.lambda-0.75.r1",
+            "evaluation": {
+              "completed_mass": 1.0000000000000002,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 0.23915458417489519,
+              "expected_owner_returns": {
+                "A": 0.2523659245331982,
+                "B": 0.2593922560240657,
+                "receiver": 0.23915458417489519
+              },
+              "expected_terms": 0.0,
+              "leaves": 192,
+              "protocol": "exact",
+              "success_probability": 0.23915458417489519,
+              "truncated_mass": 0.0
+            },
+            "seed": 0
+          },
+          {
+            "condition": "scod.conflict.lambda-0.75.r1",
+            "evaluation": {
+              "completed_mass": 1.0000000000000009,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 0.2796748238057504,
+              "expected_owner_returns": {
+                "A": 0.2320500387546935,
+                "B": 0.2500572921224114,
+                "receiver": 0.2796748238057504
+              },
+              "expected_terms": 0.0,
+              "leaves": 192,
+              "protocol": "exact",
+              "success_probability": 0.2796748238057504,
+              "truncated_mass": 0.0
+            },
+            "seed": 1
+          },
+          {
+            "condition": "scod.conflict.lambda-0.75.r1",
+            "evaluation": {
+              "completed_mass": 0.9999999999999999,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 0.28064276017771156,
+              "expected_owner_returns": {
+                "A": 0.2628699555499928,
+                "B": 0.25114747193582815,
+                "receiver": 0.28064276017771156
+              },
+              "expected_terms": 0.0,
+              "leaves": 192,
+              "protocol": "exact",
+              "success_probability": 0.28064276017771156,
+              "truncated_mass": 0.0
+            },
+            "seed": 2
+          },
+          {
+            "condition": "scod.conflict.lambda-1.r1",
+            "evaluation": {
+              "completed_mass": 1.0,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 0.23763152170564356,
+              "expected_owner_returns": {
+                "A": 0.25961985992848596,
+                "B": 0.25591034434267906,
+                "receiver": 0.23763152170564356
+              },
+              "expected_terms": 0.0,
+              "leaves": 192,
+              "protocol": "exact",
+              "success_probability": 0.23763152170564356,
+              "truncated_mass": 0.0
+            },
+            "seed": 0
+          },
+          {
+            "condition": "scod.conflict.lambda-1.r1",
+            "evaluation": {
+              "completed_mass": 1.0000000000000016,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 0.2720409203891347,
+              "expected_owner_returns": {
+                "A": 0.22450179285000718,
+                "B": 0.2544698010323011,
+                "receiver": 0.2720409203891347
+              },
+              "expected_terms": 0.0,
+              "leaves": 192,
+              "protocol": "exact",
+              "success_probability": 0.2720409203891347,
+              "truncated_mass": 0.0
+            },
+            "seed": 1
+          },
+          {
+            "condition": "scod.conflict.lambda-1.r1",
+            "evaluation": {
+              "completed_mass": 1.0000000000000002,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 0.25375314153439155,
+              "expected_owner_returns": {
+                "A": 0.2437500551146384,
+                "B": 0.2644425154320987,
+                "receiver": 0.25375314153439155
+              },
+              "expected_terms": 0.0,
+              "leaves": 192,
+              "protocol": "exact",
+              "success_probability": 0.25375314153439155,
+              "truncated_mass": 0.0
+            },
+            "seed": 2
+          }
+        ]
+      },
+      "run": "runs/assembly-conflict/20261015T101743.225409Z-82673c7c",
+      "status": "complete",
+      "verification": {
+        "errors": [],
+        "path": "runs/assembly-conflict/20261015T101743.225409Z-82673c7c",
+        "valid": true
+      }
+    },
+    {
+      "configuration": "runs/assembly-generalization/experiment.toml",
+      "elapsed_seconds": 10.109770665992983,
+      "evaluation": {
+        "trials": [
+          {
+            "condition": "binary-alpha-0",
+            "evaluation": {
+              "completed_mass": 1.0,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 1.924010989010989,
+              "expected_terms": 0.0,
+              "leaves": 4,
+              "normalized_expected_payoff": 0.9620054945054946,
+              "protocol": "exact",
+              "success_probability": 0.924010989010989,
+              "truncated_mass": 0.0
+            },
+            "seed": 0
+          },
+          {
+            "condition": "binary-alpha-0",
+            "evaluation": {
+              "completed_mass": 1.0,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 1.777885682574917,
+              "expected_terms": 0.0,
+              "leaves": 4,
+              "normalized_expected_payoff": 0.8889428412874585,
+              "protocol": "exact",
+              "success_probability": 0.7778856825749167,
+              "truncated_mass": 0.0
+            },
+            "seed": 1
+          },
+          {
+            "condition": "binary-alpha-0",
+            "evaluation": {
+              "completed_mass": 1.0,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 1.9559921210864606,
+              "expected_terms": 0.0,
+              "leaves": 4,
+              "normalized_expected_payoff": 0.9779960605432303,
+              "protocol": "exact",
+              "success_probability": 0.9559921210864607,
+              "truncated_mass": 0.0
+            },
+            "seed": 2
+          },
+          {
+            "condition": "binary-alpha-0.1",
+            "evaluation": {
+              "completed_mass": 1.0,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 1.7025197401517969,
+              "expected_terms": 0.0,
+              "leaves": 4,
+              "normalized_expected_payoff": 0.8512598700758984,
+              "protocol": "exact",
+              "success_probability": 0.7025197401517969,
+              "truncated_mass": 0.0
+            },
+            "seed": 0
+          },
+          {
+            "condition": "binary-alpha-0.1",
+            "evaluation": {
+              "completed_mass": 1.0,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 1.6134236404039863,
+              "expected_terms": 0.0,
+              "leaves": 4,
+              "normalized_expected_payoff": 0.8067118202019932,
+              "protocol": "exact",
+              "success_probability": 0.6134236404039866,
+              "truncated_mass": 0.0
+            },
+            "seed": 1
+          },
+          {
+            "condition": "binary-alpha-0.1",
+            "evaluation": {
+              "completed_mass": 1.0,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 1.8236658333110003,
+              "expected_terms": 0.0,
+              "leaves": 4,
+              "normalized_expected_payoff": 0.9118329166555001,
+              "protocol": "exact",
+              "success_probability": 0.8236658333110001,
+              "truncated_mass": 0.0
+            },
+            "seed": 2
+          },
+          {
+            "condition": "binary-alpha-1",
+            "evaluation": {
+              "completed_mass": 1.0,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 1.5,
+              "expected_terms": 0.0,
+              "leaves": 4,
+              "normalized_expected_payoff": 0.75,
+              "protocol": "exact",
+              "success_probability": 0.5,
+              "truncated_mass": 0.0
+            },
+            "seed": 0
+          },
+          {
+            "condition": "binary-alpha-1",
+            "evaluation": {
+              "completed_mass": 1.0,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 1.5,
+              "expected_terms": 0.0,
+              "leaves": 4,
+              "normalized_expected_payoff": 0.75,
+              "protocol": "exact",
+              "success_probability": 0.5,
+              "truncated_mass": 0.0
+            },
+            "seed": 1
+          },
+          {
+            "condition": "binary-alpha-1",
+            "evaluation": {
+              "completed_mass": 1.0,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 1.5,
+              "expected_terms": 0.0,
+              "leaves": 4,
+              "normalized_expected_payoff": 0.75,
+              "protocol": "exact",
+              "success_probability": 0.5,
+              "truncated_mass": 0.0
+            },
+            "seed": 2
+          },
+          {
+            "condition": "gaussian-width-0",
+            "evaluation": {
+              "completed_mass": 1.0000000000000002,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 0.25649302529311974,
+              "expected_terms": 0.0,
+              "leaves": 400,
+              "normalized_expected_payoff": 0.25649302529311974,
+              "protocol": "exact",
+              "success_probability": 0.06101252072943302,
+              "truncated_mass": 0.0
+            },
+            "seed": 0
+          },
+          {
+            "condition": "gaussian-width-0",
+            "evaluation": {
+              "completed_mass": 0.9999999999999993,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 0.24882034238069925,
+              "expected_terms": 0.0,
+              "leaves": 400,
+              "normalized_expected_payoff": 0.24882034238069925,
+              "protocol": "exact",
+              "success_probability": 0.05484206693533069,
+              "truncated_mass": 0.0
+            },
+            "seed": 1
+          },
+          {
+            "condition": "gaussian-width-0",
+            "evaluation": {
+              "completed_mass": 0.9999999999999988,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 0.25807079835780583,
+              "expected_terms": 0.0,
+              "leaves": 400,
+              "normalized_expected_payoff": 0.25807079835780583,
+              "protocol": "exact",
+              "success_probability": 0.06469001802453642,
+              "truncated_mass": 0.0
+            },
+            "seed": 2
+          },
+          {
+            "condition": "gaussian-width-0.5",
+            "evaluation": {
+              "completed_mass": 1.0000000000000004,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 0.2623117348911255,
+              "expected_terms": 0.0,
+              "leaves": 400,
+              "normalized_expected_payoff": 0.2623117348911255,
+              "protocol": "exact",
+              "success_probability": 0.06289321030490579,
+              "truncated_mass": 0.0
+            },
+            "seed": 0
+          },
+          {
+            "condition": "gaussian-width-0.5",
+            "evaluation": {
+              "completed_mass": 1.0000000000000004,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 0.253146434352327,
+              "expected_terms": 0.0,
+              "leaves": 400,
+              "normalized_expected_payoff": 0.253146434352327,
+              "protocol": "exact",
+              "success_probability": 0.05582466991937183,
+              "truncated_mass": 0.0
+            },
+            "seed": 1
+          },
+          {
+            "condition": "gaussian-width-0.5",
+            "evaluation": {
+              "completed_mass": 0.9999999999999998,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 0.26433121424479444,
+              "expected_terms": 0.0,
+              "leaves": 400,
+              "normalized_expected_payoff": 0.26433121424479444,
+              "protocol": "exact",
+              "success_probability": 0.06305804139529414,
+              "truncated_mass": 0.0
+            },
+            "seed": 2
+          },
+          {
+            "condition": "gaussian-width-2",
+            "evaluation": {
+              "completed_mass": 1.0000000000000009,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 0.30389756442326693,
+              "expected_terms": 0.0,
+              "leaves": 400,
+              "normalized_expected_payoff": 0.30389756442326693,
+              "protocol": "exact",
+              "success_probability": 0.07365828382935259,
+              "truncated_mass": 0.0
+            },
+            "seed": 0
+          },
+          {
+            "condition": "gaussian-width-2",
+            "evaluation": {
+              "completed_mass": 0.9999999999999999,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 0.29860984631626597,
+              "expected_terms": 0.0,
+              "leaves": 400,
+              "normalized_expected_payoff": 0.29860984631626597,
+              "protocol": "exact",
+              "success_probability": 0.06772690781702338,
+              "truncated_mass": 0.0
+            },
+            "seed": 1
+          },
+          {
+            "condition": "gaussian-width-2",
+            "evaluation": {
+              "completed_mass": 1.0,
+              "expected_exchanges": 0.0,
+              "expected_net_payoff": 0.3233793887322784,
+              "expected_terms": 0.0,
+              "leaves": 400,
+              "normalized_expected_payoff": 0.3233793887322784,
+              "protocol": "exact",
+              "success_probability": 0.07551175278557688,
+              "truncated_mass": 0.0
+            },
+            "seed": 2
+          }
+        ]
+      },
+      "run": "runs/assembly-generalization/20261015T101758.660858Z-0677ab8d",
+      "status": "complete",
+      "verification": {
+        "errors": [],
+        "path": "runs/assembly-generalization/20261015T101758.660858Z-0677ab8d",
+        "valid": true
+      }
+    },
+    {
+      "configuration": "runs/assembly-lifecycle/cue-release/experiment.toml",
+      "elapsed_seconds": 3.296693124982994,
+      "evaluation": {
+        "trials": [
+          {
+            "condition": "release",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9781894934333959,
+                  "expected_terms": 0.0,
+                  "leaves": 4,
+                  "protocol": "exact",
+                  "success_probability": 0.9781894934333959,
+                  "truncated_mass": 0.0
+                },
+                "id": "precursor",
+                "position": 100
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9726951824588368,
+                  "expected_terms": 0.0,
+                  "leaves": 8,
+                  "protocol": "exact",
+                  "success_probability": 0.9726951824588368,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 200
+              }
+            ],
+            "seed": 0
+          },
+          {
+            "condition": "release",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9787139689578714,
+                  "expected_terms": 0.0,
+                  "leaves": 4,
+                  "protocol": "exact",
+                  "success_probability": 0.9787139689578714,
+                  "truncated_mass": 0.0
+                },
+                "id": "precursor",
+                "position": 100
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9728242518840854,
+                  "expected_terms": 0.0,
+                  "leaves": 8,
+                  "protocol": "exact",
+                  "success_probability": 0.9728242518840854,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 200
+              }
+            ],
+            "seed": 1
+          },
+          {
+            "condition": "release",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9801960784313726,
+                  "expected_terms": 0.0,
+                  "leaves": 4,
+                  "protocol": "exact",
+                  "success_probability": 0.9801960784313726,
+                  "truncated_mass": 0.0
+                },
+                "id": "precursor",
+                "position": 100
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.972453438635764,
+                  "expected_terms": 0.0,
+                  "leaves": 8,
+                  "protocol": "exact",
+                  "success_probability": 0.972453438635764,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 200
+              }
+            ],
+            "seed": 2
+          },
+          {
+            "condition": "release-acquired-side-frozen",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9781894934333959,
+                  "expected_terms": 0.0,
+                  "leaves": 4,
+                  "protocol": "exact",
+                  "success_probability": 0.9781894934333959,
+                  "truncated_mass": 0.0
+                },
+                "id": "precursor",
+                "position": 100
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9617482462815483,
+                  "expected_terms": 0.0,
+                  "leaves": 8,
+                  "protocol": "exact",
+                  "success_probability": 0.9617482462815483,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 200
+              }
+            ],
+            "seed": 0
+          },
+          {
+            "condition": "release-acquired-side-frozen",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9787139689578714,
+                  "expected_terms": 0.0,
+                  "leaves": 4,
+                  "protocol": "exact",
+                  "success_probability": 0.9787139689578714,
+                  "truncated_mass": 0.0
+                },
+                "id": "precursor",
+                "position": 100
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.962031512463885,
+                  "expected_terms": 0.0,
+                  "leaves": 8,
+                  "protocol": "exact",
+                  "success_probability": 0.962031512463885,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 200
+              }
+            ],
+            "seed": 1
+          },
+          {
+            "condition": "release-acquired-side-frozen",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9801960784313726,
+                  "expected_terms": 0.0,
+                  "leaves": 4,
+                  "protocol": "exact",
+                  "success_probability": 0.9801960784313726,
+                  "truncated_mass": 0.0
+                },
+                "id": "precursor",
+                "position": 100
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 0.9999999999999999,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9631325070908866,
+                  "expected_terms": 0.0,
+                  "leaves": 8,
+                  "protocol": "exact",
+                  "success_probability": 0.9631325070908866,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 200
+              }
+            ],
+            "seed": 2
+          },
+          {
+            "condition": "fixed-side-retained",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9781894934333959,
+                  "expected_terms": 0.0,
+                  "leaves": 4,
+                  "protocol": "exact",
+                  "success_probability": 0.9781894934333959,
+                  "truncated_mass": 0.0
+                },
+                "id": "precursor",
+                "position": 100
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9895788102475033,
+                  "expected_terms": 0.0,
+                  "leaves": 4,
+                  "protocol": "exact",
+                  "success_probability": 0.9895788102475033,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 200
+              }
+            ],
+            "seed": 0
+          },
+          {
+            "condition": "fixed-side-retained",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9787139689578714,
+                  "expected_terms": 0.0,
+                  "leaves": 4,
+                  "protocol": "exact",
+                  "success_probability": 0.9787139689578714,
+                  "truncated_mass": 0.0
+                },
+                "id": "precursor",
+                "position": 100
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9897435897435898,
+                  "expected_terms": 0.0,
+                  "leaves": 4,
+                  "protocol": "exact",
+                  "success_probability": 0.9897435897435898,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 200
+              }
+            ],
+            "seed": 1
+          },
+          {
+            "condition": "fixed-side-retained",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9801960784313726,
+                  "expected_terms": 0.0,
+                  "leaves": 4,
+                  "protocol": "exact",
+                  "success_probability": 0.9801960784313726,
+                  "truncated_mass": 0.0
+                },
+                "id": "precursor",
+                "position": 100
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9899474641341686,
+                  "expected_terms": 0.0,
+                  "leaves": 4,
+                  "protocol": "exact",
+                  "success_probability": 0.9899474641341686,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 200
+              }
+            ],
+            "seed": 2
+          },
+          {
+            "condition": "fresh-online-budget",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 0.9999999999999999,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.7625698578042328,
+                  "expected_terms": 0.0,
+                  "leaves": 8,
+                  "protocol": "exact",
+                  "success_probability": 0.7625698578042328,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 100
+              }
+            ],
+            "seed": 0
+          },
+          {
+            "condition": "fresh-online-budget",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9262229816466017,
+                  "expected_terms": 0.0,
+                  "leaves": 8,
+                  "protocol": "exact",
+                  "success_probability": 0.9262229816466017,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 100
+              }
+            ],
+            "seed": 1
+          },
+          {
+            "condition": "fresh-online-budget",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.8519521033611366,
+                  "expected_terms": 0.0,
+                  "leaves": 8,
+                  "protocol": "exact",
+                  "success_probability": 0.8519521033611366,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 100
+              }
+            ],
+            "seed": 2
+          },
+          {
+            "condition": "fresh-total-budget",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.8749114020853151,
+                  "expected_terms": 0.0,
+                  "leaves": 8,
+                  "protocol": "exact",
+                  "success_probability": 0.8749114020853151,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 200
+              }
+            ],
+            "seed": 0
+          },
+          {
+            "condition": "fresh-total-budget",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.96569674094516,
+                  "expected_terms": 0.0,
+                  "leaves": 8,
+                  "protocol": "exact",
+                  "success_probability": 0.96569674094516,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 200
+              }
+            ],
+            "seed": 1
+          },
+          {
+            "condition": "fresh-total-budget",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9176870021650504,
+                  "expected_terms": 0.0,
+                  "leaves": 8,
+                  "protocol": "exact",
+                  "success_probability": 0.9176870021650504,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 200
+              }
+            ],
+            "seed": 2
+          },
+          {
+            "condition": "release-without-acquisition",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.5,
+                  "expected_terms": 0.0,
+                  "leaves": 4,
+                  "protocol": "exact",
+                  "success_probability": 0.5,
+                  "truncated_mass": 0.0
+                },
+                "id": "precursor",
+                "position": 0
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9362760483194044,
+                  "expected_terms": 0.0,
+                  "leaves": 8,
+                  "protocol": "exact",
+                  "success_probability": 0.9362760483194044,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 100
+              }
+            ],
+            "seed": 0
+          },
+          {
+            "condition": "release-without-acquisition",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.5,
+                  "expected_terms": 0.0,
+                  "leaves": 4,
+                  "protocol": "exact",
+                  "success_probability": 0.5,
+                  "truncated_mass": 0.0
+                },
+                "id": "precursor",
+                "position": 0
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9619967793880837,
+                  "expected_terms": 0.0,
+                  "leaves": 8,
+                  "protocol": "exact",
+                  "success_probability": 0.9619967793880837,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 100
+              }
+            ],
+            "seed": 1
+          },
+          {
+            "condition": "release-without-acquisition",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.5,
+                  "expected_terms": 0.0,
+                  "leaves": 4,
+                  "protocol": "exact",
+                  "success_probability": 0.5,
+                  "truncated_mass": 0.0
+                },
+                "id": "precursor",
+                "position": 0
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9604606992890965,
+                  "expected_terms": 0.0,
+                  "leaves": 8,
+                  "protocol": "exact",
+                  "success_probability": 0.9604606992890965,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 100
+              }
+            ],
+            "seed": 2
+          }
+        ]
+      },
+      "run": "runs/assembly-lifecycle/cue-release/20261015T102210.780168Z-007779fe",
+      "status": "complete",
+      "verification": {
+        "errors": [],
+        "path": "runs/assembly-lifecycle/cue-release/20261015T102210.780168Z-007779fe",
+        "valid": true
+      }
+    },
+    {
+      "configuration": "runs/assembly-lifecycle/man-release/experiment.toml",
+      "elapsed_seconds": 2.0342178330174647,
+      "evaluation": {
+        "trials": [
+          {
+            "condition": "release",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9781894934333959,
+                  "expected_terms": 0.0,
+                  "leaves": 4,
+                  "protocol": "exact",
+                  "success_probability": 0.9781894934333959,
+                  "truncated_mass": 0.0
+                },
+                "id": "precursor",
+                "position": 100
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9725292382705947,
+                  "expected_terms": 0.0,
+                  "leaves": 8,
+                  "protocol": "exact",
+                  "success_probability": 0.9725292382705947,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 200
+              }
+            ],
+            "seed": 0
+          },
+          {
+            "condition": "release",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9787139689578714,
+                  "expected_terms": 0.0,
+                  "leaves": 4,
+                  "protocol": "exact",
+                  "success_probability": 0.9787139689578714,
+                  "truncated_mass": 0.0
+                },
+                "id": "precursor",
+                "position": 100
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9730310430701165,
+                  "expected_terms": 0.0,
+                  "leaves": 8,
+                  "protocol": "exact",
+                  "success_probability": 0.9730310430701165,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 200
+              }
+            ],
+            "seed": 1
+          },
+          {
+            "condition": "release",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9801960784313726,
+                  "expected_terms": 0.0,
+                  "leaves": 4,
+                  "protocol": "exact",
+                  "success_probability": 0.9801960784313726,
+                  "truncated_mass": 0.0
+                },
+                "id": "precursor",
+                "position": 100
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.972453438635764,
+                  "expected_terms": 0.0,
+                  "leaves": 8,
+                  "protocol": "exact",
+                  "success_probability": 0.972453438635764,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 200
+              }
+            ],
+            "seed": 2
+          },
+          {
+            "condition": "release-acquired-side-frozen",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9781894934333959,
+                  "expected_terms": 0.0,
+                  "leaves": 4,
+                  "protocol": "exact",
+                  "success_probability": 0.9781894934333959,
+                  "truncated_mass": 0.0
+                },
+                "id": "precursor",
+                "position": 100
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9614564674188335,
+                  "expected_terms": 0.0,
+                  "leaves": 8,
+                  "protocol": "exact",
+                  "success_probability": 0.9614564674188335,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 200
+              }
+            ],
+            "seed": 0
+          },
+          {
+            "condition": "release-acquired-side-frozen",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9787139689578714,
+                  "expected_terms": 0.0,
+                  "leaves": 4,
+                  "protocol": "exact",
+                  "success_probability": 0.9787139689578714,
+                  "truncated_mass": 0.0
+                },
+                "id": "precursor",
+                "position": 100
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9623177352435648,
+                  "expected_terms": 0.0,
+                  "leaves": 8,
+                  "protocol": "exact",
+                  "success_probability": 0.9623177352435648,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 200
+              }
+            ],
+            "seed": 1
+          },
+          {
+            "condition": "release-acquired-side-frozen",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9801960784313726,
+                  "expected_terms": 0.0,
+                  "leaves": 4,
+                  "protocol": "exact",
+                  "success_probability": 0.9801960784313726,
+                  "truncated_mass": 0.0
+                },
+                "id": "precursor",
+                "position": 100
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9631325070908866,
+                  "expected_terms": 0.0,
+                  "leaves": 8,
+                  "protocol": "exact",
+                  "success_probability": 0.9631325070908866,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 200
+              }
+            ],
+            "seed": 2
+          },
+          {
+            "condition": "fixed-side-retained",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9781894934333959,
+                  "expected_terms": 0.0,
+                  "leaves": 4,
+                  "protocol": "exact",
+                  "success_probability": 0.9781894934333959,
+                  "truncated_mass": 0.0
+                },
+                "id": "precursor",
+                "position": 100
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9895788102475033,
+                  "expected_terms": 0.0,
+                  "leaves": 4,
+                  "protocol": "exact",
+                  "success_probability": 0.9895788102475033,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 200
+              }
+            ],
+            "seed": 0
+          },
+          {
+            "condition": "fixed-side-retained",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9787139689578714,
+                  "expected_terms": 0.0,
+                  "leaves": 4,
+                  "protocol": "exact",
+                  "success_probability": 0.9787139689578714,
+                  "truncated_mass": 0.0
+                },
+                "id": "precursor",
+                "position": 100
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9897435897435898,
+                  "expected_terms": 0.0,
+                  "leaves": 4,
+                  "protocol": "exact",
+                  "success_probability": 0.9897435897435898,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 200
+              }
+            ],
+            "seed": 1
+          },
+          {
+            "condition": "fixed-side-retained",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9801960784313726,
+                  "expected_terms": 0.0,
+                  "leaves": 4,
+                  "protocol": "exact",
+                  "success_probability": 0.9801960784313726,
+                  "truncated_mass": 0.0
+                },
+                "id": "precursor",
+                "position": 100
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9899474641341686,
+                  "expected_terms": 0.0,
+                  "leaves": 4,
+                  "protocol": "exact",
+                  "success_probability": 0.9899474641341686,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 200
+              }
+            ],
+            "seed": 2
+          },
+          {
+            "condition": "fresh-online-budget",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 0.9999999999999999,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.7625698578042328,
+                  "expected_terms": 0.0,
+                  "leaves": 8,
+                  "protocol": "exact",
+                  "success_probability": 0.7625698578042328,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 100
+              }
+            ],
+            "seed": 0
+          },
+          {
+            "condition": "fresh-online-budget",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9262229816466017,
+                  "expected_terms": 0.0,
+                  "leaves": 8,
+                  "protocol": "exact",
+                  "success_probability": 0.9262229816466017,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 100
+              }
+            ],
+            "seed": 1
+          },
+          {
+            "condition": "fresh-online-budget",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.8519521033611366,
+                  "expected_terms": 0.0,
+                  "leaves": 8,
+                  "protocol": "exact",
+                  "success_probability": 0.8519521033611366,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 100
+              }
+            ],
+            "seed": 2
+          },
+          {
+            "condition": "fresh-total-budget",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.8749114020853151,
+                  "expected_terms": 0.0,
+                  "leaves": 8,
+                  "protocol": "exact",
+                  "success_probability": 0.8749114020853151,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 200
+              }
+            ],
+            "seed": 0
+          },
+          {
+            "condition": "fresh-total-budget",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.96569674094516,
+                  "expected_terms": 0.0,
+                  "leaves": 8,
+                  "protocol": "exact",
+                  "success_probability": 0.96569674094516,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 200
+              }
+            ],
+            "seed": 1
+          },
+          {
+            "condition": "fresh-total-budget",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9176870021650504,
+                  "expected_terms": 0.0,
+                  "leaves": 8,
+                  "protocol": "exact",
+                  "success_probability": 0.9176870021650504,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 200
+              }
+            ],
+            "seed": 2
+          },
+          {
+            "condition": "release-without-acquisition",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.5,
+                  "expected_terms": 0.0,
+                  "leaves": 4,
+                  "protocol": "exact",
+                  "success_probability": 0.5,
+                  "truncated_mass": 0.0
+                },
+                "id": "precursor",
+                "position": 0
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.958048335613315,
+                  "expected_terms": 0.0,
+                  "leaves": 8,
+                  "protocol": "exact",
+                  "success_probability": 0.958048335613315,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 100
+              }
+            ],
+            "seed": 0
+          },
+          {
+            "condition": "release-without-acquisition",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.5,
+                  "expected_terms": 0.0,
+                  "leaves": 4,
+                  "protocol": "exact",
+                  "success_probability": 0.5,
+                  "truncated_mass": 0.0
+                },
+                "id": "precursor",
+                "position": 0
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 0.9999999999999999,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9609002976190475,
+                  "expected_terms": 0.0,
+                  "leaves": 8,
+                  "protocol": "exact",
+                  "success_probability": 0.9609002976190475,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 100
+              }
+            ],
+            "seed": 1
+          },
+          {
+            "condition": "release-without-acquisition",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.5,
+                  "expected_terms": 0.0,
+                  "leaves": 4,
+                  "protocol": "exact",
+                  "success_probability": 0.5,
+                  "truncated_mass": 0.0
+                },
+                "id": "precursor",
+                "position": 0
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9613900434950367,
+                  "expected_terms": 0.0,
+                  "leaves": 8,
+                  "protocol": "exact",
+                  "success_probability": 0.9613900434950367,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 100
+              }
+            ],
+            "seed": 2
+          }
+        ]
+      },
+      "run": "runs/assembly-lifecycle/man-release/20261015T102214.053790Z-5fefd630",
+      "status": "complete",
+      "verification": {
+        "errors": [],
+        "path": "runs/assembly-lifecycle/man-release/20261015T102214.053790Z-5fefd630",
+        "valid": true
+      }
+    },
+    {
+      "configuration": "runs/assembly-lifecycle/nand-compose/experiment.toml",
+      "elapsed_seconds": 121.06924829201307,
+      "evaluation": {
+        "trials": [
+          {
+            "condition": "learned-short-one",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.6350000000000001,
+                  "expected_terms": 0.0,
+                  "leaves": 32,
+                  "protocol": "exact",
+                  "success_probability": 0.6350000000000001,
+                  "truncated_mass": 0.0
+                },
+                "id": "nand-first",
+                "position": 10
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.5706249999999999,
+                  "expected_terms": 0.0,
+                  "leaves": 32,
+                  "protocol": "exact",
+                  "success_probability": 0.5706249999999999,
+                  "truncated_mass": 0.0
+                },
+                "id": "nand-second",
+                "position": 10
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 1.000000000000002,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.5317226080246916,
+                  "expected_terms": 0.0,
+                  "leaves": 2048,
+                  "protocol": "exact",
+                  "success_probability": 0.5317226080246916,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 100
+              }
+            ],
+            "seed": 0
+          },
+          {
+            "condition": "learned-short-one",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.60821875,
+                  "expected_terms": 0.0,
+                  "leaves": 32,
+                  "protocol": "exact",
+                  "success_probability": 0.60821875,
+                  "truncated_mass": 0.0
+                },
+                "id": "nand-first",
+                "position": 10
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 0.9999999999999999,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.6070833333333334,
+                  "expected_terms": 0.0,
+                  "leaves": 32,
+                  "protocol": "exact",
+                  "success_probability": 0.6070833333333334,
+                  "truncated_mass": 0.0
+                },
+                "id": "nand-second",
+                "position": 10
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 0.9999999999999989,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.5664171894654092,
+                  "expected_terms": 0.0,
+                  "leaves": 2048,
+                  "protocol": "exact",
+                  "success_probability": 0.5664171894654092,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 100
+              }
+            ],
+            "seed": 1
+          },
+          {
+            "condition": "learned-short-one",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.5416666666666666,
+                  "expected_terms": 0.0,
+                  "leaves": 32,
+                  "protocol": "exact",
+                  "success_probability": 0.5416666666666666,
+                  "truncated_mass": 0.0
+                },
+                "id": "nand-first",
+                "position": 10
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 1.0000000000000002,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.6300000000000001,
+                  "expected_terms": 0.0,
+                  "leaves": 32,
+                  "protocol": "exact",
+                  "success_probability": 0.6300000000000001,
+                  "truncated_mass": 0.0
+                },
+                "id": "nand-second",
+                "position": 10
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 1.0000000000000115,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.5676119402985095,
+                  "expected_terms": 0.0,
+                  "leaves": 2048,
+                  "protocol": "exact",
+                  "success_probability": 0.5676119402985095,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 100
+              }
+            ],
+            "seed": 2
+          },
+          {
+            "condition": "learned-long-one",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.867098119190253,
+                  "expected_terms": 0.0,
+                  "leaves": 32,
+                  "protocol": "exact",
+                  "success_probability": 0.867098119190253,
+                  "truncated_mass": 0.0
+                },
+                "id": "nand-first",
+                "position": 100
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 0.9999999999999998,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.8282354600498665,
+                  "expected_terms": 0.0,
+                  "leaves": 32,
+                  "protocol": "exact",
+                  "success_probability": 0.8282354600498665,
+                  "truncated_mass": 0.0
+                },
+                "id": "nand-second",
+                "position": 100
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 1.0000000000000033,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.7389752867380949,
+                  "expected_terms": 0.0,
+                  "leaves": 2048,
+                  "protocol": "exact",
+                  "success_probability": 0.7389752867380949,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 100
+              }
+            ],
+            "seed": 0
+          },
+          {
+            "condition": "learned-long-one",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0000000000000002,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.716911705223871,
+                  "expected_terms": 0.0,
+                  "leaves": 32,
+                  "protocol": "exact",
+                  "success_probability": 0.716911705223871,
+                  "truncated_mass": 0.0
+                },
+                "id": "nand-first",
+                "position": 100
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 1.0000000000000002,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.7500491035177027,
+                  "expected_terms": 0.0,
+                  "leaves": 32,
+                  "protocol": "exact",
+                  "success_probability": 0.7500491035177027,
+                  "truncated_mass": 0.0
+                },
+                "id": "nand-second",
+                "position": 100
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 1.0000000000000016,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.669210454979103,
+                  "expected_terms": 0.0,
+                  "leaves": 2048,
+                  "protocol": "exact",
+                  "success_probability": 0.669210454979103,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 100
+              }
+            ],
+            "seed": 1
+          },
+          {
+            "condition": "learned-long-one",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.6835362231084888,
+                  "expected_terms": 0.0,
+                  "leaves": 32,
+                  "protocol": "exact",
+                  "success_probability": 0.6835362231084888,
+                  "truncated_mass": 0.0
+                },
+                "id": "nand-first",
+                "position": 100
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 1.0000000000000004,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.7038327526132404,
+                  "expected_terms": 0.0,
+                  "leaves": 32,
+                  "protocol": "exact",
+                  "success_probability": 0.7038327526132404,
+                  "truncated_mass": 0.0
+                },
+                "id": "nand-second",
+                "position": 100
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 1.0000000000000002,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.6413327526132406,
+                  "expected_terms": 0.0,
+                  "leaves": 2048,
+                  "protocol": "exact",
+                  "success_probability": 0.6413327526132406,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 100
+              }
+            ],
+            "seed": 2
+          },
+          {
+            "condition": "learned-long-two",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.867098119190253,
+                  "expected_terms": 0.0,
+                  "leaves": 32,
+                  "protocol": "exact",
+                  "success_probability": 0.867098119190253,
+                  "truncated_mass": 0.0
+                },
+                "id": "nand-first",
+                "position": 100
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 0.9999999999999998,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.8282354600498665,
+                  "expected_terms": 0.0,
+                  "leaves": 32,
+                  "protocol": "exact",
+                  "success_probability": 0.8282354600498665,
+                  "truncated_mass": 0.0
+                },
+                "id": "nand-second",
+                "position": 100
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 0.9999999999999962,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.6407943218382065,
+                  "expected_terms": 0.0,
+                  "leaves": 4096,
+                  "protocol": "exact",
+                  "success_probability": 0.6407943218382065,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 100
+              }
+            ],
+            "seed": 0
+          },
+          {
+            "condition": "learned-long-two",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0000000000000002,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.716911705223871,
+                  "expected_terms": 0.0,
+                  "leaves": 32,
+                  "protocol": "exact",
+                  "success_probability": 0.716911705223871,
+                  "truncated_mass": 0.0
+                },
+                "id": "nand-first",
+                "position": 100
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 1.0000000000000002,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.7500491035177027,
+                  "expected_terms": 0.0,
+                  "leaves": 32,
+                  "protocol": "exact",
+                  "success_probability": 0.7500491035177027,
+                  "truncated_mass": 0.0
+                },
+                "id": "nand-second",
+                "position": 100
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 0.999999999999999,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.6013804833360189,
+                  "expected_terms": 0.0,
+                  "leaves": 4096,
+                  "protocol": "exact",
+                  "success_probability": 0.6013804833360189,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 100
+              }
+            ],
+            "seed": 1
+          },
+          {
+            "condition": "learned-long-two",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.6835362231084888,
+                  "expected_terms": 0.0,
+                  "leaves": 32,
+                  "protocol": "exact",
+                  "success_probability": 0.6835362231084888,
+                  "truncated_mass": 0.0
+                },
+                "id": "nand-first",
+                "position": 100
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 1.0000000000000004,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.7038327526132404,
+                  "expected_terms": 0.0,
+                  "leaves": 32,
+                  "protocol": "exact",
+                  "success_probability": 0.7038327526132404,
+                  "truncated_mass": 0.0
+                },
+                "id": "nand-second",
+                "position": 100
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 1.0000000000000022,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.6256223930686053,
+                  "expected_terms": 0.0,
+                  "leaves": 4096,
+                  "protocol": "exact",
+                  "success_probability": 0.6256223930686053,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 100
+              }
+            ],
+            "seed": 2
+          },
+          {
+            "condition": "learned-long-one-uniform-route",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.867098119190253,
+                  "expected_terms": 0.0,
+                  "leaves": 32,
+                  "protocol": "exact",
+                  "success_probability": 0.867098119190253,
+                  "truncated_mass": 0.0
+                },
+                "id": "nand-first",
+                "position": 100
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 0.9999999999999998,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.8282354600498665,
+                  "expected_terms": 0.0,
+                  "leaves": 32,
+                  "protocol": "exact",
+                  "success_probability": 0.8282354600498665,
+                  "truncated_mass": 0.0
+                },
+                "id": "nand-second",
+                "position": 100
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 0.9999999999999968,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.710772929444761,
+                  "expected_terms": 0.0,
+                  "leaves": 2048,
+                  "protocol": "exact",
+                  "success_probability": 0.710772929444761,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 100
+              }
+            ],
+            "seed": 0
+          },
+          {
+            "condition": "learned-long-one-uniform-route",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0000000000000002,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.716911705223871,
+                  "expected_terms": 0.0,
+                  "leaves": 32,
+                  "protocol": "exact",
+                  "success_probability": 0.716911705223871,
+                  "truncated_mass": 0.0
+                },
+                "id": "nand-first",
+                "position": 100
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 1.0000000000000002,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.7500491035177027,
+                  "expected_terms": 0.0,
+                  "leaves": 32,
+                  "protocol": "exact",
+                  "success_probability": 0.7500491035177027,
+                  "truncated_mass": 0.0
+                },
+                "id": "nand-second",
+                "position": 100
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 0.9999999999999994,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.6738077527727655,
+                  "expected_terms": 0.0,
+                  "leaves": 2048,
+                  "protocol": "exact",
+                  "success_probability": 0.6738077527727655,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 100
+              }
+            ],
+            "seed": 1
+          },
+          {
+            "condition": "learned-long-one-uniform-route",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.6835362231084888,
+                  "expected_terms": 0.0,
+                  "leaves": 32,
+                  "protocol": "exact",
+                  "success_probability": 0.6835362231084888,
+                  "truncated_mass": 0.0
+                },
+                "id": "nand-first",
+                "position": 100
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 1.0000000000000004,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.7038327526132404,
+                  "expected_terms": 0.0,
+                  "leaves": 32,
+                  "protocol": "exact",
+                  "success_probability": 0.7038327526132404,
+                  "truncated_mass": 0.0
+                },
+                "id": "nand-second",
+                "position": 100
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 1.0000000000000009,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.6413327526132416,
+                  "expected_terms": 0.0,
+                  "leaves": 2048,
+                  "protocol": "exact",
+                  "success_probability": 0.6413327526132416,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 100
+              }
+            ],
+            "seed": 2
+          },
+          {
+            "condition": "constructed-perfect-1-selector",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9355670103092784,
+                  "expected_terms": 0.0,
+                  "leaves": 32,
+                  "protocol": "exact",
+                  "success_probability": 0.9355670103092784,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 100
+              }
+            ],
+            "seed": 0
+          },
+          {
+            "condition": "constructed-perfect-1-selector",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.9052631578947369,
+                  "expected_terms": 0.0,
+                  "leaves": 32,
+                  "protocol": "exact",
+                  "success_probability": 0.9052631578947369,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 100
+              }
+            ],
+            "seed": 1
+          },
+          {
+            "condition": "constructed-perfect-1-selector",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.8111111111111111,
+                  "expected_terms": 0.0,
+                  "leaves": 32,
+                  "protocol": "exact",
+                  "success_probability": 0.8111111111111111,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 100
+              }
+            ],
+            "seed": 2
+          },
+          {
+            "condition": "constructed-perfect-2-selector",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 0.9999999999999999,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.8627698522913775,
+                  "expected_terms": 0.0,
+                  "leaves": 64,
+                  "protocol": "exact",
+                  "success_probability": 0.8627698522913775,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 100
+              }
+            ],
+            "seed": 0
+          },
+          {
+            "condition": "constructed-perfect-2-selector",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0000000000000009,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.7129574970484064,
+                  "expected_terms": 0.0,
+                  "leaves": 64,
+                  "protocol": "exact",
+                  "success_probability": 0.7129574970484064,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 100
+              }
+            ],
+            "seed": 1
+          },
+          {
+            "condition": "constructed-perfect-2-selector",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 0.9999999999999991,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.8748943364327975,
+                  "expected_terms": 0.0,
+                  "leaves": 64,
+                  "protocol": "exact",
+                  "success_probability": 0.8748943364327975,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 100
+              }
+            ],
+            "seed": 2
+          }
+        ]
+      },
+      "run": "runs/assembly-lifecycle/nand-compose/20261015T101811.244537Z-08d6d812",
+      "status": "complete",
+      "verification": {
+        "errors": [],
+        "path": "runs/assembly-lifecycle/nand-compose/20261015T101811.244537Z-08d6d812",
+        "valid": true
+      }
+    },
+    {
+      "configuration": "runs/assembly-lifecycle/nand-transfer/experiment.toml",
+      "elapsed_seconds": 4.824806083983276,
+      "evaluation": {
+        "trials": [
+          {
+            "condition": "learned-short",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 0.9999999999999997,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.645034013605442,
+                  "expected_terms": 0.0,
+                  "leaves": 32,
+                  "protocol": "exact",
+                  "success_probability": 0.645034013605442,
+                  "truncated_mass": 0.0
+                },
+                "id": "nand",
+                "position": 10
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 0.9999999999999998,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.6267505287829418,
+                  "expected_terms": 0.0,
+                  "leaves": 128,
+                  "protocol": "exact",
+                  "success_probability": 0.6267505287829418,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 100
+              }
+            ],
+            "seed": 0
+          },
+          {
+            "condition": "learned-short",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.6449652777777779,
+                  "expected_terms": 0.0,
+                  "leaves": 32,
+                  "protocol": "exact",
+                  "success_probability": 0.6449652777777779,
+                  "truncated_mass": 0.0
+                },
+                "id": "nand",
+                "position": 10
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 0.9999999999999994,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.630304783950617,
+                  "expected_terms": 0.0,
+                  "leaves": 128,
+                  "protocol": "exact",
+                  "success_probability": 0.630304783950617,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 100
+              }
+            ],
+            "seed": 1
+          },
+          {
+            "condition": "learned-short",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 0.9999999999999999,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.5264285714285715,
+                  "expected_terms": 0.0,
+                  "leaves": 32,
+                  "protocol": "exact",
+                  "success_probability": 0.5264285714285715,
+                  "truncated_mass": 0.0
+                },
+                "id": "nand",
+                "position": 10
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 1.0000000000000002,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.5238041835091526,
+                  "expected_terms": 0.0,
+                  "leaves": 128,
+                  "protocol": "exact",
+                  "success_probability": 0.5238041835091526,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 100
+              }
+            ],
+            "seed": 2
+          },
+          {
+            "condition": "learned-long",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 0.9999999999999999,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.793548923697587,
+                  "expected_terms": 0.0,
+                  "leaves": 32,
+                  "protocol": "exact",
+                  "success_probability": 0.793548923697587,
+                  "truncated_mass": 0.0
+                },
+                "id": "nand",
+                "position": 100
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 1.0000000000000002,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.7228612568583199,
+                  "expected_terms": 0.0,
+                  "leaves": 128,
+                  "protocol": "exact",
+                  "success_probability": 0.7228612568583199,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 100
+              }
+            ],
+            "seed": 0
+          },
+          {
+            "condition": "learned-long",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 0.9999999999999998,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.717183680015543,
+                  "expected_terms": 0.0,
+                  "leaves": 32,
+                  "protocol": "exact",
+                  "success_probability": 0.717183680015543,
+                  "truncated_mass": 0.0
+                },
+                "id": "nand",
+                "position": 100
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.713656204215596,
+                  "expected_terms": 0.0,
+                  "leaves": 128,
+                  "protocol": "exact",
+                  "success_probability": 0.713656204215596,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 100
+              }
+            ],
+            "seed": 1
+          },
+          {
+            "condition": "learned-long",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 0.9999999999999999,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.8004605662145652,
+                  "expected_terms": 0.0,
+                  "leaves": 32,
+                  "protocol": "exact",
+                  "success_probability": 0.8004605662145652,
+                  "truncated_mass": 0.0
+                },
+                "id": "nand",
+                "position": 100
+              },
+              {
+                "evaluation": {
+                  "completed_mass": 1.0000000000000002,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.7194367241963651,
+                  "expected_terms": 0.0,
+                  "leaves": 128,
+                  "protocol": "exact",
+                  "success_probability": 0.7194367241963651,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 100
+              }
+            ],
+            "seed": 2
+          },
+          {
+            "condition": "constructed-perfect",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 0.9999999999999999,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.8647804738809013,
+                  "expected_terms": 0.0,
+                  "leaves": 16,
+                  "protocol": "exact",
+                  "success_probability": 0.8647804738809013,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 100
+              }
+            ],
+            "seed": 0
+          },
+          {
+            "condition": "constructed-perfect",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.7304484792427445,
+                  "expected_terms": 0.0,
+                  "leaves": 16,
+                  "protocol": "exact",
+                  "success_probability": 0.7304484792427445,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 100
+              }
+            ],
+            "seed": 1
+          },
+          {
+            "condition": "constructed-perfect",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 0.9999999999999999,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.8887585717766638,
+                  "expected_terms": 0.0,
+                  "leaves": 16,
+                  "protocol": "exact",
+                  "success_probability": 0.8887585717766638,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 100
+              }
+            ],
+            "seed": 2
+          },
+          {
+            "condition": "scratch-online-budget",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0000000000000002,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.7133794500895323,
+                  "expected_terms": 0.0,
+                  "leaves": 32,
+                  "protocol": "exact",
+                  "success_probability": 0.7133794500895323,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 100
+              }
+            ],
+            "seed": 0
+          },
+          {
+            "condition": "scratch-online-budget",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0000000000000002,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.7313016871735595,
+                  "expected_terms": 0.0,
+                  "leaves": 32,
+                  "protocol": "exact",
+                  "success_probability": 0.7313016871735595,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 100
+              }
+            ],
+            "seed": 1
+          },
+          {
+            "condition": "scratch-online-budget",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0000000000000002,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.7562089736330976,
+                  "expected_terms": 0.0,
+                  "leaves": 32,
+                  "protocol": "exact",
+                  "success_probability": 0.7562089736330976,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 100
+              }
+            ],
+            "seed": 2
+          },
+          {
+            "condition": "scratch-total-long-budget",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.7320682446287285,
+                  "expected_terms": 0.0,
+                  "leaves": 32,
+                  "protocol": "exact",
+                  "success_probability": 0.7320682446287285,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 200
+              }
+            ],
+            "seed": 0
+          },
+          {
+            "condition": "scratch-total-long-budget",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0000000000000002,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.7799580403679687,
+                  "expected_terms": 0.0,
+                  "leaves": 32,
+                  "protocol": "exact",
+                  "success_probability": 0.7799580403679687,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 200
+              }
+            ],
+            "seed": 1
+          },
+          {
+            "condition": "scratch-total-long-budget",
+            "phases": [
+              {
+                "evaluation": {
+                  "completed_mass": 1.0000000000000002,
+                  "expected_exchanges": 0.0,
+                  "expected_net_payoff": 0.7829007427173826,
+                  "expected_terms": 0.0,
+                  "leaves": 32,
+                  "protocol": "exact",
+                  "success_probability": 0.7829007427173826,
+                  "truncated_mass": 0.0
+                },
+                "id": "test",
+                "position": 200
+              }
+            ],
+            "seed": 2
+          }
+        ]
+      },
+      "run": "runs/assembly-lifecycle/nand-transfer/20261015T102012.292368Z-3052735a",
+      "status": "complete",
+      "verification": {
+        "errors": [],
+        "path": "runs/assembly-lifecycle/nand-transfer/20261015T102012.292368Z-3052735a",
+        "valid": true
+      }
+    }
+  ]
+}

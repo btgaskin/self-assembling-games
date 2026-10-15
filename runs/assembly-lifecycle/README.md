@@ -165,3 +165,8 @@ continuation contracts.
 ## Execution tiers
 
 `experiment.toml` is the bounded smoke tier: seeds 0–2 and budgets scaled to one tenth of the pilot. `pilot.toml` retains the four-seed, longer-horizon proposal described above. Run directories retain the exact executed declaration. The smoke tier tests integration and measures early dispositions; it does not estimate learning limits.
+
+
+The `release-without-acquisition` arm applies the same 9:1 release rule after a
+zero-budget precursor phase. It isolates the contribution of the acquired side
+against the imposed release prior; its online test budget matches `release`.

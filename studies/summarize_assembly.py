@@ -15,14 +15,16 @@ lines = ['# Assembly extension: retained smoke studies', '',
          'The [machine-readable report](assembly-smoke-results.json) retains each endpoint,',
          'verification result, run path, source hash and elapsed time. The [runner](assembly_smoke.py)',
          'uses the archived measurements, and every run retains its original and resolved TOML,',
-         'checkpoint states, receipts and numerical outputs.', '',
+         'checkpoint states, receipts and numerical outputs. The [interpretation](assembly-interpretation.md)',
+         'connects these results and explains the additional release control. A [compressed run archive](assembly-smoke-runs.tar.gz)',
+         'contains the full retained directories; its SHA-256 is recorded in the JSON report.', '',
          '| Study | Trials | Wall time (s) | Verified |', '|---|---:|---:|---|']
 for study in data['studies']:
     name = Path(study['configuration']).parent.name
     lines.append(f"| {name} | {len(study['evaluation']['trials'])} | {study['elapsed_seconds']:.2f} | {study['verification']['valid']} |")
-lines += ['', f"Peak resident memory for the sequential reporting process: {data['peak_process_rss_bytes']/1024**2:.1f} MiB.",
-          'Timing includes running, retaining and verifying the study. Exact branch enumeration',
-          'makes the composed cases substantially more expensive than their training encounters.', '',
+lines += ['', f"Peak resident memory across the reporting processes: {data['peak_process_rss_bytes']/1024**2:.1f} MiB.",
+          'Timing includes running, retaining and verifying the study. The composed cases include',
+          'exact enumeration of both stochastic components at each measurement.', '',
           '## Endpoint comparisons', '',
           'Success is the declared task predicate. For generalization it means exact action/state',
           'agreement; Gaussian reward also credits nearby actions. Conflict utilities are reported',

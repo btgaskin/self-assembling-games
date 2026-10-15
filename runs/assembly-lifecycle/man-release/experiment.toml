@@ -111,3 +111,31 @@ name = "fresh-total-budget"
 phases = [
     { id = "test", preset = "sig.demo", budget = 200 },
 ]
+
+[[conditions]]
+name = "release-without-acquisition"
+
+[[conditions.phases]]
+id = "precursor"
+preset = "man.demo"
+budget = 0
+
+[[conditions.phases]]
+id = "test"
+preset = "sig.demo"
+budget = 100
+
+[conditions.phases.start]
+kind = "carry"
+phase = "precursor"
+
+[conditions.phases.start.transition]
+kind = "release_fixed"
+fixed_weight = 9.0
+other_weight = 1.0
+
+[conditions.phases.overrides.source]
+kind = "deliberate_variant"
+assumptions = [
+    "The declared fixed side becomes proportional R1 with weights nine for its old option and one for each other option.",
+]

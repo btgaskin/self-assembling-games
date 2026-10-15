@@ -257,6 +257,12 @@ take precedence. Resolved phases retain `model`, `budget`, `start`, `protocol`,
 `interventions` and `analysis`. References name earlier phase ids in the same
 condition and seed trial. A missing `start` means `kind = "fresh"`.
 
+The first carry implementation supports the built-in conditional-table runtime.
+Identity carry preserves its interaction; fixed-side release supports CUE/MAN → SIG.
+Trainability interventions apply to the admitted fixed-shape games, and component
+exports support NAND, ORD and ADD interfaces. Fresh phases can use the other
+registered runtimes; their state transformations require a provider-specific contract.
+
 Fresh and composed phases use the first eight bytes of
 `SHA256(JSON([trial_seed, phase_id]))`, interpreted as an unsigned big-endian
 integer, as their seed. The JSON encoding uses no separator whitespace. This
