@@ -206,7 +206,7 @@ def resolve_model(identifier: str | dict, overrides: dict | None = None) -> dict
             "interaction": {"provider", "game", "parameters"},
             "realisation": {"provider", "parameters"},
             "adaptation": {"provider", "parameters"},
-            "source": {"kind", "identifiers", "assumptions", "questions"},
+            "source": {"kind", "identifiers", "assumptions", "questions", "references"},
             "execution": {"clock", "budget", "parameters"},
         }.items():
             unknown = declared[layer].keys() - allowed_fields
@@ -333,6 +333,7 @@ def resolve_model(identifier: str | dict, overrides: dict | None = None) -> dict
             source_profile = load_profile(gp["profile"])
             if source_profile.model != profile.model:
                 raise ValueError("Barrett source profile and model disagree")
+            identifiers = list(dict.fromkeys(identifiers + source_profile.source))
             questions = entry.get("source_questions", [])
         resources = {**_FINITE_DEFAULTS, **profile.resources}
         rp = {"fixed_decisions": copy.deepcopy(profile.fixed_decisions)}
@@ -442,6 +443,10 @@ def resolve_model(identifier: str | dict, overrides: dict | None = None) -> dict
         )
     elif overrides:
         return resolve_model(_merge(result, overrides))
+    from .sources import references
+    resolved_references = references(result["source"]["identifiers"])
+    if resolved_references:
+        result["source"]["references"] = resolved_references
     # Reconstruct to apply validators to the complete defaulted declaration.
     _profile(result).validate()
     if (

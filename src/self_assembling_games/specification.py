@@ -278,7 +278,9 @@ class ModelSpecification:
                     "resources": copy.deepcopy(profile.resources),
                 }
             questions = obj._finite_game.fidelity.get("game", {}).get("questions", [])
-            identifiers = [method.source]
+            identifiers = list(dict.fromkeys([method.source] + list(
+                obj._finite_game.fidelity.get("game", {}).get("source", [])
+            )))
             defaults = {
                 **(
                     {"generations": 100, "sample_interval": 1}

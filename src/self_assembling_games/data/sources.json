@@ -1,0 +1,192 @@
+[
+  {
+    "id": "barrett_skyrms2017",
+    "authors": "Jeffrey A. Barrett; Brian Skyrms",
+    "title": "Self-Assembling Games",
+    "year": 2017,
+    "doi": "10.1093/bjps/axv043",
+    "url": "https://sites.socsci.uci.edu/~jabarret/bio/publications/self-assembling-games.pdf",
+    "scope": "core",
+    "protocol": "Sections 2–5: ritualization, polymerization, transfer and composition"
+  },
+  {
+    "id": "barrett2023",
+    "authors": "Jeffrey A. Barrett",
+    "title": "Self-Assembling Games and the Evolution of Salience",
+    "year": 2023,
+    "doi": "10.1086/714789",
+    "url": "https://doi.org/10.1086/714789",
+    "scope": "core",
+    "protocol": "Salience and computational composition; source-specific credit rules"
+  },
+  {
+    "id": "lacroix2022",
+    "authors": "Travis LaCroix",
+    "title": "Using Logic to Evolve More Logic: Composing Logical Operators via Self-Assembly",
+    "year": 2022,
+    "doi": "10.1093/bjps/axz049",
+    "url": "https://philsci-archive.pitt.edu/16658/7/LaCroix-Evolving-Logic-BJPS-Final-Pre-Print-Nov-2019.pdf",
+    "scope": "implemented_extension",
+    "protocol": "Preprint sections 3.2 and 3.5, Figures 7–8; online 2019"
+  },
+  {
+    "id": "oconnor2017",
+    "authors": "Cailin O’Connor",
+    "title": "Evolving to Generalize: Trading Precision for Speed",
+    "year": 2017,
+    "doi": "10.1093/bjps/axv038",
+    "url": "https://cailinoconnor.com/wp-content/uploads/2015/03/EvolvingtoGen-Final.pdf",
+    "scope": "implemented_extension",
+    "protocol": "Sections 3–4.2; Figure 4; online 2015"
+  },
+  {
+    "id": "godfrey_smith_martinez2013",
+    "authors": "Peter Godfrey-Smith; Manolo Martínez",
+    "title": "Communication and Common Interest",
+    "year": 2013,
+    "doi": "10.1371/journal.pcbi.1003282",
+    "url": "https://doi.org/10.1371/journal.pcbi.1003282",
+    "scope": "comparator",
+    "protocol": "Equilibrium analysis; reinforcement comparisons are additional variants"
+  },
+  {
+    "id": "martinez_godfrey_smith2016",
+    "authors": "Manolo Martínez; Peter Godfrey-Smith",
+    "title": "Common Interest and Signaling Games: A Dynamic Analysis",
+    "year": 2016,
+    "doi": "10.1086/685743",
+    "url": "https://petergodfreysmith.com/wp-content/uploads/2013/06/Martinez-GS-Common-Interest-Dynamic-2016-eprint.pdf",
+    "scope": "comparator",
+    "protocol": "Table 1 and two-population replicator dynamics"
+  },
+  {
+    "id": "zollman_bergstrom_huttegger2013",
+    "authors": "Kevin J. S. Zollman; Carl T. Bergstrom; Simon M. Huttegger",
+    "title": "Between Cheap and Costly Signals: The Evolution of Partially Honest Communication",
+    "year": 2013,
+    "doi": "10.1098/rspb.2012.1878",
+    "url": "https://doi.org/10.1098/rspb.2012.1878",
+    "scope": "comparator",
+    "protocol": "Sections 2b–3; differential costs and hybrid equilibrium"
+  },
+  {
+    "id": "oconnor2014",
+    "authors": "Cailin O’Connor",
+    "title": "The Evolution of Vagueness",
+    "year": 2014,
+    "doi": "10.1007/s10670-013-9463-2",
+    "url": "https://cailinoconnor.com/wp-content/uploads/2015/03/The_Evolution_of_Vagueness_official.pdf",
+    "scope": "roadmap",
+    "protocol": "Signalling categories and generalization; distinct from the 2017 approximation problem"
+  },
+  {
+    "id": "rubin_oconnor2018",
+    "authors": "Hannah Rubin; Cailin O’Connor",
+    "title": "Discrimination and Collaboration in Science",
+    "year": 2018,
+    "doi": "10.1086/697744",
+    "url": "https://escholarship.org/content/qt8mw9m21x/qt8mw9m21x_noSplash_01858bb6771dff7746de38ff46d13435.pdf",
+    "scope": "roadmap",
+    "protocol": "DISC: bargaining norms and consent-based network changes"
+  },
+  {
+    "id": "enquist2007",
+    "authors": "Magnus Enquist; Kimmo Eriksson; Stefano Ghirlanda",
+    "title": "Critical Social Learning: A Solution to Rogers’s Paradox of Nonadaptive Culture",
+    "year": 2007,
+    "doi": "10.1525/aa.2007.109.4.727",
+    "url": "https://cognitionandculture.net/wp-content/uploads/Critical_Social_Learning_A_Solution_to_Rogerss_Pa.pdf",
+    "scope": "roadmap",
+    "protocol": "Comparator for copying, testing and individual learning"
+  },
+  {
+    "id": "axelrod_hamilton1981",
+    "authors": "Robert Axelrod; William D. Hamilton",
+    "title": "The Evolution of Cooperation",
+    "year": 1981,
+    "doi": "10.1126/science.7466396",
+    "url": "https://public.websites.umich.edu/~axe/research/Axelrod%20and%20Hamilton%20EC%201981.pdf",
+    "scope": "roadmap",
+    "protocol": "Comparator for repeated interaction, recognition and contingent strategies"
+  },
+  {
+    "id": "milinski2002",
+    "authors": "Manfred Milinski; Dirk Semmann; Hans-Jürgen Krambeck",
+    "title": "Reputation Helps Solve the Tragedy of the Commons",
+    "year": 2002,
+    "doi": "10.1038/415424a",
+    "url": "https://www.nature.com/articles/415424a",
+    "scope": "roadmap",
+    "protocol": "Supplied reputation link between public goods and indirect reciprocity"
+  },
+  {
+    "id": "kirby2008",
+    "authors": "Simon Kirby; Hannah Cornish; Kenny Smith",
+    "title": "Cumulative Cultural Evolution in the Laboratory: An Experimental Approach to the Origins of Structure in Human Language",
+    "year": 2008,
+    "doi": "10.1073/pnas.0707835105",
+    "url": "https://doi.org/10.1073/pnas.0707835105",
+    "scope": "roadmap",
+    "protocol": "Transmission and reconstruction across learners"
+  },
+  {
+    "id": "baronchelli2006",
+    "authors": "Andrea Baronchelli; Maddalena Felici; Vittorio Loreto; Emanuele Caglioti; Luc Steels",
+    "title": "Sharp Transition Towards Shared Vocabularies in Multi-Agent Systems",
+    "year": 2006,
+    "doi": "10.1088/1742-5468/2006/06/P06014",
+    "url": "https://openaccess.city.ac.uk/2672/1/Sharp%20transition%20towards%20shared%20vocabularies%20in%20multi-agent%20systems.pdf",
+    "scope": "roadmap",
+    "protocol": "Vocabulary invention, adoption and deletion"
+  },
+  {
+    "id": "bergstrom_lachmann2003",
+    "authors": "Carl T. Bergstrom; Michael Lachmann",
+    "title": "The Red King Effect: When the Slowest Runner Wins the Coevolutionary Race",
+    "year": 2003,
+    "doi": "10.1073/pnas.0134966100",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/12525707/",
+    "scope": "roadmap",
+    "protocol": "Comparator for relative adaptive rates"
+  },
+  {
+    "id": "wagner2012",
+    "authors": "Elliott O. Wagner",
+    "title": "Deterministic Chaos and the Evolution of Meaning",
+    "year": 2012,
+    "doi": "10.1093/bjps/axr039",
+    "url": "https://doi.org/10.1093/bjps/axr039",
+    "scope": "roadmap",
+    "protocol": "Nonconvergent informative signalling; diagnostic reference"
+  },
+  {
+    "id": "weitz2016",
+    "authors": "Joshua S. Weitz; Ceyhun Eksin; Keith Paarporn; Sam P. Brown; William C. Ratcliff",
+    "title": "An Oscillating Tragedy of the Commons in Replicator Dynamics with Game-Environment Feedback",
+    "year": 2016,
+    "doi": "10.1073/pnas.1604096113",
+    "url": "https://doi.org/10.1073/pnas.1604096113",
+    "scope": "roadmap",
+    "protocol": "Environmental feedback; defer until tied to an assembled capacity"
+  },
+  {
+    "id": "tria2014",
+    "authors": "Francesca Tria; Vittorio Loreto; Vito D. P. Servedio; Steven H. Strogatz",
+    "title": "The Dynamics of Correlated Novelties",
+    "year": 2014,
+    "doi": "10.1038/srep05890",
+    "url": "https://www.nature.com/articles/srep05890",
+    "scope": "roadmap",
+    "protocol": "Triggered expansion of possibilities; mathematical comparison"
+  },
+  {
+    "id": "scott_phillips2009",
+    "authors": "Thomas C. Scott-Phillips; Simon Kirby; Graham R. S. Ritchie",
+    "title": "Signalling Signalhood and the Emergence of Communication",
+    "year": 2009,
+    "doi": "10.1016/j.cognition.2009.08.009",
+    "url": "https://doi.org/10.1016/j.cognition.2009.08.009",
+    "scope": "roadmap",
+    "protocol": "Embodied communication game; acquired controller remains a further mechanism"
+  }
+]

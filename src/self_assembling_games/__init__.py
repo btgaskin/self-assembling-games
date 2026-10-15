@@ -1,6 +1,7 @@
 """Self-assembling games with inspectable learning and evolutionary dynamics."""
 
 from .artifacts import export_template, replay_trace
+from .component_artifacts import export_component
 from .core import Address, Decision, Feedback, Outcome, Runtime, Table
 from .definitions import GameDefinition, game_definition
 from .specification import (
@@ -134,7 +135,7 @@ def resume(path, **parameters):
 
         if (
             json.loads((target / "manifest.json").read_text()).get("schema_version")
-            == 2
+            in {2, 3}
         ):
             return _resume_study(target, **parameters)
     return _resume_kernel(path, **parameters)
@@ -163,4 +164,5 @@ __all__ = [
     "run",
     "evaluate",
     "resume",
+    "export_component",
 ]

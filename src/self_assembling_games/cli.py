@@ -57,6 +57,7 @@ def main(argv=None):
     sub.add_parser(
         "catalogue", help="List source-grounded built-in and situated examples"
     )
+    sub.add_parser("sources", help="List cited sources and protocol locators")
     for name in ("describe", "resolve"):
         sub.add_parser(name).add_argument(
             "subject", help="Model identifier or TOML path"
@@ -87,7 +88,10 @@ def main(argv=None):
         from .domain import Experiment, experiment
         from .experiments import Run, Workspace, resume, run
 
-        if args.command == "catalogue":
+        if args.command == "sources":
+            from .sources import bibliography
+            result = bibliography()
+        elif args.command == "catalogue":
             from .registry import catalogue, profiles
             from .finite_profiles import adaptive_profiles, finite_catalogue
             from .situated import ECG_MODEL, situated_catalogue
