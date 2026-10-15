@@ -1,0 +1,53 @@
+schema_version = 2
+kind = "experiment"
+seeds = [
+    0,
+    1,
+    2,
+]
+budget = 100
+
+[analysis]
+sample_interval = 100
+
+[[conditions]]
+name = "binary-alpha-0"
+preset = "oconnor.generalization.binary"
+
+[conditions.overrides.adaptation.parameters.generalization]
+alpha = 0
+
+[[conditions]]
+name = "binary-alpha-0.1"
+preset = "oconnor.generalization.binary"
+
+[conditions.overrides.adaptation.parameters.generalization]
+alpha = 0.1
+
+[[conditions]]
+name = "binary-alpha-1"
+preset = "oconnor.generalization.binary"
+
+[conditions.overrides.adaptation.parameters.generalization]
+alpha = 1
+
+[[conditions]]
+name = "gaussian-width-0"
+preset = "oconnor.generalization.gaussian"
+
+[conditions.overrides.adaptation.parameters.generalization]
+width = 0
+
+[[conditions]]
+name = "gaussian-width-0.5"
+preset = "oconnor.generalization.gaussian"
+
+[conditions.overrides.adaptation.parameters.generalization]
+width = 0.5
+
+[[conditions]]
+name = "gaussian-width-2"
+preset = "oconnor.generalization.gaussian"
+
+[conditions.overrides.adaptation.parameters.generalization]
+width = 2

@@ -139,7 +139,8 @@ def main(argv=None):
                 data = subject.to_dict()
                 if args.budget is not None:
                     for condition in data["conditions"]:
-                        condition["budget"] = (
+                        target = condition["phases"][-1] if "phases" in condition else condition
+                        target["budget"] = (
                             int(args.budget)
                             if args.budget.is_integer()
                             else args.budget

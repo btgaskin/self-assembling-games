@@ -1,0 +1,16 @@
+schema_version = 2
+kind = "experiment"
+seeds = [
+    0,
+    1,
+    2,
+]
+budget = 100
+conditions = [
+    { name = "stipulated", preset = "lacroix.logic.stipulated" },
+    { name = "role-free", preset = "lacroix.logic.role-free" },
+    { name = "observation-control", preset = "lacroix.logic.observation-control" },
+]
+
+[analysis]
+sample_interval = 100

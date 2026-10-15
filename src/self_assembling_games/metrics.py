@@ -176,6 +176,10 @@ def evaluate(
         for owner, value in (outcome.owner_returns or {}).items():
             returns = totals.setdefault("expected_owner_returns", {})
             returns[owner] = returns.get(owner, 0.0) + mass * value
+    if base["profile"]["model"] == "GEN-APPROX":
+        parameters = base["profile"]["parameters"]
+        maximum = 2.0 if parameters["payoff_kind"] == "binary" else parameters["payoff_height"]
+        totals["normalized_expected_payoff"] = totals["expected_net_payoff"] / maximum
     return {"protocol": "exact", "leaves": leaves, **totals}
 
 

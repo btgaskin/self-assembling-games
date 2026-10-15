@@ -1,0 +1,66 @@
+schema_version = 2
+kind = "experiment"
+seeds = [
+    0,
+    1,
+    2,
+]
+budget = 100
+
+[analysis]
+sample_interval = 100
+
+[[conditions]]
+name = "gm16.table1.r1"
+preset = "gm16.table1.r1"
+budget = 100
+
+[[conditions]]
+name = "gm16.table1.evolution"
+preset = "gm16.table1.evolution"
+budget = 1.0
+
+[[conditions]]
+name = "zbh13.separating.signed"
+preset = "zbh13.separating.signed"
+budget = 100
+
+[[conditions]]
+name = "zbh13.separating.evolution"
+preset = "zbh13.separating.evolution"
+budget = 1.0
+
+[[conditions]]
+name = "zbh13.hybrid-equilibrium.signed"
+preset = "zbh13.hybrid-equilibrium.signed"
+budget = 100
+
+[[conditions]]
+name = "zbh13.hybrid-equilibrium.evolution"
+preset = "zbh13.hybrid-equilibrium.evolution"
+budget = 1.0
+
+[[conditions]]
+name = "scod.conflict.lambda-0.r1"
+preset = "scod.conflict.lambda-0.r1"
+budget = 100
+
+[[conditions]]
+name = "scod.conflict.lambda-0.25.r1"
+preset = "scod.conflict.lambda-0.25.r1"
+budget = 100
+
+[[conditions]]
+name = "scod.conflict.lambda-0.5.r1"
+preset = "scod.conflict.lambda-0.5.r1"
+budget = 100
+
+[[conditions]]
+name = "scod.conflict.lambda-0.75.r1"
+preset = "scod.conflict.lambda-0.75.r1"
+budget = 100
+
+[[conditions]]
+name = "scod.conflict.lambda-1.r1"
+preset = "scod.conflict.lambda-1.r1"
+budget = 100

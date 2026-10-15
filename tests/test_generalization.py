@@ -27,6 +27,7 @@ def test_binary_invariants_and_restore(alpha):
         rt = system._backend.simulation.runtime
         assert np.array_equal(rt.tables['actor/0'].weights, rt.tables['actor/1'].weights)
         assert system.evaluate()['expected_net_payoff'] == pytest.approx(1.5)
+        assert system.evaluate()['normalized_expected_payoff'] == pytest.approx(.75)
     restored = System.restore(system.snapshot())
     system.advance(10)
     restored.advance(10)
