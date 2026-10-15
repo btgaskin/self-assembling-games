@@ -126,6 +126,8 @@ class Simulation:
     def step(self) -> Outcome:
         self.runtime.begin()
         outcome = self.model_instance.encounter()
+        if outcome.owner_returns is not None:
+            outcome.returns_for(self.runtime.owners.values())
         self.metrics.add(outcome)
         self.runtime.emit(
             "outcome",
@@ -137,6 +139,7 @@ class Simulation:
             terms=outcome.terms,
             exchanges=outcome.exchanges,
             details=outcome.details,
+            **({"owner_returns": outcome.owner_returns} if outcome.owner_returns is not None else {}),
         )
         self.runtime.clocks["play"] += 1
         self.status = outcome.status

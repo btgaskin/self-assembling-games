@@ -1410,5 +1410,29 @@
     "source_reproduction_status": "requires_resolution",
     "analysis_available": false,
     "modules": {}
+  },
+  {
+    "id": "GEN-APPROX",
+    "name": "Approximation with generalized reinforcement",
+    "adaptive_choices": "Action conditional on perceived state",
+    "source_learning": "R1 with declared cross-context reinforcement",
+    "mechanism_status": "Source protocol specified",
+    "implemented": true,
+    "required_fields": [],
+    "source_questions": [],
+    "learners": [
+      "R1"
+    ],
+    "validation_status": "mechanism_tests",
+    "profile_status": "source_protocols_and_research_configuration",
+    "source_reproduction_status": "protocol_specific",
+    "analysis_available": true,
+    "source_family": "oconnor2017",
+    "modules": {
+      "actor": {
+        "role": "action_selection",
+        "owner": "organism"
+      }
+    }
   }
 ]

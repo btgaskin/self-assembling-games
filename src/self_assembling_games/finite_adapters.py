@@ -108,23 +108,17 @@ def barrett_game(profile: Any, *, source_snapshot=None, **budgets: int) -> Finit
             self.next_occurrence += 1
             return result
 
-        def credit(self, choices, outcome):
-            for d in choices:
-                if d.table in addresses:
-                    row = addresses[d.table]
-                    if (
-                        row.role + "/" + row.context
-                        in self.provider.game.fixed_decisions
-                    ):
-                        continue
-                    self.provider.credits.append(
-                        (
-                            row.role,
-                            row.context,
-                            self.tables[d.table].index(d.option),
-                            outcome.payoff,
-                        )
-                    )
+        def feedback(self, feedback):
+            identity = feedback.address.table
+            if identity in addresses:
+                row = addresses[identity]
+                if row.role + "/" + row.context in self.provider.game.fixed_decisions:
+                    return
+                self.provider.credits.append((
+                    row.role, row.context,
+                    self.tables[identity].index(feedback.address.option),
+                    feedback.payoff,
+                ))
 
     def interaction(provider):
         from .model import ModelInstance
@@ -144,9 +138,10 @@ def barrett_game(profile: Any, *, source_snapshot=None, **budgets: int) -> Finit
             raise ValueError(
                 "Finite adapter encountered censoring; use an explicit finite terminating game"
             )
+        returns = result.returns_for(base.runtime.owners.values())
         return ParticipantOutcome(
             result.success,
-            (result.payoff,) * len(roles),
+            tuple(returns[role] for role in roles),
             result.terms,
             result.exchanges,
         )

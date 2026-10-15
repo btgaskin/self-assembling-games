@@ -148,6 +148,7 @@ def _profile(model, protocol=None):
             + ", ".join(sorted(ap.keys() - allowed_adaptation))
         )
     fixed = rp.pop("fixed_decisions", {})
+    lineage = rp.pop("lineage", {})
     genetics = {}
     if method.method_class == "population_generations":
         genetics = {
@@ -171,6 +172,7 @@ def _profile(model, protocol=None):
         kind=source["kind"],
         assumptions=list(source["assumptions"]),
         genetics=genetics,
+        lineage=lineage,
     )
 
 
@@ -334,6 +336,8 @@ def resolve_model(identifier: str | dict, overrides: dict | None = None) -> dict
             questions = entry.get("source_questions", [])
         resources = {**_FINITE_DEFAULTS, **profile.resources}
         rp = {"fixed_decisions": copy.deepcopy(profile.fixed_decisions)}
+        if profile.lineage:
+            rp["lineage"] = copy.deepcopy(profile.lineage)
         ap = {}
         if method.method_class == "population_generations":
             from .multilocus import RESOURCE_DEFAULTS, resolve_genetics

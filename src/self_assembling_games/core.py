@@ -53,6 +53,18 @@ class Outcome:
     exchanges: int = 0
     status: str = "complete"
     details: dict[str, Any] = field(default_factory=dict)
+    owner_returns: dict[str, float] | None = None
+
+    def returns_for(self, owners) -> dict[str, float]:
+        """Participant utilities, independent of local learning feedback."""
+        owners = set(owners)
+        if self.owner_returns is None:
+            return {owner: self.payoff for owner in owners}
+        if set(self.owner_returns) != owners or any(
+            not math.isfinite(value) for value in self.owner_returns.values()
+        ):
+            raise ValueError("owner_returns requires finite returns for every declared owner")
+        return dict(self.owner_returns)
 
     @property
     def payoff(self) -> float:
@@ -137,7 +149,9 @@ class Table:
             "propensity_distribution": self.propensity_distribution().tolist(),
             "adaptive_operation": self.learner.get("rule"),
             "adaptive_parameters": resolved_parameters(self.learner),
-            "adaptive_scope": "complete_unfrozen_assignment"
+            "adaptive_scope": "cross_context"
+            if "generalization" in self.learner
+            else "complete_unfrozen_assignment"
             if self.learner.get("rule") == "STRATEGY_WSLR"
             else "addressed_table",
         }
@@ -482,6 +496,22 @@ class Runtime:
             if table.module == module:
                 table.frozen = True
         self.emit("freeze", module=module)
+
+    def set_trainable(self, modules: list[str], enabled: bool) -> None:
+        """Change eligibility for fixed-shape modules without resetting state."""
+        if type(enabled) is not bool or not modules or len(set(modules)) != len(modules):
+            raise ValueError("Trainability requires unique modules and a Boolean enabled")
+        if set(modules) - set(self.owners):
+            raise ValueError("Unknown trainability module")
+        for module in modules:
+            if enabled:
+                self.frozen_modules.discard(module)
+            else:
+                self.frozen_modules.add(module)
+            for table in self.tables.values():
+                if table.module == module:
+                    table.frozen = not enabled
+        self.emit("trainability", modules=list(modules), enabled=enabled)
 
     def invoke(self, identity: str, operation: Callable[[], Any]) -> Any:
         if identity not in self.invocations:

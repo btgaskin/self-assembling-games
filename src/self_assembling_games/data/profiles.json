@@ -1044,5 +1044,79 @@
     "assumptions": [
       "Short demonstration duration; source reproduction status is separate."
     ]
+  },
+  {
+    "id": "oconnor.generalization.binary",
+    "model": "GEN-APPROX",
+    "parameters": {
+      "coordinates": [
+        0,
+        1
+      ],
+      "payoff_kind": "binary"
+    },
+    "learner": {
+      "rule": "R1",
+      "generalization": {
+        "kind": "binary",
+        "alpha": 0.1
+      }
+    },
+    "kind": "source_resolved",
+    "plays": 10000,
+    "source": [
+      "oconnor2017",
+      "https://doi.org/10.1093/bjps/axv038"
+    ],
+    "assumptions": [
+      "Section 4.2 binary approximation; finite simulation budget is declared separately."
+    ]
+  },
+  {
+    "id": "oconnor.generalization.gaussian",
+    "model": "GEN-APPROX",
+    "parameters": {
+      "coordinates": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "payoff_kind": "gaussian",
+      "payoff_height": 1.0,
+      "payoff_width": 2.0
+    },
+    "learner": {
+      "rule": "R1",
+      "generalization": {
+        "kind": "gaussian",
+        "width": 0.5
+      }
+    },
+    "kind": "deliberate_variant",
+    "plays": 10000,
+    "source": [
+      "oconnor2017",
+      "https://doi.org/10.1093/bjps/axv038"
+    ],
+    "assumptions": [
+      "Declared finite line 0..19, uniform prior, unnormalized kernels without wrapping or cutoff; not a Figure 6 reproduction."
+    ]
   }
 ]

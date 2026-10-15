@@ -20,6 +20,7 @@ _FAMILIES = {
     "box": ("BOX",),
     "task": ("BAND", "META-ORACLE", "META-RULE", "MH"),
     "attention": ("ATT-R", "ATT-B"),
+    "generalization": ("GEN-APPROX",),
 }
 
 

@@ -24,6 +24,7 @@ class Metrics:
         self.terms = 0
         self.exchanges = 0
         self.statuses: dict[str, int] = {}
+        self.owner_returns: dict[str, float] = {}
 
     def add(self, outcome: Outcome) -> None:
         self.attempts += 1
@@ -33,6 +34,8 @@ class Metrics:
         self.completed += 1
         self.successes += int(outcome.success)
         self.payoff += outcome.payoff
+        for owner, value in (outcome.owner_returns or {}).items():
+            self.owner_returns[owner] = self.owner_returns.get(owner, 0.0) + value
         self.terms += outcome.terms
         self.exchanges += outcome.exchanges
         self.recent.append(outcome.success)
@@ -51,6 +54,7 @@ class Metrics:
             "mean_terms": self.terms / count if count else None,
             "mean_exchanges": self.exchanges / count if count else None,
             "statuses": dict(self.statuses),
+            **({"mean_owner_returns": {k: v / count for k, v in self.owner_returns.items()}} if self.owner_returns and count else {}),
         }
 
     def state(self) -> dict[str, Any]:
@@ -64,6 +68,7 @@ class Metrics:
             "terms": self.terms,
             "exchanges": self.exchanges,
             "statuses": dict(self.statuses),
+            **({"owner_returns": dict(self.owner_returns)} if self.owner_returns else {}),
         }
 
     @classmethod
@@ -168,6 +173,9 @@ def evaluate(
         totals["expected_net_payoff"] += mass * outcome.payoff
         totals["expected_terms"] += mass * outcome.terms
         totals["expected_exchanges"] += mass * outcome.exchanges
+        for owner, value in (outcome.owner_returns or {}).items():
+            returns = totals.setdefault("expected_owner_returns", {})
+            returns[owner] = returns.get(owner, 0.0) + mass * value
     return {"protocol": "exact", "leaves": leaves, **totals}
 
 

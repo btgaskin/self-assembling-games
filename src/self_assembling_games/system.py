@@ -54,7 +54,28 @@ class System:
         return self
 
     def inspect(self):
-        return copy.deepcopy(self._backend.inspect())
+        result = copy.deepcopy(self._backend.inspect())
+        if hasattr(self, "lineage"):
+            result["lifecycle"] = copy.deepcopy(self.lineage)
+        return result
+
+    def fork(self):
+        snapshot = self.snapshot()
+        child = type(self).restore(snapshot)
+        child.lineage = {"parent_checkpoint_hash": snapshot["checkpoint_hash"],
+                         "operation": "fork"}
+        return child
+
+    def set_trainable(self, modules, enabled):
+        from .transitions import set_trainable
+
+        set_trainable(self, modules, enabled)
+        return self
+
+    def transition(self, target_model, transition):
+        from .transitions import transition_system
+
+        return transition_system(self, target_model, transition)
 
     def snapshot(self):
         data = self.model.to_dict()
@@ -68,6 +89,8 @@ class System:
             "provider": _identity(data["runtime"]),
             "state": self._backend.snapshot(),
         }
+        if hasattr(self, "lineage"):
+            result["lineage"] = copy.deepcopy(self.lineage)
         result["checkpoint_hash"] = digest(result)
         return copy.deepcopy(result)
 
@@ -96,6 +119,8 @@ class System:
         instance = cls.__new__(cls)
         instance.model = Model.from_dict(value["model"])
         instance.seed, instance.protocol = value["seed"], value["protocol"]
+        if "lineage" in value:
+            instance.lineage = copy.deepcopy(value["lineage"])
         instance._backend = provider(value["model"]["runtime"]).restore_backend(
             value["model"], value["state"]
         )
