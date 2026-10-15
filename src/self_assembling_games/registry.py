@@ -29,7 +29,12 @@ def catalogue() -> list[dict[str, Any]]:
 
 
 def profiles() -> list[dict[str, Any]]:
-    return json.loads(files(__package__).joinpath("data/profiles.json").read_text())
+    from .conflict_profiles import conflict_profiles
+
+    return (
+        json.loads(files(__package__).joinpath("data/profiles.json").read_text())
+        + conflict_profiles()
+    )
 
 
 def reproduction_protocols() -> list[dict[str, Any]]:

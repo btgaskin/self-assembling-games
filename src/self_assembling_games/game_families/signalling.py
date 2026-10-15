@@ -9,6 +9,11 @@ if TYPE_CHECKING:
     from ..model import ModelInstance
 
 from .common import rows, fixed
+from .participant_payoffs import (
+    explicit_outcome,
+    has_separate_payoffs,
+    validate_separate_payoffs,
+)
 
 
 def resolve_parameters(model, parameters):
@@ -50,6 +55,17 @@ def encounter(model_instance: ModelInstance) -> Outcome:
         if "success_matrix" in p
         else x == receiver.option
     )
+    if has_separate_payoffs(p):
+        return explicit_outcome(
+            rt,
+            p,
+            [sender, receiver],
+            x,
+            receiver.option,
+            success,
+            reward,
+            sender_signal=sender.option,
+        )
     outcome = Outcome(success, reward)
     if model_instance.learner["rule"] == "STRATEGY_WSLR":
         if not outcome.success:
@@ -64,6 +80,7 @@ def validate(profile):
     from ..registry import validate_distribution
 
     p, rule = profile.parameters, profile.learner["rule"]
+    validate_separate_payoffs(profile, p["states"], p["actions"])
     if profile.model in {"SIG", "CUE", "MAN", "HYB"}:
         n = p["states"]
         if "state_probabilities" in p:
@@ -77,7 +94,8 @@ def validate(profile):
             if "success_matrix" not in p:
                 raise ValueError("Custom payoffs require a separate success_matrix")
             if any(
-                not math.isfinite(value) or (rule == "R1" and value < 0)
+                not math.isfinite(value)
+                or (rule == "R1" and value < 0 and not has_separate_payoffs(p))
                 for row in p["payoffs"]
                 for value in row
             ):

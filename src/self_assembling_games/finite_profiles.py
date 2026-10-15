@@ -325,8 +325,10 @@ def validate_finite_game(profile, game):
 def adaptive_profiles(family: str | None = None) -> list[dict[str, Any]]:
     profiles = []
     from .multilocus_games import multilocus_profiles
+    from .conflict_profiles import conflict_adaptive_profiles
 
     profiles += multilocus_profiles()
+    profiles += conflict_adaptive_profiles()
     for game in finite_catalogue("skyrms"):
         identifier = game["id"]
         slug = identifier.lower()

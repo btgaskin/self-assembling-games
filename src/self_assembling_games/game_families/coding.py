@@ -9,6 +9,11 @@ if TYPE_CHECKING:
     from ..model import ModelInstance
 
 from .common import rows
+from .participant_payoffs import (
+    explicit_outcome,
+    has_separate_payoffs,
+    validate_separate_payoffs,
+)
 
 
 def initialize(model_instance: ModelInstance) -> None:
@@ -33,7 +38,7 @@ def encounter(model_instance: ModelInstance) -> Outcome:
         model_instance.parameters,
         model_instance.model,
     )
-    x = rt.uniform("nature", 4)
+    x = rt.chance("nature", p.get("state_probabilities", [0.25] * 4))
     a = rt.decide("A", x, x)
     b = rt.decide("B", x, x)
     choices = [a, b]
@@ -57,10 +62,23 @@ def encounter(model_instance: ModelInstance) -> Outcome:
         if model == "CHANGE" and rt.clocks["play"] >= p["change_at"]
         else x
     )
-    outcome = Outcome(action.option == target, float(action.option == target))
+    success = (
+        bool(p["success_matrix"][x][action.option])
+        if "success_matrix" in p
+        else action.option == target
+    )
+    if has_separate_payoffs(p):
+        return explicit_outcome(
+            rt, p, choices, x, action.option, success, float(success)
+        )
+    outcome = Outcome(success, float(success))
     rt.credit(choices, outcome)
     return outcome
 
 
 def validate(profile):
-    pass
+    from ..registry import validate_distribution
+
+    if "state_probabilities" in profile.parameters:
+        validate_distribution(profile.parameters["state_probabilities"], 4)
+    validate_separate_payoffs(profile, 4, 4)
