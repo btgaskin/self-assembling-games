@@ -51,3 +51,25 @@ def test_zero_width_only_current_context():
     reinforce_contexts(rt,d,Outcome(True,1),list(range(20)),{'kind':'gaussian','width':0})
     assert rt.tables['actor/0'].total == 21
     assert rt.tables['actor/1'].total == 20
+
+
+@pytest.mark.parametrize('parameters', [
+    {'sigma':2}, {'payoff_heigth':1}, {'payoff_height':1},
+])
+def test_unknown_or_unused_binary_parameters_are_rejected(parameters):
+    with pytest.raises(ValueError, match='Unknown approximation parameters'):
+        model('oconnor.generalization.binary', interaction={'parameters':parameters})
+
+
+def test_unknown_learning_parameters_are_rejected():
+    with pytest.raises(ValueError, match='Unknown approximation learning parameters'):
+        model('oconnor.generalization.binary', adaptation={'parameters':{'retention':0.5}})
+
+
+def test_resolved_defaults_window_and_ownership_remain_valid():
+    for preset in ['oconnor.generalization.binary', 'oconnor.generalization.gaussian']:
+        declaration = model(preset, execution={'parameters':{'window':7}},
+                            organisation={'owners':{'actor':'learner'}})
+        system = declaration.instantiate(seed=4).advance(3)
+        assert System.restore(system.snapshot()).snapshot() == system.snapshot()
+        assert system._backend.simulation.runtime.owners == {'actor':'learner'}

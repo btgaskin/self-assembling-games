@@ -38,6 +38,15 @@ def encounter(instance):
 
 def validate(profile):
     p = resolve_parameters(profile.model, dict(profile.parameters))
+    allowed_parameters = {
+        'coordinates', 'state_probabilities', 'payoff_kind', 'window', 'owners',
+    }
+    if p.get('payoff_kind') == 'gaussian':
+        allowed_parameters.update({'payoff_height', 'payoff_width'})
+    if p.keys() - allowed_parameters:
+        raise ValueError('Unknown approximation parameters: ' + ', '.join(sorted(p.keys() - allowed_parameters)))
+    if profile.learner.keys() - {'rule', 'error', 'generalization'}:
+        raise ValueError('Unknown approximation learning parameters')
     coordinates = p['coordinates']
     if not isinstance(coordinates, list) or not coordinates or any(
         isinstance(v, bool) or not isinstance(v, (int, float)) or not math.isfinite(v)

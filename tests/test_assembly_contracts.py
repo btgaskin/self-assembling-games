@@ -51,3 +51,28 @@ def test_owner_returns_are_complete_and_separate():
     assert outcome.returns_for(['a', 'b', 'b']) == {'a': -1, 'b': 2}
     with pytest.raises(ValueError):
         outcome.returns_for(['a'])
+
+
+def test_identity_carry_retains_imported_state_without_original_artifact(tmp_path):
+    from self_assembling_games.component_artifacts import export_component
+
+    path = export_component(model('nand.demo').instantiate(seed=11).advance(5), tmp_path)
+    source = model('tr-log.demo', interaction={'parameters':{
+        'template_mode':'artifact', 'templates':{'template':str(path)},
+    }}).instantiate(seed=3).advance(9)
+    before = source.snapshot()
+    target = model(source.model, execution={'budget':17}, source={
+        'assumptions':source.model.to_dict()['source']['assumptions'] + ['Identity continuation control.']})
+    path.unlink()
+    child = source.transition(target, {'kind':'identity'})
+    assert source.snapshot() == before
+    assert child.position == 9
+    assert child.model.to_dict() == target.to_dict()
+    assert child.snapshot()['state']['profile']['assumptions'] == target.to_dict()['source']['assumptions']
+    assert child.snapshot()['state']['profile']['plays'] == 17
+    restored = System.restore(child.snapshot())
+    child.advance(8)
+    restored.advance(8)
+    source.advance(8)
+    assert restored.snapshot() == child.snapshot()
+    assert child.snapshot()['state']['runtime'] == source.snapshot()['state']['runtime']

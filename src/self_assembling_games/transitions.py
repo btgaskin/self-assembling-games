@@ -70,7 +70,28 @@ def transition_system(system, target_model, transition):
             if isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value) or value <= 0:
                 raise ValueError('release_fixed requires explicit positive finite weights')
     parent = system.snapshot()
-    child = System(target, seed=system.seed, protocol=system.protocol)
+    if kind == 'identity':
+        # Existing tables already contain imported policies. Restoring avoids
+        # reopening their original artifact paths or rerunning initializers.
+        from .builtin import _profile
+        from .model import ModelInstance
+        from .specification import ModelSpecification
+        from .simulation import digest
+
+        child = System.restore(parent)
+        child.model = target
+        child._backend.model = copy.deepcopy(after)
+        destination = _conditional(child)
+        destination.profile = _profile(after, system.protocol)
+        specification = ModelSpecification.from_profile(destination.profile)
+        destination.model_instance = ModelInstance(
+            specification, specification.game_definition,
+            destination.runtime.organisation, destination.runtime,
+        )
+        destination.configuration_hash = digest(destination.profile.to_dict())
+        destination.protocol = specification.execution_parameters(system.protocol)
+    else:
+        child = System(target, seed=system.seed, protocol=system.protocol)
     destination = _conditional(child)
     destination.runtime = Runtime.restore(source.runtime.state())
     destination.world = copy.deepcopy(source.world)
