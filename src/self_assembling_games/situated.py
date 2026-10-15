@@ -19,10 +19,11 @@ import numpy as np
 
 @dataclass(frozen=True)
 class Stage:
-    """The actors choosing simultaneously at a named decision stage."""
+    """Actors choosing together; timed runtimes interpret duration in native units."""
 
     id: str
     actors: tuple[str, ...]
+    duration: int | float | None = None
 
 
 @dataclass
@@ -318,6 +319,12 @@ def resolve_model(identifier, overrides=None) -> dict[str, Any]:
     budget = model["execution"].get("budget")
     if type(budget) is not int or budget < 0:
         raise ValueError("Situated encounter budget must be a nonnegative integer")
+    execution_parameters = model["execution"].get("parameters", {})
+    if not isinstance(execution_parameters, dict):
+        raise ValueError("Situated execution parameters must be a table")
+    history_limit = execution_parameters.get("controller_history_limit")
+    if history_limit is not None and (type(history_limit) is not int or history_limit < 0):
+        raise ValueError("controller_history_limit must be null or a nonnegative integer")
     if not isinstance(model["source"].get("kind"), str):
         raise ValueError("Situated source requires a kind")
     for name in ("identifiers", "assumptions", "questions"):
@@ -364,7 +371,10 @@ class SituatedBackend:
             self.adaptation_rngs[actor] = np.random.default_rng(streams[2 + 2 * i])
         self.controller_states = {a: None for a in self.actors}
         self.adaptation_states = {a: None for a in self.actors}
+        # Full actor-local archive is checkpointed independently of the view window.
         self.observed_histories = {a: [] for a in self.actors}
+        self.controller_history_limit = self.model["execution"].get("parameters", {}).get(
+            "controller_history_limit")
         self.position = 0
         self.stages_completed = 0
         self.history: list[dict[str, Any]] = []
@@ -416,9 +426,12 @@ class SituatedBackend:
         # Obtain *all* views and action spaces before invoking any policy.
         legal_spaces = {}
         for actor in stage.actors:
+            archive = self.observed_histories[actor]
+            limit = self.controller_history_limit
+            visible_history = archive if limit is None else (archive[-limit:] if limit else [])
             views[actor] = {"actor": actor, "encounter": self.position,
                             "stage": stage.id, "observation": observations[actor],
-                            "history": copy.deepcopy(self.observed_histories[actor])}
+                            "history": copy.deepcopy(visible_history)}
             legal_spaces[actor] = self.interaction.legal_actions(copy.deepcopy(pre_world), actor)
         for actor in stage.actors:
             action, state = self.controllers[actor].choose(
@@ -474,12 +487,30 @@ class SituatedBackend:
             raise ValueError("Situated evaluation summarizes retained encounter outcomes")
         endings = [entry for entry in self.history if entry["terminated"] or entry["truncated"]]
         rewards = [float(e["info"]["reward"]) for e in endings if "reward" in e["info"]]
-        return {"clock": self.clock, "position": self.position,
+        durations = []
+        current_duration = 0
+        for entry in self.history:
+            current_duration += 1
+            if entry["terminated"] or entry["truncated"]:
+                durations.append(current_duration)
+                current_duration = 0
+        count = len(endings)
+        evaluation = {"clock": self.clock, "position": self.position,
                 "encounters": self.position, "stages": self.stages_completed,
                 "terminated": sum(e["terminated"] for e in endings),
                 "truncated": sum(e["truncated"] for e in endings),
                 "reward_samples": len(rewards),
-                "mean_reward": sum(rewards) / len(rewards) if rewards else None}
+                "mean_reward": sum(rewards) / len(rewards) if rewards else None,
+                "completion_rate": sum(e["terminated"] for e in endings) / count if count else None,
+                "mean_reward_per_ended_encounter_zero_filled": sum(rewards) / count if count else None,
+                "encounter_durations_stages": durations,
+                "mean_encounter_duration_stages": sum(durations) / count if count else None,
+                "open_encounter_duration_stages": current_duration}
+        if isinstance(self.interaction, ECGInteraction):
+            evaluation["ecg_success_rate"] = (
+                sum(e["terminated"] and e["info"].get("reward") == 1 for e in endings) / count
+                if count else None)
+        return evaluation
 
     def inspect(self):
         return {"runtime": "situated", "clock": self.clock, "position": self.position,

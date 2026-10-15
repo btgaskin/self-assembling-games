@@ -293,3 +293,82 @@ def test_restore_rejects_changed_external_component_code(tmp_path, monkeypatch, 
     module.write_text(module.read_text() + "\n# changed provider source\n")
     with pytest.raises(ValueError, match="external provider code differs"):
         restore_backend(model, snapshot)
+
+
+def test_outcome_denominators_include_truncations_and_duration():
+    backend = create_backend(scripted({"A": ["finish"], "B": ["finish"]}, tick_cap=2))
+    backend.world["boards"] = {a: ["red"] * 4 for a in backend.actors}
+    backend.advance(2)
+    metrics = backend.evaluate()
+    assert metrics["mean_reward"] == 1
+    assert metrics["reward_samples"] == 1
+    assert metrics["mean_reward_per_ended_encounter_zero_filled"] == 0.5
+    assert metrics["ecg_success_rate"] == 0.5
+    assert metrics["completion_rate"] == 0.5
+    assert metrics["encounter_durations_stages"] == [1, 2]
+    assert metrics["mean_encounter_duration_stages"] == 1.5
+    backend.step_stage()
+    assert backend.evaluate()["open_encounter_duration_stages"] == 1
+
+
+def test_generic_reward_is_not_reported_as_success():
+    backend = create_backend(resolve_model("ecg.demo", {"interaction": {
+        "provider": "test_situated:huge_interaction", "parameters": {}}}))
+    backend.advance(1)
+    assert "ecg_success_rate" not in backend.evaluate()
+    assert backend.evaluate()["mean_reward"] is None
+
+
+@pytest.mark.parametrize("limit", [None, 0, 3])
+def test_history_window_preserves_archive_and_checkpoint_continuation(limit):
+    model = resolve_model("ecg.demo", {
+        "realisation": {"provider": "test_situated:probe_controller"},
+        "interaction": {"parameters": {"tick_cap": 2}},
+        "execution": {"parameters": {"controller_history_limit": limit}}})
+    backend = create_backend(model, seed=3)
+    # The probe retains its latest view, so inspect precisely what a policy received.
+    for i in range(100):
+        backend.step_stage()
+        expected = backend.observed_histories["A"][:i]
+        if limit is not None:
+            expected = expected[-limit:] if limit else []
+        assert backend.controller_states["A"]["view"]["history"] == expected
+    assert len(backend.observed_histories["A"]) == 100
+    restored = restore_backend(model, json.loads(json.dumps(backend.snapshot())))
+    backend.advance(2)
+    restored.advance(2)
+    assert backend.snapshot() == restored.snapshot()
+
+
+def test_default_and_explicit_unlimited_controller_views_are_equivalent():
+    overrides = {"realisation": {"provider": "test_situated:probe_controller"},
+                 "interaction": {"parameters": {"tick_cap": 2}}}
+    first = create_backend(resolve_model("ecg.demo", overrides), seed=9)
+    overrides["execution"] = {"parameters": {"controller_history_limit": None}}
+    second = create_backend(resolve_model("ecg.demo", overrides), seed=9)
+    for _ in range(8):
+        assert first.step_stage() == second.step_stage()
+        assert first.controller_states == second.controller_states
+        assert first.observed_histories == second.observed_histories
+
+
+@pytest.mark.parametrize("limit", [-1, True, 1.5, "3"])
+def test_invalid_history_limit(limit):
+    with pytest.raises(ValueError, match="controller_history_limit"):
+        resolve_model("ecg.demo", {
+            "execution": {"parameters": {"controller_history_limit": limit}}})
+
+
+def test_empty_and_all_truncated_evaluation():
+    backend = create_backend(scripted({}, tick_cap=1))
+    initial = backend.evaluate()
+    assert initial["completion_rate"] is None
+    assert initial["ecg_success_rate"] is None
+    assert initial["mean_reward_per_ended_encounter_zero_filled"] is None
+    assert initial["encounter_durations_stages"] == []
+    backend.advance(3)
+    metrics = backend.evaluate()
+    assert metrics["mean_reward"] is None
+    assert metrics["completion_rate"] == metrics["ecg_success_rate"] == 0
+    assert metrics["mean_reward_per_ended_encounter_zero_filled"] == 0
+    assert metrics["encounter_durations_stages"] == [1, 1, 1]

@@ -1,0 +1,25 @@
+# Smoke budget: check execution; independent replicates are needed for inference.
+preset = "toylife.delay"
+seeds = [0]
+budget = 2
+workers = 1
+
+[[conditions]]
+name = "immediate"
+[conditions.overrides.interaction.parameters]
+delay = 0
+
+[[conditions]]
+name = "eight-update-delay"
+[conditions.overrides.interaction.parameters]
+delay = 8
+
+[[conditions]]
+name = "reset-chemistry"
+[conditions.overrides.interaction.parameters]
+delay = 8
+[conditions.overrides.realisation.parameters]
+reset_between_phases = true
+
+[analysis]
+sample_interval = 1

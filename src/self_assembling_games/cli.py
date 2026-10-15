@@ -91,12 +91,18 @@ def main(argv=None):
             from .registry import catalogue, profiles
             from .finite_profiles import adaptive_profiles, finite_catalogue
             from .situated import ECG_MODEL, situated_catalogue
+            from .toylife import (
+                presets as molecular_presets,
+                coverage as molecular_coverage,
+            )
 
             result = {
                 "games": catalogue() + finite_catalogue() + situated_catalogue(),
                 "presets": profiles()
                 + adaptive_profiles()
-                + [{"id": ECG_MODEL["id"], "runtime": "situated"}],
+                + [{"id": ECG_MODEL["id"], "runtime": "situated"}]
+                + molecular_presets(),
+                "molecular_coverage": molecular_coverage(),
             }
         elif args.command in {"describe", "resolve"}:
             result = _subject(args.subject).to_dict()

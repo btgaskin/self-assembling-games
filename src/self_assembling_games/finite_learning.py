@@ -147,18 +147,20 @@ class ReinforcementSimulation:
             if not isinstance(samples, int) or samples <= 0:
                 raise ValueError("samples must be a positive integer")
             rng = np.random.Generator(np.random.PCG64(seed))
-            results = [
-                self.game.encounter(_Sampling(self._realisation, rng))
-                for _ in range(samples)
-            ]
+            successes = 0
+            return_totals = [0] * len(self.game.roles)
+            for _ in range(samples):
+                outcome = self.game.encounter(_Sampling(self._realisation, rng))
+                successes += outcome.success
+                for i in range(len(return_totals)):
+                    return_totals[i] += outcome.returns[i]
             return {
                 "protocol": "sampled_frozen",
                 "samples": samples,
                 "seed": seed,
-                "success_probability": sum(o.success for o in results) / samples,
+                "success_probability": successes / samples,
                 "expected_returns": {
-                    r: sum(o.returns[i] for o in results) / samples
-                    for i, r in enumerate(self.game.roles)
+                    r: return_totals[i] / samples for i, r in enumerate(self.game.roles)
                 },
             }
         if protocol != "exact":

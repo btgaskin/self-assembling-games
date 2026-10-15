@@ -15,6 +15,7 @@ dist/
 .coverage
 htmlcov/
 .ruff_cache/
+.cache/toylife2/
 
 # Local agent guidance and development records
 .internal/

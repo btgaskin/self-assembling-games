@@ -65,11 +65,7 @@ def adaptive_ensemble(
         raise ValueError("Ensemble horizon must be finite and positive")
     if not evolution and (not isinstance(horizon, int) or isinstance(horizon, bool)):
         raise ValueError("Ensemble plays/generations must be an integer")
-    metric = metric or (
-        "final_policy_success_probability"
-        if evolution or discrete
-        else "cumulative_accuracy"
-    )
+    metric = metric or "final_policy_success_probability"
     allowed = {
         "final_policy_success_probability",
         "generation_average_expected_success"
@@ -127,7 +123,11 @@ def adaptive_ensemble(
     }
     if values:
         rng = np.random.Generator(np.random.PCG64(0))
-        bootstrap = np.mean(rng.choice(values, (2000, len(values))), axis=1)
+        # Draw one resample at a time: retain the same RNG order and row means
+        # while bounding temporary storage to the number of completed seeds.
+        bootstrap = np.array(
+            [rng.choice(values, len(values)).mean() for _ in range(2000)]
+        )
         report["mean_bootstrap_95"] = np.quantile(bootstrap, [0.025, 0.975]).tolist()
         report["interval_protocol"] = {
             "method": "percentile_bootstrap",

@@ -1,0 +1,20 @@
+# Smoke-budget ordering generalization comparison.
+preset = "toylife.ordering"
+seeds = [0]
+budget = 2
+workers = 1
+
+[[conditions]]
+name = "all-pairs"
+[conditions.overrides.interaction.parameters]
+train_pairs = "all"
+
+[[conditions]]
+name = "adjacent-pairs"
+[conditions.overrides.interaction.parameters]
+train_pairs = "adjacent"
+
+[analysis]
+sample_interval = 1
+[analysis.evaluation]
+split = "held_out"

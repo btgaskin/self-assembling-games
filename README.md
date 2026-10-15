@@ -20,6 +20,64 @@ The source families currently include Jeffrey A. Barrett's *Self-Assembling Game
 
 Source-specific definitions preserve observations, option sets, feedback, and timing. The finite core supports continuous-time replicator dynamics, birth-mutation replicator dynamics, conditional reinforcement, and complete-plan reinforcement. Multilocus realisations add deterministic haplotype recursions and haploid Wright–Fisher sampling with explicit expression, recombination, and locus mutation. The Barrett encounter runtime additionally supports punishment, persistence, invention, and nested learning. Source questions and deliberate variants travel with configurations and checkpoints. See the [shared adaptive architecture](docs/finite-dynamics.md), [multilocus methods and equations](docs/multilocus.md), and [source register](docs/sources.md).
 
+## Chemical realisations
+
+The optional toyLIFE adapter evolves genomes whose proteins form one shared
+chemical pool. A declared molecular apparatus exposes observation fields and
+reads chemical state as actions. Sixteen task interfaces cover classification,
+Boolean functions, arithmetic, delayed response and episodic experience.
+Task scores guide organism-level Wright–Fisher selection between generations;
+chemical state persists across phases within each episode.
+
+Use Python 3.12 or 3.13 and install `.[toylife]`. For a local toyLIFE2 checkout,
+install it into the same environment with `pip install -e /path/to/toyLIFE2`
+before installing this project. The [adapter guide](docs/toylife.md) describes
+configuration, four smoke workspaces and case-level coverage; the
+[task contracts](docs/toylife-tasks.md) specify observations, timing and scoring.
+Coverage records the relation between these constructed chemical assays and
+source cases, including interfaces and mechanisms still required for each case.
+
+## Designing an experiment
+
+The common workflow compares mechanisms through resolved conditions and preserves
+native clocks: learning encounters, evolutionary time, population generations,
+and molecular updates. Choose the same endpoint measure across comparison arms;
+report accumulated training performance separately. Equal action probabilities
+can arise from different urn masses, inherited correlations, or chemical histories,
+so initial state is part of an experimental condition.
+
+For molecular studies, begin with input sensitivity and constant-response
+baselines, then compare evolution with random genome sampling under declared
+budgets. Test frozen genomes on reserved episode panels and use retained,
+blank-exposure, inverted-cue and reset conditions to examine memory. Conditioning
+uses matched exposure schedules and washout; habituation supports feedback controls
+and a novel-cue probe. Response traces establish what changed within a lifetime.
+The [task contracts](docs/toylife-tasks.md) describe each score and its controls.
+
+The four molecular workspaces are short execution checks. They provide templates
+for experiments with independent populations, apparatus assignments, and reserved
+evaluation episodes. Genes share one chemical pool in the current adapter;
+multiple participants and compartments require an additional organisation model.
+The ECG fixture currently supplies random and scripted controllers; acquired
+signalhood studies additionally require a learning controller and causal tests of
+how partners use each other's actions.
+
+Three bounded study drivers retain their protocols, raw measurements and source
+revision. Run them from a committed checkout, with the corresponding optional
+dependencies installed:
+
+```sh
+python examples/adaptive_dispositions_study.py --output runs/dispositions-pilot
+python examples/inherited_accessibility_study.py --output runs/accessibility-pilot --wright-fisher
+python examples/chemical_capacity_study.py --output runs/chemical-capacity-pilot
+```
+
+The first compares conditional and complete-plan acquisition with explicit mass
+controls. The second varies inherited encoding and transmission. The third maps
+unselected chemical responses to all sixteen Boolean functions, retaining best
+constant-policy baselines. These bounded exploratory studies establish useful
+comparisons and hypotheses for independent confirmation.
+
 ## Games, methods, and history
 
 The library takes self-assembling games as its organizing concept and traces each model's lineage through its source family. Lewis' sender–receiver game provides the convention-forming setting. Skyrms' 2009 paper studies evolutionary dynamics and extends that setting to complementary information, voting, teamwork, chains, and dialogue. Barrett develops conditional learning, modular composition, and the assembly of interaction and inquiry. The [chapter source register](docs/sources.md) records the antecedents of individual Barrett models.

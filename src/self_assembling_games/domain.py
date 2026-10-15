@@ -169,7 +169,9 @@ def model(identifier, **overrides):
         identifier.get("runtime", "builtin")
         if isinstance(identifier, dict)
         else (
-            "situated"
+            "self_assembling_games.toylife"
+            if identifier.lower().startswith("toylife.")
+            else "situated"
             if identifier.lower() in ("ecg", "ecg-inspired", "ecg.demo", "ecg.scripted")
             else "builtin"
         )

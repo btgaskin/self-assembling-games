@@ -45,7 +45,7 @@ Experiments archive resolved inputs and per-trial checkpoints in a timestamped s
 
 New experiments should first vary existing mechanisms through their declared parameters. A new interaction can use the situated protocol with the same lifecycle and run storage. A new realisation needs its own sufficient state and a compatible adaptation mechanism. Tests should compare uninterrupted and restored execution, verify observation boundaries, and show that inspection and evaluation preserve running state.
 
-A future toyLIFE2 provider can expose sequence-to-structure-to-function through realisation, molecular/world transitions through interaction, and inherited variation through adaptation. It will need explicit mappings for sensing, actuation, time and fitness. The current package remains a standalone games library; molecular integration is a subsequent implementation.
+The optional toyLIFE2 provider exposes sequence-to-structure-to-function through realisation, molecular/world transitions through interaction, and inherited variation through adaptation. Its declared apparatus maps observations to ligands and molecular readouts to actions. One organism owns one shared chemical pool; chemical state persists within episodes and organism-level selection acts between generations. See the [adapter guide](toylife.md) for task coverage, timing, fitness and evaluation controls. Additional compartments and continuous chemistry require their own explicit organisational and dynamical contracts.
 
 ## Comparisons supported by this structure
 

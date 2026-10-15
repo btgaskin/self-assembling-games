@@ -707,3 +707,66 @@ def test_restoration_checks_semantics_and_protocol():
     snapshot["protocol"]["max_step"] = 99
     with pytest.raises(ValueError, match="protocol"):
         restore_adaptive(snapshot)
+
+
+@pytest.mark.parametrize("method", ["evolution", "strategy-r1"])
+def test_ensemble_default_measures_endpoint_policy(method, tmp_path):
+    from self_assembling_games import run_ensemble
+
+    horizon = {"duration": 0.2} if method == "evolution" else {"plays": 10}
+    report = run_ensemble(
+        f"sk-sig.{method}.demo", [1, 2, 3], output=tmp_path, **horizon
+    )
+    assert report["protocol"]["metric"] == "final_policy_success_probability"
+    for run in report["runs"]:
+        simulation = resume(tmp_path / f"seed-{run['seed']}")
+        assert run["measurement"] == simulation.evaluate()["success_probability"]
+    values = [run["measurement"] for run in report["runs"]]
+    rng = np.random.Generator(np.random.PCG64(0))
+    legacy_bootstrap = rng.choice(values, (2000, len(values))).mean(axis=1)
+    assert (
+        report["mean_bootstrap_95"]
+        == np.quantile(legacy_bootstrap, [0.025, 0.975]).tolist()
+    )
+
+
+def test_ensemble_explicit_cumulative_measurement(tmp_path):
+    from self_assembling_games import run_ensemble
+
+    report = run_ensemble(
+        "sk-sig.strategy-r1.demo",
+        [1],
+        output=tmp_path,
+        plays=10,
+        metric="cumulative_accuracy",
+    )
+    run = report["runs"][0]
+    assert run["measurement"] == run["summary"]["cumulative_accuracy"]
+
+
+def test_streamed_sampled_evaluation_preserves_draws_and_training_state():
+    from self_assembling_games.realisations import _Sampling
+
+    simulation = build_adaptive("sk-sig.strategy-r1.demo", seed=7)
+    simulation.run(plays=10)
+    before = simulation.snapshot()
+    samples, seed = 137, 31
+    rng = np.random.Generator(np.random.PCG64(seed))
+    outcomes = [
+        simulation.game.encounter(_Sampling(simulation._realisation, rng))
+        for _ in range(samples)
+    ]
+    expected = {
+        "protocol": "sampled_frozen",
+        "samples": samples,
+        "seed": seed,
+        "success_probability": sum(o.success for o in outcomes) / samples,
+        "expected_returns": {
+            role: sum(o.returns[i] for o in outcomes) / samples
+            for i, role in enumerate(simulation.game.roles)
+        },
+    }
+    assert (
+        simulation.evaluate(protocol="sampled", samples=samples, seed=seed) == expected
+    )
+    assert simulation.snapshot() == before

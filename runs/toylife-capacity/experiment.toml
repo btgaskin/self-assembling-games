@@ -1,0 +1,18 @@
+# Smoke budget: check execution; independent replicates are needed for inference.
+preset = "toylife.boolean.nand"
+seeds = [0]
+budget = 2
+workers = 1
+
+[[conditions]]
+name = "two-genes"
+[conditions.overrides.realisation.parameters]
+genes = 2
+
+[[conditions]]
+name = "four-genes"
+[conditions.overrides.realisation.parameters]
+genes = 4
+
+[analysis]
+sample_interval = 1

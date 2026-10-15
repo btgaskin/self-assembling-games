@@ -146,3 +146,43 @@ SUB, DISC, GEN, SET and RIT as cases awaiting a concrete operational protocol.
 Their presence records the book's scope while their readiness fields distinguish
 implemented mechanisms from proposed extensions. The ECG fixture adds a general
 world/action/feedback substrate; it does not resolve those source questions.
+
+## Outcome denominators and history windows
+
+Evaluation counts each terminated or truncated encounter as one ended attempt.
+`completion_rate` is the fraction that terminated. `mean_reward` retains its
+conditional definition: the mean of ending `info.reward` values actually supplied,
+with `reward_samples` giving its denominator. The explicit
+`mean_reward_per_ended_encounter_zero_filled` divides their sum by all ended
+attempts, assigning zero to endings without a supplied reward. This is a reporting
+convention; it does not create feedback for controllers or adaptation. Generic
+rewards may have any numeric scale. For ECG, `ecg_success_rate` counts matching
+chosen colours after both actors finish, divided by all ended attempts, so a
+truncation contributes zero success. These rates are `None` before the first end.
+`encounter_durations_stages` lists stage counts for ended attempts,
+`mean_encounter_duration_stages` averages those counts, and
+`open_encounter_duration_stages` counts stages in the current unfinished attempt.
+For ECG, each stage is one tick.
+
+`execution.parameters.controller_history_limit` selects the maximum number of
+recent actor-local events included in each controller's `view["history"]`.
+The default, `None` (JSON `null`), supplies the full history and preserves existing
+observations. A nonnegative integer supplies that many most recent events; zero
+supplies an empty list. The window spans encounters, includes feedback received
+while inactive, and takes effect before the current stage's event is appended.
+For example:
+
+```python
+model = resolve_model("ecg.demo", {
+    "execution": {"parameters": {"controller_history_limit": 32}},
+})
+```
+
+The full actor-local `observed_histories` archive and public receipt `history`
+remain retained in checkpoints. Controller views copy only the selected window;
+with a fixed bound their history-copy cost stays bounded as a run grows. Archive
+storage and checkpoint size still grow with the number of stages. The model
+records the bound and restoration preserves it. A bound changes the information
+available to a history-dependent policy and therefore defines a scientific model
+choice to hold fixed when comparing runs. Explicit controller memory and adaptive
+state persist independently of this observation window.

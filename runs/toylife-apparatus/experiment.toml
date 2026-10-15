@@ -1,0 +1,16 @@
+# Smoke budget: check execution; independent replicates are needed for inference.
+preset = "toylife.boolean.nand"
+seeds = [0]
+budget = 2
+workers = 1
+
+[[conditions]]
+name = "declared-output"
+
+[[conditions]]
+name = "permuted-output"
+[conditions.overrides.realisation.parameters.apparatus.output]
+permutation = [1, 0]
+
+[analysis]
+sample_interval = 1

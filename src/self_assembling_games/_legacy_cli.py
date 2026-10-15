@@ -22,7 +22,9 @@ def main(argv: list[str] | None = None) -> int:
     listing.add_argument("--all", action="store_true")
     listing.add_argument("--experiments", action="store_true")
     listing.add_argument(
-        "--family", choices=["barrett", "skyrms", "constructed", "all"], default="all"
+        "--family",
+        choices=["barrett", "skyrms", "constructed", "toylife", "all"],
+        default="all",
     )
     sub.add_parser(
         "methods", help="List adaptive method classes and their named methods"
@@ -81,6 +83,10 @@ def main(argv: list[str] | None = None) -> int:
     try:
         if args.command == "list":
             from .finite_profiles import adaptive_profiles, finite_catalogue
+            from .toylife import (
+                presets as molecular_presets,
+                coverage as molecular_coverage,
+            )
 
             if args.experiments:
                 from .registry import reproduction_protocols
@@ -90,6 +96,8 @@ def main(argv: list[str] | None = None) -> int:
                         "Historical adaptive experiments remain source-gated; SKQ1"
                     )
                 result = reproduction_protocols()
+            elif args.family == "toylife":
+                result = molecular_coverage() if args.all else molecular_presets()
             elif args.family in {"skyrms", "constructed"}:
                 result = (
                     finite_catalogue(args.family)
@@ -102,7 +110,7 @@ def main(argv: list[str] | None = None) -> int:
                     + finite_catalogue("skyrms")
                     + finite_catalogue("constructed")
                     if args.all
-                    else profiles() + adaptive_profiles()
+                    else profiles() + adaptive_profiles() + molecular_presets()
                 )
             else:
                 result = catalogue() if args.all else profiles()
