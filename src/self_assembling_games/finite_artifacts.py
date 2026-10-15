@@ -24,12 +24,13 @@ def import_frozen_decisions(
     complete permutations. Joint mixtures over plans require their own matching
     model and are never silently replaced by independent conditional marginals.
     """
-    from .simulation import read_snapshot, digest
+    from .simulation import digest
+    from .component_artifacts import load_component_snapshot
 
     path = Path(path)
     if path.is_dir():
-        path = path / "checkpoint.json"
-    snapshot = read_snapshot(path)
+        path = path / ("component.json" if (path / "component.json").is_file() else "checkpoint.json")
+    snapshot = load_component_snapshot(path)
     if not bindings:
         raise ValueError("Frozen imports need explicit decision bindings")
     policies, options = {}, {}
@@ -74,7 +75,7 @@ def import_frozen_decisions(
         if sorted(order) != list(range(len(p))):
             raise ValueError("Option adapters must be complete permutations")
         result[destination] = p[order].tolist()
-    return {
+    imported = {
         "fixed_decisions": result,
         "lineage": {
             "artifact_sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
@@ -90,3 +91,8 @@ def import_frozen_decisions(
             "transform": "freeze_conditional_responses",
         },
     }
+    if "component_artifact" in snapshot:
+        imported["lineage"]["component"] = copy.deepcopy(snapshot["component_artifact"])
+    if "checkpoint_origin" in snapshot:
+        imported["lineage"]["source_checkpoint"] = copy.deepcopy(snapshot["checkpoint_origin"])
+    return imported

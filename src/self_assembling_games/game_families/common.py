@@ -39,9 +39,9 @@ def nand_rows(rt: Runtime, prefix: str, learner: dict[str, Any]) -> None:
 def install_artifact(
     model_instance: ModelInstance, name: str, prefix: str, expected: str
 ) -> None:
-    from ..simulation import read_snapshot
+    from ..component_artifacts import load_component_snapshot, ordered_component_tables
 
-    snapshot = read_snapshot(model_instance.parameters["templates"][name])
+    snapshot = load_component_snapshot(model_instance.parameters["templates"][name])
     if snapshot["profile"]["model"] != expected:
         raise ValueError(f"Template {name} must be a {expected} artifact")
     if expected == "NAND" and snapshot["profile"]["parameters"].get(
@@ -79,7 +79,7 @@ def install_artifact(
             raise ValueError(
                 "Frozen vocabulary lacks a receiver row for an available signal pair"
             )
-    for old in snapshot["runtime"]["tables"].values():
+    for old in ordered_component_tables(snapshot):
         record = copy.deepcopy(old)
         record["module"] = prefix + record["module"]
         record["frozen"] = True
@@ -97,10 +97,17 @@ def install_artifact(
         "play": snapshot["runtime"]["clocks"]["play"],
         "configuration_hash": snapshot["configuration_hash"],
     }
-    model_instance.lineage[name]["artifact_hash"] = sim_hash(snapshot)
-    model_instance.lineage[name]["export_transforms"] = snapshot["lineage"].get(
-        "vocabulary_export"
+    component = snapshot.get("component_artifact")
+    model_instance.lineage[name]["artifact_hash"] = (
+        component["artifact_hash"] if component else sim_hash(snapshot)
     )
+    model_instance.lineage[name]["export_transforms"] = (
+        component["transformations"] if component else snapshot["lineage"].get("vocabulary_export")
+    )
+    if component:
+        model_instance.lineage[name]["component"] = copy.deepcopy(component)
+    if "checkpoint_origin" in snapshot:
+        model_instance.lineage[name]["source_checkpoint"] = copy.deepcopy(snapshot["checkpoint_origin"])
 
 
 def sim_hash(snapshot: dict[str, Any]) -> str:

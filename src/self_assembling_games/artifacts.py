@@ -109,6 +109,7 @@ def export_template(
                 {"rule": "R1"},
                 frozen=True,
             ).to_dict()
+            snapshot["runtime"]["table_order"].append(identity)
             added += 1
     snapshot["lineage"]["vocabulary_export"] = {
         "kind": "deliberate_transform",
